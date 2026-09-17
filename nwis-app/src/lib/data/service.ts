@@ -211,7 +211,7 @@ export async function getOffsetWells(targetWellId: string): Promise<OffsetWellRe
       const sim = computeCompositeSimilarity(target, offset);
       const matchedEvents = MOCK_EVENTS.filter((e) => 
         e.wellId.toLowerCase() === offset.id.toLowerCase() ||
-        e.field.toLowerCase() === offset.field.toLowerCase()
+        (Boolean(e.field) && e.field?.toLowerCase() === offset.field.toLowerCase())
       );
 
       return {

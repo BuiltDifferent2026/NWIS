@@ -11,24 +11,24 @@ export const ConfidenceBadge: React.FC<ConfidenceBadgeProps> = ({ level, classNa
   const getBadgeStyle = () => {
     switch (level) {
       case 'STRUCTURED-HIGH':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
       case 'OCR-HIGH':
-        return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30';
+        return 'bg-cyan-50 dark:bg-cyan-950/40 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800';
       case 'OCR-MEDIUM':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800';
       case 'OCR-LOW':
-        return 'bg-orange-500/10 text-orange-400 border-orange-500/30';
+        return 'bg-orange-50 dark:bg-orange-950/40 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800';
       case 'MANUAL-REVIEW':
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/30';
+        return 'bg-purple-50 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800';
       default:
-        return 'bg-slate-700/20 text-slate-400 border-slate-700';
+        return 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700';
     }
   };
 
   return (
     <span
       title={sourceDoc ? `Extraction Pedigree: ${level} | Source: ${sourceDoc}` : `Extraction Pedigree: ${level}`}
-      className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-mono font-medium border uppercase tracking-wider ${getBadgeStyle()} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-mono font-semibold border uppercase tracking-wider ${getBadgeStyle()} ${className}`}
     >
       <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
       {level}

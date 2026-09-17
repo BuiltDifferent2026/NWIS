@@ -20,10 +20,10 @@ export const HeroSection: React.FC = () => {
   const [selectedWell, setSelectedWell] = useState('OIL-GLK-14');
 
   return (
-    <section className="relative overflow-hidden bg-white border-b border-neutral-200 pt-10 pb-16 lg:py-20">
+    <section className="relative overflow-hidden bg-white dark:bg-[#090b0f] border-b border-neutral-200 dark:border-neutral-800 pt-10 pb-16 lg:py-20 transition-colors">
       {/* Background Architectural Blueprint Grid Lines */}
       <div 
-        className="absolute inset-0 pointer-events-none opacity-40"
+        className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-10"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
@@ -34,8 +34,8 @@ export const HeroSection: React.FC = () => {
       />
 
       {/* Subtle Side Cross-Hatch Rulers (Like the reference blueprint margins) */}
-      <div className="absolute top-0 bottom-0 left-0 w-8 border-r border-neutral-200/60 hidden xl:block bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.02),rgba(0,0,0,0.02)_4px,transparent_4px,transparent_8px)]" />
-      <div className="absolute top-0 bottom-0 right-0 w-8 border-l border-neutral-200/60 hidden xl:block bg-[repeating-linear-gradient(-45deg,rgba(0,0,0,0.02),rgba(0,0,0,0.02)_4px,transparent_4px,transparent_8px)]" />
+      <div className="absolute top-0 bottom-0 left-0 w-8 border-r border-neutral-200/60 dark:border-neutral-800/60 hidden xl:block bg-[repeating-linear-gradient(45deg,rgba(0,0,0,0.02),rgba(0,0,0,0.02)_4px,transparent_4px,transparent_8px)] dark:bg-[repeating-linear-gradient(45deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02)_4px,transparent_4px,transparent_8px)]" />
+      <div className="absolute top-0 bottom-0 right-0 w-8 border-l border-neutral-200/60 dark:border-neutral-800/60 hidden xl:block bg-[repeating-linear-gradient(-45deg,rgba(0,0,0,0.02),rgba(0,0,0,0.02)_4px,transparent_4px,transparent_8px)] dark:bg-[repeating-linear-gradient(-45deg,rgba(255,255,255,0.02),rgba(255,255,255,0.02)_4px,transparent_4px,transparent_8px)]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -44,13 +44,13 @@ export const HeroSection: React.FC = () => {
           <div className="lg:col-span-7 space-y-6">
             
             {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-amber-600 animate-pulse" />
               <span>eRTMAC Subsurface Institutional Memory Layer</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em] text-neutral-950 leading-[1.06]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em] text-neutral-950 dark:text-white leading-[1.06]">
               130 Years of Subsurface Memory.{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-amber-600 to-orange-600">
                 Activated Before You Drill.
@@ -58,20 +58,20 @@ export const HeroSection: React.FC = () => {
             </h1>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg text-neutral-600 max-w-2xl leading-relaxed">
+            <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
               An AI-powered offset-well intelligence platform that sits strictly alongside eRTMAC. Transmuting fragmented Daily Drilling Reports and Well Completion Reports into proactive depth-aware hazard advisories across the Naga Thrust & Fold Belt.
             </p>
 
             {/* Interactive Search / Quick Launch Box */}
             <div className="pt-2">
-              <div className="p-2 sm:p-2.5 rounded-2xl border border-neutral-300 bg-neutral-50 shadow-xs max-w-xl flex flex-col sm:flex-row gap-2">
+              <div className="p-2 sm:p-2.5 rounded-2xl border border-neutral-300 dark:border-neutral-800 bg-neutral-50 dark:bg-[#12151c] shadow-xs max-w-xl flex flex-col sm:flex-row gap-2">
                 <div className="relative flex-1 flex items-center">
                   <Search className="absolute left-3.5 w-4 h-4 text-neutral-400" />
                   <input
                     type="text"
                     defaultValue="OIL-GLK-14 (Geleki • Tipam Sandstone)"
                     placeholder="Search active well or formation..."
-                    className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm font-mono text-neutral-900 bg-white border border-neutral-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/30"
+                    className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm font-mono text-neutral-900 dark:text-white bg-white dark:bg-[#161a24] border border-neutral-200 dark:border-neutral-700 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/30"
                   />
                 </div>
                 <Link
@@ -84,9 +84,9 @@ export const HeroSection: React.FC = () => {
               </div>
 
               {/* Footnote reassurance */}
-              <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] text-neutral-500 font-mono">
+              <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
                 <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   Strictly 1-way read-only eRTMAC feed
                 </span>
                 <span>•</span>
@@ -95,18 +95,18 @@ export const HeroSection: React.FC = () => {
             </div>
 
             {/* Quick Metrics Bar */}
-            <div className="pt-4 border-t border-neutral-200 grid grid-cols-3 gap-4 max-w-lg">
+            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800 grid grid-cols-3 gap-4 max-w-lg">
               <div>
-                <div className="text-2xl font-bold font-mono text-neutral-950">1,000+</div>
-                <div className="text-[11px] text-neutral-500">Indexed Assam Wells</div>
+                <div className="text-2xl font-bold font-mono text-neutral-950 dark:text-white">1,000+</div>
+                <div className="text-[11px] text-neutral-500 dark:text-neutral-400">Indexed Assam Wells</div>
               </div>
               <div>
-                <div className="text-2xl font-bold font-mono text-amber-700">75m</div>
-                <div className="text-[11px] text-neutral-500">Proactive Lookahead</div>
+                <div className="text-2xl font-bold font-mono text-amber-700 dark:text-amber-400">75m</div>
+                <div className="text-[11px] text-neutral-500 dark:text-neutral-400">Proactive Lookahead</div>
               </div>
               <div>
-                <div className="text-2xl font-bold font-mono text-emerald-700">34 NPT h</div>
-                <div className="text-[11px] text-neutral-500">Saved per Incident</div>
+                <div className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400">34 NPT h</div>
+                <div className="text-[11px] text-neutral-500 dark:text-neutral-400">Saved per Incident</div>
               </div>
             </div>
 
@@ -116,7 +116,7 @@ export const HeroSection: React.FC = () => {
           <div className="lg:col-span-5 relative">
             
             {/* Scenic Assam Foothill Backdrop Gradient Container */}
-            <div className="relative rounded-3xl p-3 bg-gradient-to-b from-neutral-100 to-neutral-200 border border-neutral-300/80 shadow-xl overflow-hidden">
+            <div className="relative rounded-3xl p-3 bg-gradient-to-b from-neutral-100 to-neutral-200 dark:from-neutral-900 dark:to-neutral-950 border border-neutral-300/80 dark:border-neutral-800 shadow-xl overflow-hidden">
               
               {/* Subtle Assam landscape image layer / artistic mist */}
               <div 

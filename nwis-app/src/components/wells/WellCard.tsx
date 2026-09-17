@@ -20,52 +20,52 @@ export const WellCard: React.FC<WellCardProps> = ({ well, currentDepthMD, isActi
 
   return (
     <div
-      className={`rounded-xl border p-4 transition-all duration-200 backdrop-blur-md ${
+      className={`rounded-2xl border p-4.5 transition-all duration-200 shadow-xs hover:shadow-md ${
         isActive
-          ? 'bg-blue-950/20 border-blue-500/50 shadow-lg shadow-blue-500/10'
-          : 'bg-slate-900/60 border-white/[0.06] hover:border-slate-700'
+          ? 'bg-amber-500/5 border-amber-500/50 dark:bg-amber-950/20'
+          : 'bg-white dark:bg-[#12151c] border-neutral-200 dark:border-neutral-800 hover:border-amber-500/40'
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div>
-          <div className="flex items-center gap-2">
-            <h4 className="font-semibold text-slate-100 text-sm">{well.name}</h4>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="font-extrabold text-neutral-950 dark:text-white text-sm">{well.name}</h4>
             {isActive && (
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500 text-white animate-pulse">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500 text-neutral-950 animate-pulse">
                 ACTIVE RIG
               </span>
             )}
             <StatusBadge status={well.status} size="sm" />
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
             {well.field} Field • Block {well.block}
           </p>
         </div>
         <ConfidenceBadge level={well.confidenceLevel} />
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 text-xs font-mono bg-slate-950/40 rounded-lg p-2.5 border border-slate-800">
+      <div className="mt-3 grid grid-cols-2 gap-2 text-xs font-mono bg-neutral-50 dark:bg-neutral-900/60 rounded-xl p-3 border border-neutral-200/60 dark:border-neutral-800">
         <div>
-          <span className="text-slate-400 block text-[10px] uppercase">
+          <span className="text-neutral-500 dark:text-neutral-400 block text-[10px] uppercase font-bold">
             {well.status === 'drilling' ? 'Current Depth' : 'Total Depth'}
           </span>
-          <span className="font-bold text-slate-200">
+          <span className="font-bold text-neutral-950 dark:text-white">
             {currentDepthMD ?? well.currentDepthMD ?? well.totalDepthMD}m MD
           </span>
         </div>
         <div>
-          <span className="text-slate-400 block text-[10px] uppercase">Trajectory</span>
-          <span className="font-bold text-slate-200 capitalize">{well.trajectoryType}</span>
+          <span className="text-neutral-500 dark:text-neutral-400 block text-[10px] uppercase font-bold">Trajectory</span>
+          <span className="font-bold text-neutral-950 dark:text-white capitalize">{well.trajectoryType}</span>
         </div>
         <div>
-          <span className="text-slate-400 block text-[10px] uppercase">Formations</span>
-          <span className="font-bold text-slate-200">{well.formationTops.length} Tops</span>
+          <span className="text-neutral-500 dark:text-neutral-400 block text-[10px] uppercase font-bold">Formations</span>
+          <span className="font-bold text-neutral-950 dark:text-white">{well.formationTops.length} Tops</span>
         </div>
         <div>
-          <span className="text-slate-400 block text-[10px] uppercase">Incidents</span>
+          <span className="text-neutral-500 dark:text-neutral-400 block text-[10px] uppercase font-bold">Incidents</span>
           <span
             className={`font-bold ${
-              criticalEvents.length > 0 ? 'text-amber-400' : 'text-slate-200'
+              criticalEvents.length > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-950 dark:text-white'
             }`}
           >
             {events.length} logs ({criticalEvents.length} alert)
@@ -73,13 +73,13 @@ export const WellCard: React.FC<WellCardProps> = ({ well, currentDepthMD, isActi
         </div>
       </div>
 
-      <div className="mt-3 flex items-center justify-between pt-2 border-t border-slate-800/80">
-        <span className="text-[11px] text-slate-400 font-mono">
-          Rig: <span className="text-slate-300">{well.rig}</span>
+      <div className="mt-3 flex items-center justify-between pt-2 border-t border-neutral-100 dark:border-neutral-800/80">
+        <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+          Rig: <span className="text-neutral-800 dark:text-neutral-200 font-bold">{well.rig}</span>
         </span>
         <Link
           href={`/wells/${well.id}`}
-          className="text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1 font-mono"
+          className="text-xs text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:underline flex items-center gap-1 font-mono font-bold"
         >
           View Wellbore →
         </Link>

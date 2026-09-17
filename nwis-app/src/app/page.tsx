@@ -10,7 +10,7 @@ import { LandingFooter } from '../components/landing/LandingFooter';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-neutral-900">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-[#090b0f] text-neutral-900 dark:text-neutral-100 transition-colors">
       {/* Top Blueprint Navigation Bar */}
       <LandingNav />
 

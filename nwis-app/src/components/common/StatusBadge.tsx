@@ -13,25 +13,25 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'sm', p
     switch (status) {
       case 'drilling':
       case 'LIVE_STREAMING':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        return 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
       case 'completed':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+        return 'bg-blue-50 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800';
       case 'suspended':
       case 'INTERMITTENT':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800';
       case 'planned':
       case 'OFFLINE':
-        return 'bg-slate-500/10 text-slate-400 border-slate-500/30';
+        return 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-neutral-700';
       case 'critical':
-        return 'bg-red-500/15 text-red-400 border-red-500/40 font-semibold';
+        return 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800 font-bold';
       case 'high':
-        return 'bg-orange-500/15 text-orange-400 border-orange-500/30';
+        return 'bg-amber-100 dark:bg-amber-950/50 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700 font-semibold';
       case 'medium':
-        return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+        return 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800';
       case 'low':
-        return 'bg-blue-500/15 text-blue-400 border-blue-500/30';
+        return 'bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border-sky-200 dark:border-sky-800';
       default:
-        return 'bg-slate-800 text-slate-300 border-slate-700';
+        return 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-200 dark:border-neutral-700';
     }
   };
 

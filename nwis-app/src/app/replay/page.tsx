@@ -271,8 +271,6 @@ export default function WellReplayPage() {
           </Card>
         </div>
       </div>
-        </div>
-      </div>
     </div>
   );
 }
