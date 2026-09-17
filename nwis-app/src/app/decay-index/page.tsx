@@ -45,9 +45,9 @@ export default function MemoryDecayIndexPage() {
   };
 
   const getDecayColor = (score: number) => {
-    if (score >= 75) return 'text-rose-700 bg-rose-50 border-rose-200';
-    if (score >= 55) return 'text-amber-700 bg-amber-50 border-amber-200';
-    return 'text-emerald-700 bg-emerald-50 border-emerald-200';
+    if (score >= 75) return 'text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800';
+    if (score >= 55) return 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800';
+    return 'text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800';
   };
 
   return (
@@ -64,14 +64,14 @@ export default function MemoryDecayIndexPage() {
       {/* ─── Header Strip ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-800 text-[11px] font-mono font-semibold mb-1">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-[11px] font-mono font-semibold mb-1">
             <TrendingDown className="w-3.5 h-3.5" />
             <span>KNOWLEDGE EROSION AUDIT</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
             Institutional Memory Decay Index
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 mt-0.5 font-medium">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
             Quantifying subsurface institutional knowledge erosion across legacy Assam-Arakan assets.
           </p>
         </div>
@@ -81,7 +81,7 @@ export default function MemoryDecayIndexPage() {
           <button
             type="button"
             onClick={handleExport}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 text-neutral-800 text-xs font-bold shadow-2xs transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-bold shadow-2xs transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>{reportExported ? 'Report Generated' : 'Export Audit PDF'}</span>
@@ -93,99 +93,99 @@ export default function MemoryDecayIndexPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* KPI 1 */}
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs flex flex-col justify-between space-y-2">
-          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs flex flex-col justify-between space-y-2">
+          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
             Highest Decay Risk
           </div>
           <div>
-            <div className="text-2xl font-extrabold font-mono text-rose-600">
+            <div className="text-2xl font-extrabold font-mono text-rose-600 dark:text-rose-400">
               Digboi: 88/100
             </div>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               54-year average record age
             </p>
           </div>
-          <div className="pt-2 border-t border-neutral-100 text-[11px] text-neutral-500 font-mono">
-            Vulnerability: <strong className="text-neutral-900">Depleted reservoir losses</strong>
+          <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+            Vulnerability: <strong className="text-neutral-900 dark:text-white">Depleted reservoir losses</strong>
           </div>
         </Card>
 
         {/* KPI 2 */}
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs flex flex-col justify-between space-y-2">
-          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs flex flex-col justify-between space-y-2">
+          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
             Total At-Risk Records
           </div>
           <div>
-            <div className="text-2xl font-extrabold font-mono text-neutral-950">
+            <div className="text-2xl font-extrabold font-mono text-neutral-950 dark:text-white">
               {totalAtRisk.toLocaleString()} Records
             </div>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               Paper-only & unindexed TIFF scans
             </p>
           </div>
-          <div className="pt-2 border-t border-neutral-100 text-[11px] text-neutral-500 font-mono">
-            Across <strong className="text-neutral-900">6 asset fields</strong>
+          <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+            Across <strong className="text-neutral-900 dark:text-white">6 asset fields</strong>
           </div>
         </Card>
 
         {/* KPI 3 */}
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs flex flex-col justify-between space-y-2">
-          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs flex flex-col justify-between space-y-2">
+          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
             Monitored Legacy Wells
           </div>
           <div>
-            <div className="text-2xl font-extrabold font-mono text-neutral-950">
+            <div className="text-2xl font-extrabold font-mono text-neutral-950 dark:text-white">
               {totalLegacy.toLocaleString()} Wells
             </div>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               Drilled between 1889 and 2020
             </p>
           </div>
-          <div className="pt-2 border-t border-neutral-100 text-[11px] text-neutral-500 font-mono">
-            Average Basin Decay: <strong className="text-amber-700">{avgDecay}/100</strong>
+          <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+            Average Basin Decay: <strong className="text-amber-700 dark:text-amber-400">{avgDecay}/100</strong>
           </div>
         </Card>
 
         {/* KPI 4 */}
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs flex flex-col justify-between space-y-2">
-          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs flex flex-col justify-between space-y-2">
+          <div className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
             Digitization Priority
           </div>
           <div>
-            <div className="text-2xl font-extrabold font-mono text-amber-700">
+            <div className="text-2xl font-extrabold font-mono text-amber-700 dark:text-amber-400">
               851 Digboi WCRs
             </div>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
               Requires immediate layout OCR
             </p>
           </div>
-          <div className="pt-2 border-t border-neutral-100 text-[11px] text-neutral-500 font-mono">
-            Queue status: <strong className="text-emerald-700">Ready for Ingestion</strong>
+          <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+            Queue status: <strong className="text-emerald-700 dark:text-emerald-400">Ready for Ingestion</strong>
           </div>
         </Card>
 
       </div>
 
       {/* ─── Interactive Comparison Matrix Table ─── */}
-      <Card className="rounded-2xl border border-neutral-200 bg-white shadow-xs overflow-hidden">
+      <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] shadow-xs overflow-hidden">
         
         {/* Table Filter Bar */}
-        <div className="p-4 border-b border-neutral-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50">
+        <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50 dark:bg-neutral-900/50">
           <div>
-            <h2 className="text-sm font-extrabold text-neutral-950">
+            <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white">
               Field Knowledge Preservation Register
             </h2>
-            <p className="text-xs text-neutral-500">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
               Breakdown of paper vs. scanned unstructured vs. digitized structured WCR/DDR records.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="text-neutral-500">Field Filter:</span>
+            <span className="text-neutral-500 dark:text-neutral-400">Field Filter:</span>
             <select
               value={selectedField}
               onChange={(e) => setSelectedField(e.target.value)}
-              className="border border-neutral-200 bg-white rounded-lg px-2.5 py-1 text-xs font-bold text-neutral-900 focus:outline-hidden"
+              className="border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-xl px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
             >
               <option value="all">All Assam Fields</option>
               <option value="digboi">Digboi</option>
@@ -282,8 +282,8 @@ export default function MemoryDecayIndexPage() {
         </div>
 
         {/* Legend strip */}
-        <div className="p-3 border-t border-neutral-100 bg-neutral-50 flex flex-wrap items-center gap-5 text-xs font-mono text-neutral-500">
-          <span className="font-bold text-neutral-700 uppercase text-[11px]">Format Legend:</span>
+        <div className="p-3.5 border-t border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 flex flex-wrap items-center gap-5 text-xs font-mono text-neutral-500 dark:text-neutral-400">
+          <span className="font-bold text-neutral-700 dark:text-neutral-300 uppercase text-[11px]">Format Legend:</span>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
             <span>Structured & Vectorized</span>
@@ -303,38 +303,38 @@ export default function MemoryDecayIndexPage() {
       {/* ─── Knowledge Preservation Roadmap ─── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs space-y-2">
-          <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs font-mono">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 flex items-center justify-center font-bold text-xs font-mono">
             01
           </div>
-          <h3 className="text-sm font-extrabold text-neutral-950">
+          <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white">
             Layout-Aware Optical Ingestion
           </h3>
-          <p className="text-xs text-neutral-600 leading-relaxed">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Prioritizing 851 fragile Digboi records. Multi-column table OCR captures mud weight schedules and casing seats into verified JSON.
           </p>
         </Card>
 
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs space-y-2">
-          <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs font-mono">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 flex items-center justify-center font-bold text-xs font-mono">
             02
           </div>
-          <h3 className="text-sm font-extrabold text-neutral-950">
+          <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white">
             Stratigraphic Entity Vectorization
           </h3>
-          <p className="text-xs text-neutral-600 leading-relaxed">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Normalizes historical lithology nomenclature (e.g. Tipam Ss, Girujan Clay) to standard OIL stratigraphy across 1,690 legacy wells.
           </p>
         </Card>
 
-        <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs space-y-2">
-          <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs font-mono">
+        <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs space-y-2">
+          <div className="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center font-bold text-xs font-mono">
             03
           </div>
-          <h3 className="text-sm font-extrabold text-neutral-950">
+          <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white">
             eRTMAC Live Bridge Ingestion
           </h3>
-          <p className="text-xs text-neutral-600 leading-relaxed">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
             Fuses digitized historical risk corridors with live WITSML drilling feeds, eliminating NPT surprises 75m before hazard depth.
           </p>
         </Card>

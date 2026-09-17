@@ -160,19 +160,19 @@ export default function AnalogsPage() {
       {/* ─── Header Strip ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-mono font-semibold mb-1">
-            <GitCompare className="w-3.5 h-3.5 text-amber-700" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-[11px] font-mono font-semibold mb-1">
+            <GitCompare className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
             <span>PETROPHYSICAL TWINNING ENGINE</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
             Cross-Formation Analog Engine
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 mt-0.5 font-medium">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
             Bridging institutional memory across basins: proving that petrophysical similarity outweighs pure geographic distance.
           </p>
         </div>
 
-        <Badge variant="outline" className="text-xs font-mono bg-neutral-100 text-neutral-800 border-neutral-300 py-1.5 px-3">
+        <Badge variant="outline" className="text-xs font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700 py-1.5 px-3">
           SIMILARITY ≠ DISTANCE
         </Badge>
       </div>
@@ -188,22 +188,22 @@ export default function AnalogsPage() {
               onClick={() => setSelectedCaseId(item.id)}
               className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-neutral-950 text-white border-neutral-900 shadow-md ring-2 ring-amber-500/20'
-                  : 'bg-white text-neutral-800 border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50 shadow-xs'
+                  ? 'bg-neutral-950 dark:bg-neutral-900 text-white border-neutral-900 dark:border-amber-500/50 shadow-md ring-2 ring-amber-500/20'
+                  : 'bg-white dark:bg-[#12151c] text-neutral-800 dark:text-neutral-200 border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900 shadow-xs'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className={`text-[10px] font-mono uppercase font-bold ${isSelected ? 'text-amber-400' : 'text-neutral-500'}`}>
+                <span className={`text-[10px] font-mono uppercase font-bold ${isSelected ? 'text-amber-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
                   {item.targetField}
                 </span>
-                <span className={`text-[11px] font-mono font-extrabold ${isSelected ? 'text-emerald-400' : 'text-emerald-700'}`}>
+                <span className={`text-[11px] font-mono font-extrabold ${isSelected ? 'text-emerald-400' : 'text-emerald-700 dark:text-emerald-400'}`}>
                   {item.matchScore}% Match
                 </span>
               </div>
               <div className="font-extrabold text-sm tracking-tight truncate">
                 {item.targetFormation}
               </div>
-              <div className={`text-xs mt-1 truncate ${isSelected ? 'text-neutral-300' : 'text-neutral-500'}`}>
+              <div className={`text-xs mt-1 truncate ${isSelected ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
                 Matched: {item.analogFormation}
               </div>
             </button>
@@ -212,28 +212,28 @@ export default function AnalogsPage() {
       </div>
 
       {/* ─── Main Analog Comparison Card ─── */}
-      <Card className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-xs space-y-6">
+      <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-6 shadow-xs space-y-6">
         
         {/* Top Comparison Summary */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-xl bg-neutral-50 border border-neutral-200/80">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/80 dark:border-neutral-800">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 mb-1">
+            <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 dark:text-neutral-400 mb-1">
               <span>Target Formation Horizon:</span>
-              <strong className="text-neutral-900">{currentCase.targetDepth}</strong>
+              <strong className="text-neutral-900 dark:text-white">{currentCase.targetDepth}</strong>
             </div>
-            <div className="text-lg font-extrabold text-neutral-950">
+            <div className="text-lg font-extrabold text-neutral-950 dark:text-white">
               {currentCase.targetFormation}
             </div>
-            <p className="text-xs text-neutral-600 mt-1">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
               {currentCase.targetLithology}
             </p>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <div className="text-right">
-              <div className="text-[11px] font-mono text-neutral-500 uppercase">Geological Analog</div>
-              <div className="text-sm font-extrabold text-neutral-900">{currentCase.analogFormation}</div>
-              <div className="text-[11px] font-mono text-neutral-500">{currentCase.analogDistanceKm}</div>
+              <div className="text-[11px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">Geological Analog</div>
+              <div className="text-sm font-extrabold text-neutral-900 dark:text-white">{currentCase.analogFormation}</div>
+              <div className="text-[11px] font-mono text-neutral-500 dark:text-neutral-400">{currentCase.analogDistanceKm}</div>
             </div>
             <div className="w-14 h-14 rounded-2xl bg-amber-600 text-white flex flex-col items-center justify-center font-mono shadow-xs">
               <span className="text-base font-extrabold leading-none">{currentCase.matchScore}%</span>
@@ -243,35 +243,35 @@ export default function AnalogsPage() {
         </div>
 
         {/* Subsurface Rationale */}
-        <div className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans bg-amber-50/50 p-4 rounded-xl border border-amber-200/70">
-          <strong className="text-amber-900 block mb-0.5 font-bold">Subsurface Twinning Rationale:</strong>
+        <div className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans bg-amber-50/50 dark:bg-amber-950/20 p-4 rounded-xl border border-amber-200/70 dark:border-amber-800/60">
+          <strong className="text-amber-900 dark:text-amber-300 block mb-0.5 font-bold">Subsurface Twinning Rationale:</strong>
           {currentCase.subsurfaceRationale}
         </div>
 
         {/* ─── 5-Vector Petrophysical Match Matrix ─── */}
         <div className="space-y-3">
-          <div className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-500">
+          <div className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
             Petrophysical Parameter Alignment Matrix (5 Vectors)
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {currentCase.vectors.map((vec) => (
-              <div key={vec.label} className="p-3.5 rounded-xl border border-neutral-200 bg-white space-y-2">
+              <div key={vec.label} className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#181c26] space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-extrabold text-neutral-900">{vec.label}</span>
-                  <Badge variant="outline" className="text-[10px] font-mono bg-emerald-50 text-emerald-800 border-emerald-200 font-bold">
+                  <span className="font-extrabold text-neutral-900 dark:text-white">{vec.label}</span>
+                  <Badge variant="outline" className="text-[10px] font-mono bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 font-bold">
                     {vec.matchPercent}%
                   </Badge>
                 </div>
 
-                <div className="space-y-1 text-xs font-mono pt-1 border-t border-neutral-100">
-                  <div className="flex justify-between text-neutral-500">
+                <div className="space-y-1 text-xs font-mono pt-1 border-t border-neutral-100 dark:border-neutral-800">
+                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
                     <span>Target:</span>
-                    <span className="text-neutral-900 font-semibold">{vec.targetValue}</span>
+                    <span className="text-neutral-900 dark:text-neutral-200 font-semibold">{vec.targetValue}</span>
                   </div>
-                  <div className="flex justify-between text-neutral-500">
+                  <div className="flex justify-between text-neutral-500 dark:text-neutral-400">
                     <span>Analog:</span>
-                    <span className="text-neutral-900 font-semibold">{vec.analogValue}</span>
+                    <span className="text-neutral-900 dark:text-neutral-200 font-semibold">{vec.analogValue}</span>
                   </div>
                 </div>
               </div>
@@ -280,7 +280,7 @@ export default function AnalogsPage() {
         </div>
 
         {/* ─── Transferable Operational Playbook ─── */}
-        <div className="p-5 rounded-xl border border-neutral-200 bg-neutral-950 text-neutral-200 space-y-4">
+        <div className="p-5 rounded-xl border border-neutral-800 bg-neutral-950 text-neutral-200 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
@@ -325,17 +325,17 @@ export default function AnalogsPage() {
         </div>
 
         {/* Citations & Evidence Trail */}
-        <div className="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-500 border-t border-neutral-100">
-          <div className="flex items-center gap-2">
+        <div className="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-neutral-500 dark:text-neutral-400 border-t border-neutral-100 dark:border-neutral-800">
+          <div className="flex items-center gap-2 flex-wrap">
             <BookOpen className="w-3.5 h-3.5 text-neutral-400" />
             <span>Verified Source Files:</span>
             {currentCase.provenanceCitations.map((c, i) => (
-              <span key={i} className="px-2 py-0.5 rounded bg-neutral-100 border border-neutral-200 text-neutral-800 font-bold">
+              <span key={i} className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 font-bold">
                 {c.docRef} ({c.year})
               </span>
             ))}
           </div>
-          <span className="text-neutral-400">
+          <span className="text-neutral-400 dark:text-neutral-500 text-[11px]">
             Powered by Assam Basin Geospatial & Petrophysical Vector Engine
           </span>
         </div>

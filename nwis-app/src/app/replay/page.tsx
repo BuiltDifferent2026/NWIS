@@ -70,30 +70,30 @@ export default function WellReplayPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-mono font-semibold mb-1">
-            <Activity className="w-3.5 h-3.5 text-amber-700" />
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-[11px] font-mono font-semibold mb-1">
+            <Activity className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
             <span>PRE-SPUD LOOKAHEAD VERIFICATION</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
             Historical Well Replay Simulator
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 mt-0.5 font-medium">
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
             Proving that NWIS fires hazard advisories <strong>75 meters before</strong> the drill bit reaches the historical incident horizon.
           </p>
         </div>
 
-        <Badge variant="outline" className="text-xs font-mono bg-neutral-100 text-neutral-800 border-neutral-300 py-1.5 px-3 self-start sm:self-auto">
+        <Badge variant="outline" className="text-xs font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700 py-1.5 px-3 self-start sm:self-auto">
           BENCHMARK MODE
         </Badge>
       </div>
 
       {/* ─── Simulation Controls Deck ─── */}
-      <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs space-y-4">
+      <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           
           {/* Well Selector */}
           <div className="flex items-center gap-3">
-            <label htmlFor="replay-well" className="text-xs font-mono font-bold text-neutral-500 uppercase">
+            <label htmlFor="replay-well" className="text-xs font-mono font-bold text-neutral-500 dark:text-neutral-400 uppercase">
               Benchmark Well:
             </label>
             <select
@@ -104,7 +104,7 @@ export default function WellReplayPage() {
                 setCurrentDepth(2120);
                 setIsPlaying(false);
               }}
-              className="border border-neutral-200 bg-neutral-50 rounded-xl px-3 py-1.5 text-xs font-bold text-neutral-900 font-mono focus:outline-hidden"
+              className="border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 rounded-xl px-3 py-1.5 text-xs font-bold text-neutral-900 dark:text-white font-mono focus:outline-hidden"
             >
               {replayCandidateWells.map((rw) => (
                 <option key={rw.id} value={rw.id}>
@@ -119,8 +119,8 @@ export default function WellReplayPage() {
             <button
               type="button"
               onClick={() => setIsPlaying(!isPlaying)}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-2xs transition-colors ${
-                isPlaying ? 'bg-amber-600 hover:bg-amber-700' : 'bg-neutral-950 hover:bg-neutral-800'
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white shadow-2xs transition-colors cursor-pointer ${
+                isPlaying ? 'bg-amber-600 hover:bg-amber-700' : 'bg-neutral-950 dark:bg-amber-600 hover:bg-neutral-800 dark:hover:bg-amber-700'
               }`}
             >
               {isPlaying ? (
@@ -141,21 +141,21 @@ export default function WellReplayPage() {
                 setIsPlaying(false);
                 setCurrentDepth(2120);
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 text-neutral-800 text-xs font-bold transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-bold transition-colors cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5 text-neutral-500" />
               <span>Reset</span>
             </button>
 
             {/* Speed Multiplier */}
-            <div className="inline-flex rounded-xl border border-neutral-200 bg-neutral-100 p-1 text-xs font-mono">
+            <div className="inline-flex rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-900 p-1 text-xs font-mono">
               {[2, 5, 15, 30].map((spd) => (
                 <button
                   key={spd}
                   type="button"
                   onClick={() => setPlaybackSpeed(spd)}
-                  className={`px-2 py-0.5 rounded-lg font-bold transition-colors ${
-                    playbackSpeed === spd ? 'bg-white text-neutral-950 shadow-2xs' : 'text-neutral-500 hover:text-neutral-800'
+                  className={`px-2.5 py-0.5 rounded-lg font-bold transition-colors cursor-pointer ${
+                    playbackSpeed === spd ? 'bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-2xs' : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-white'
                   }`}
                 >
                   {spd}x
@@ -166,11 +166,11 @@ export default function WellReplayPage() {
         </div>
 
         {/* Depth Scrubber */}
-        <div className="space-y-1.5 pt-2 border-t border-neutral-100">
-          <div className="flex items-center justify-between text-xs font-mono text-neutral-600">
+        <div className="space-y-1.5 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+          <div className="flex items-center justify-between text-xs font-mono text-neutral-600 dark:text-neutral-400">
             <span>Interval: 2,100m MD</span>
-            <span className="font-extrabold text-neutral-950">
-              Live Bit Depth: <strong className="text-amber-700 font-mono text-sm">{currentDepth.toFixed(1)}m MD</strong>
+            <span className="font-extrabold text-neutral-950 dark:text-white">
+              Live Bit Depth: <strong className="text-amber-700 dark:text-amber-400 font-mono text-sm">{currentDepth.toFixed(1)}m MD</strong>
             </span>
             <span>Interval End: 2,350m MD</span>
           </div>
@@ -181,29 +181,29 @@ export default function WellReplayPage() {
             step={0.5}
             value={currentDepth}
             onChange={(e) => setCurrentDepth(Number(e.target.value))}
-            className="w-full h-2 bg-neutral-200 rounded-lg cursor-pointer accent-amber-600"
+            className="w-full h-2 bg-neutral-200 dark:bg-neutral-800 rounded-lg cursor-pointer accent-amber-600"
           />
         </div>
 
         {/* ─── Predicted vs Actual Readout Strip (Clean & Spacious) ─── */}
-        <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 font-mono text-xs">
+        <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60 p-4 font-mono text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <span className="text-neutral-500 uppercase text-[10px] block font-bold">1. Current Live Bit Depth</span>
-              <span className="text-lg font-extrabold text-neutral-950 mt-0.5 block">{currentDepth.toFixed(1)}m MD</span>
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] block font-bold">1. Current Live Bit Depth</span>
+              <span className="text-lg font-extrabold text-neutral-950 dark:text-white mt-0.5 block">{currentDepth.toFixed(1)}m MD</span>
             </div>
             <div>
-              <span className="text-neutral-500 uppercase text-[10px] block font-bold">2. Proactive Alert Trigger Horizon</span>
-              <span className="text-lg font-extrabold text-amber-700 mt-0.5 block">{alertTriggerDepth}m MD</span>
-              <span className="text-[11px] text-neutral-500 block mt-0.5">
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] block font-bold">2. Proactive Alert Trigger Horizon</span>
+              <span className="text-lg font-extrabold text-amber-700 dark:text-amber-400 mt-0.5 block">{alertTriggerDepth}m MD</span>
+              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 block mt-0.5">
                 {isAlertFired ? '✓ Alert Triggered' : `${(alertTriggerDepth - currentDepth).toFixed(1)}m until trigger`}
               </span>
             </div>
             <div>
-              <span className="text-neutral-500 uppercase text-[10px] block font-bold">3. Historical Incident Depth</span>
-              <span className="text-lg font-extrabold text-rose-700 mt-0.5 block">{historicalIncidentDepth}m MD</span>
-              <span className="text-[11px] text-neutral-500 block mt-0.5">
-                Lead-time: <strong className="text-neutral-900 font-bold">75m proactive lookahead</strong>
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] block font-bold">3. Historical Incident Depth</span>
+              <span className="text-lg font-extrabold text-rose-700 dark:text-rose-400 mt-0.5 block">{historicalIncidentDepth}m MD</span>
+              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 block mt-0.5">
+                Lead-time: <strong className="text-neutral-900 dark:text-neutral-200 font-bold">75m proactive lookahead</strong>
               </span>
             </div>
           </div>
@@ -226,17 +226,17 @@ export default function WellReplayPage() {
 
         {/* Right: Dynamic Fired Alert Card */}
         <div className="lg:col-span-7 space-y-4">
-          <Card className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
-              <h2 className="text-sm font-extrabold text-neutral-950 uppercase tracking-wide">
+          <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+              <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide">
                 Proactive Corridor Watcher Feed
               </h2>
               {isAlertFired ? (
-                <Badge className="bg-rose-50 text-rose-800 border-rose-200 font-mono text-[10px] font-bold">
+                <Badge className="bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800 font-mono text-[10px] font-bold">
                   ADVISORY ACTIVE
                 </Badge>
               ) : (
-                <Badge variant="outline" className="bg-neutral-100 text-neutral-600 border-neutral-200 font-mono text-[10px]">
+                <Badge variant="outline" className="bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border-neutral-200 dark:border-neutral-700 font-mono text-[10px]">
                   MONITORING
                 </Badge>
               )}
@@ -244,11 +244,11 @@ export default function WellReplayPage() {
 
             {isAlertFired ? (
               <div className="space-y-4">
-                <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs space-y-1">
-                  <span className="font-bold text-rose-900 block">
+                <div className="p-3.5 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 rounded-xl text-xs space-y-1">
+                  <span className="font-bold text-rose-900 dark:text-rose-200 block">
                     ⚠ Proactive Alert Fired at {alertTriggerDepth}m MD ({historicalIncidentDepth - alertTriggerDepth}m before historical loss)
                   </span>
-                  <p className="text-neutral-700 leading-relaxed">
+                  <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
                     The drill bit has entered the proactive buffer zone. In 1996, OIL-GLK-07 drilled through this horizon blind and suffered total lost circulation at {historicalIncidentDepth}m MD. NWIS fires this operational advisory now to enable pre-treatment before penetrating the micro-fractured sandstone.
                   </p>
                 </div>
@@ -263,12 +263,14 @@ export default function WellReplayPage() {
                 />
               </div>
             ) : (
-              <div className="py-20 text-center text-xs font-mono text-neutral-500 space-y-1">
-                <div className="text-neutral-800 font-bold">Bit currently in safe formation interval ({currentDepth.toFixed(0)}m MD)</div>
-                <p className="text-neutral-400">Advance depth past {alertTriggerDepth}m MD to witness the proactive advisory trigger.</p>
+              <div className="py-20 text-center text-xs font-mono text-neutral-500 dark:text-neutral-400 space-y-1">
+                <div className="text-neutral-800 dark:text-neutral-200 font-bold">Bit currently in safe formation interval ({currentDepth.toFixed(0)}m MD)</div>
+                <p className="text-neutral-400 dark:text-neutral-500">Advance depth past {alertTriggerDepth}m MD to witness the proactive advisory trigger.</p>
               </div>
             )}
           </Card>
+        </div>
+      </div>
         </div>
       </div>
     </div>
