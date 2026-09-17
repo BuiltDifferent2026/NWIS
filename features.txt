@@ -1,0 +1,35 @@
+**Short answer:** **Part of it is implemented (~50–60%), but several important parts still have to be connected and built.**
+
+Here is the exact breakdown of what is already there vs. what we have to do:
+
+---
+
+###  What is ALREADY implemented right now:
+If you run `npm run dev`, you can already open and use:
+1. **The Replay Simulator (`/replay`)**: The interactive depth slider that demonstrates proactive alert firing before historical incident depth.
+2. **The Well Workspace (`/wells/[wellId]`)**: The split screen with the Leaflet map on the left and the SVG Depth Track on the right, plus the dual distance/similarity comparison.
+3. **The Alert Detail (`/alerts/[alertId]`)**: The **Fact / Estimate / Recommendation** 3-block card with engineer feedback buttons (Acknowledge / Reject / Apply Mitigation).
+4. **The Dashboard (`/dashboard`)**: The active rig table and advisory summary strip.
+5. **Admin Pages (`/admin/ingestion`, `/admin/sources`)**: Document provenance and OCR confidence tables.
+
+---
+
+### ❌ What we still HAVE to do:
+1. **Connect the real `src/data/` folder**:
+   * Currently, the pages are reading from a tiny 8-well file (`fixtures.ts`). 
+   * Your rich dataset in `src/data/wells.ts` (with **50+ wells**, real formations, casing programs, and mud programs) is not fully wired up to the UI yet.
+2. **Build the Institutional Memory Decay Index view**:
+   * The data (`Digboi 88/100 decay`, `Geleki 68/100`, etc.) is already written in `src/data/live-state.ts`, but **there is no UI page or widget showing it yet**.
+3. **Add the Live eRTMAC Telemetry Ribbon**:
+   * The live parameters (ROP: `14.8 m/h`, Torque: `11.2 kft-lb`, Mud Weight, Standpipe Pressure) are in `src/data/live-state.ts`, but not yet displayed as a top header bar.
+4. **Build the Cross-Formation Analog Engine view**:
+   * Petrophysical matching across basins is not yet shown in the UI.
+5. **Build the "Ask NWIS" AI Search / Copilot Drawer**:
+   * A quick search/chat drawer to query offset-well incident history.
+6. **UI Polish & Control-Room Styling**:
+   * Upgrading the design from a flat look to a high-impact, modern PSU control-room dashboard that will wow hackathon judges.
+
+---
+
+### Summary:
+The skeleton and core demo (the Replay and Well Workspace) exist, but **we have to wire the rich `src/data/` data and add the 3 or 4 missing views (Memory Decay Index, Telemetry Ribbon, AI Assistant)** to make it a 100% complete prototype.

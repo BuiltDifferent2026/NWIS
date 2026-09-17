@@ -1,0 +1,549 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+/* ---break---
+*/
+@custom-variant dark (&:is(.dark *));
+
+/* ─── StrataSense (eRTMAC-NWIS) Design System ───
+   Government-grade operational tool inspired by GOV.UK and USWDS principles.
+   Restrained palette, flat structure, functional colour only, high contrast.
+*/
+
+:root {
+  /* Neutral Base Palette (GOV.UK / USWDS inspired) */
+  --gov-canvas: #f4f8fb;
+  --gov-surface: #ffffff;
+  --gov-surface-subtle: #f8fafc;
+  --gov-border: #bfc1c3;
+  --gov-border-subtle: #e5e7eb;
+  --gov-text-main: #0b0c0c;
+  --gov-text-muted: #505a5f;
+  --gov-text-light: #6f777b;
+
+  /* Functional Colours strictly reserved */
+  --gov-blue: #1d70b8;
+  --gov-blue-hover: #003078;
+  --gov-blue-subtle: #e8f1f8;
+
+  --gov-red: #ca3535;
+  --gov-red-subtle: #fbeeed;
+  --gov-red-border: #e89999;
+
+  --gov-amber: #b56000;
+  --gov-amber-subtle: #fef4e8;
+  --gov-amber-border: #f4be7a;
+
+  --gov-green: #0f7a52;
+  --gov-green-subtle: #ecf6f2;
+  --gov-green-border: #8ec3ad;
+
+  /* Focus style */
+  --gov-focus: #ffdd00;
+  --gov-focus-text: #0b0c0c;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+@theme {
+  --font-sans: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
+}
+
+html, body, button, input, select, textarea, optgroup {
+  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.011em;
+}
+
+body {
+  background-color: var(--gov-canvas);
+  color: var(--gov-text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* Accessible visible focus states */
+a:focus,
+button:focus,
+input:focus,
+select:focus {
+  outline: 3px solid var(--gov-focus);
+  outline-offset: 1px;
+}
+
+/* Operational Tables (Real semantic tables styled for scanning) */
+.gov-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background-color: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+}
+
+.gov-table th {
+  background-color: #f3f4f6;
+  color: var(--gov-text-main);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--gov-border);
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+.gov-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--gov-border-subtle);
+  color: var(--gov-text-main);
+  vertical-align: top;
+}
+
+.gov-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+.dark .gov-table {
+  background-color: #12151c;
+  border-color: #262a36;
+}
+
+.dark .gov-table th {
+  background-color: #181c26;
+  color: #f8fafc;
+  border-bottom-color: #262a36;
+}
+
+.dark .gov-table td {
+  border-bottom-color: #1e232f;
+  color: #cbd5e1;
+}
+
+.dark .gov-table tr:hover td {
+  background-color: #1a1f2c;
+}
+
+/* Operational Cards / Containers */
+.gov-card {
+  background-color: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  padding: 18px;
+  border-radius: 16px;
+}
+
+.gov-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gov-text-main);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.dark .gov-card {
+  background-color: #12151c;
+  border-color: #262a36;
+}
+
+.dark .gov-card-title {
+  color: #f8fafc;
+}
+
+/* Status Tags (Color + Always text) */
+.gov-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  font-family: var(--font-mono, monospace);
+}
+
+.gov-tag-red {
+  background-color: var(--gov-red-subtle);
+  color: #8a1f1f;
+  border-color: var(--gov-red-border);
+}
+
+.gov-tag-amber {
+  background-color: var(--gov-amber-subtle);
+  color: #783d00;
+  border-color: var(--gov-amber-border);
+}
+
+.gov-tag-green {
+  background-color: var(--gov-green-subtle);
+  color: #075034;
+  border-color: var(--gov-green-border);
+}
+
+.gov-tag-blue {
+  background-color: var(--gov-blue-subtle);
+  color: #144e82;
+  border-color: #9ac2e6;
+}
+
+.gov-tag-grey {
+  background-color: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.dark .gov-tag-red {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.dark .gov-tag-amber {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.dark .gov-tag-green {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.dark .gov-tag-blue {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.dark .gov-tag-grey {
+  background-color: rgba(148, 163, 184, 0.12);
+  color: #cbd5e1;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+/* Button styles */
+.gov-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: var(--gov-blue);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 16px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.gov-button:hover {
+  background-color: var(--gov-blue-hover);
+}
+
+.gov-button-secondary {
+  background-color: #f3f4f6;
+  color: var(--gov-text-main);
+  border: 1px solid var(--gov-border);
+  border-radius: 12px;
+}
+
+.gov-button-secondary:hover {
+  background-color: #e5e7eb;
+}
+
+.dark .gov-button-secondary {
+  background-color: #1e2330;
+  color: #f8fafc;
+  border-color: #2d3345;
+}
+
+.dark .gov-button-secondary:hover {
+  background-color: #283042;
+}
+/* ---break---
+*/
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+/* ---break---
+*/
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+/* ---break---
+*/
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ─── Refined High-Contrast Theme System ─── */
+.dark {
+  --gov-canvas: #08090d;
+  --gov-surface: #11141b;
+  --gov-surface-subtle: #161922;
+  --gov-border: #232835;
+  --gov-border-subtle: #181c26;
+  --gov-text-main: #f1f5f9;
+  --gov-text-muted: #94a3b8;
+  --gov-text-light: #64748b;
+  color-scheme: dark;
+}
+
+/* In dark mode, transform all component surfaces to control-room black */
+.dark body {
+  background-color: #08090d !important;
+  color: #f1f5f9 !important;
+}
+
+.dark .bg-white {
+  background-color: #11141b !important;
+  color: #f1f5f9 !important;
+}
+
+.dark .bg-white\/90,
+.dark .bg-white\/80 {
+  background-color: rgba(17, 20, 27, 0.94) !important;
+}
+
+.dark .bg-neutral-50,
+.dark .bg-neutral-50\/50,
+.dark .bg-neutral-50\/80 {
+  background-color: #0a0c10 !important;
+}
+
+.dark .bg-neutral-100 {
+  background-color: #161922 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Borders in dark mode */
+.dark .border-neutral-100 {
+  border-color: #181c26 !important;
+}
+
+.dark .border-neutral-200,
+.dark .border-neutral-200\/80,
+.dark .border-neutral-200\/60 {
+  border-color: #232835 !important;
+}
+
+.dark .border-neutral-300 {
+  border-color: #2d3444 !important;
+}
+
+/* Dark mode typography */
+.dark .text-neutral-950,
+.dark .text-neutral-900 {
+  color: #f8fafc !important;
+}
+
+.dark .text-neutral-800 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-neutral-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-neutral-600 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-neutral-500 {
+  color: #64748b !important;
+}
+
+/* Hover states in dark mode */
+.dark .hover\:bg-neutral-50:hover,
+.dark .hover\:bg-neutral-50\/80:hover {
+  background-color: #161922 !important;
+}
+
+.dark .hover\:bg-neutral-100:hover,
+.dark .hover\:bg-neutral-100\/80:hover {
+  background-color: #1e2330 !important;
+}
+
+.dark .hover\:text-neutral-950:hover,
+.dark .hover\:text-neutral-900:hover,
+.dark .hover\:text-neutral-800:hover,
+.dark .group:hover .group-hover\:text-neutral-950,
+.dark .group:hover .group-hover\:text-neutral-900 {
+  color: #ffffff !important;
+}
+
+/* Form inputs & select dropdowns in dark mode */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #11141b !important;
+  color: #f8fafc !important;
+  border-color: #232835 !important;
+}
+
+.dark select option {
+  background-color: #11141b !important;
+  color: #f8fafc !important;
+}
+
+/* Table styles in dark mode */
+.dark .gov-table {
+  background-color: #11141b;
+  border-color: #232835;
+}
+
+.dark .gov-table th {
+  background-color: #161922;
+  color: #f8fafc;
+  border-color: #232835;
+}
+
+.dark .gov-table td {
+  color: #e2e8f0;
+  border-color: #181c26;
+}
+
+.dark .gov-table tr:hover td {
+  background-color: #161922;
+}
+
+/* ─── Light Mode Specific High-Contrast Rules (When NOT in dark mode) ─── */
+html:not(.dark) .bg-white,
+html:not(.dark) button.bg-white,
+html:not(.dark) a.bg-white {
+  color: #0b0c0e;
+}
+
+html:not(.dark) .hover\:text-neutral-950:hover,
+html:not(.dark) .hover\:text-neutral-900:hover,
+html:not(.dark) .hover\:text-neutral-800:hover,
+html:not(.dark) .group:hover .group-hover\:text-neutral-950,
+html:not(.dark) .group:hover .group-hover\:text-neutral-900 {
+  color: #0b0c0e !important;
+}
+
+html:not(.dark) select option {
+  background-color: #ffffff;
+  color: #0b0c0e;
+}
