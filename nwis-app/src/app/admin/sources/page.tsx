@@ -40,15 +40,11 @@ export default function AdminSourcesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-[11px] font-mono font-semibold mb-1">
-            <Archive className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-            <span>ARCHIVAL PROVENANCE AUDIT</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
-            Source Document & Evidence Register
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
+            Source Document &amp; Evidence Register
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
-            Register of physical paper archives, Daily Drilling Reports (DDRs), and Well Completion Reports (WCRs) with archive box references and extracted event counts.
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Register of archival Daily Drilling Reports (DDRs) and Well Completion Reports (WCRs).
           </p>
         </div>
 

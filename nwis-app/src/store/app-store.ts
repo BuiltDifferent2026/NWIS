@@ -24,9 +24,17 @@ interface AppState {
   stepSimulatedDepth: (delta: number) => void;
   isReplayActive: boolean;
   setReplayActive: (active: boolean) => void;
+
+  // UI layout state
+  isSidebarCollapsed: boolean;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  toggleSidebar: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
+  isSidebarCollapsed: false,
+  setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
+  toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
   currentRole: 'operations_manager',
   setRole: (role) => set({ currentRole: role }),
 

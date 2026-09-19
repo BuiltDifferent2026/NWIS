@@ -12,14 +12,13 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
-  // The landing page ('/') and login page ('/login') render with their own dedicated full-width layouts
-  const isPublicPage = pathname === '/' || pathname === '/login';
+  const isLandingPage = pathname === '/' || pathname === '/landing' || pathname === '/login';
 
-  if (isPublicPage) {
+  if (isLandingPage) {
     return <>{children}</>;
   }
 
-  // Enterprise console layout with top bar, sidebar, and main workspace
+  // Enterprise operational console layout with top bar, navigation, and main workspace
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-[#090b0f] text-neutral-900 dark:text-neutral-100 antialiased transition-colors">
       {/* Skip to main content link (Accessibility requirement) */}

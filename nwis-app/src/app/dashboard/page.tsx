@@ -41,11 +41,8 @@ export default function DashboardPage() {
       {/* ─── Top Greeting & Overview Banner ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-[11px] font-mono font-semibold mb-1">
-            <span>UPSTREAM OPERATIONAL STATUS</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
-            Assam-Arakan Basin Operations
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
+            Assam-Arakan Basin Fleet
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
             Real-time subsurface hazard lookahead alongside eRTMAC live drilling feeds.
@@ -133,8 +130,8 @@ export default function DashboardPage() {
       {currentRole === 'operations_manager' && (
         <div className="p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-neutral-900 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <TrendingDown className="w-5 h-5 text-amber-400" />
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 shadow-xs">
+              <TrendingDown className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -142,14 +139,14 @@ export default function DashboardPage() {
                 <Badge className="bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-300 dark:border-rose-800 font-mono text-[10px]">Digboi 88/100 Decay</Badge>
               </div>
               <div className="text-xs sm:text-sm font-extrabold text-neutral-950 dark:text-white mt-0.5">
-                Institutional memory decay in Digboi & Kharsang assets requires digitization prioritization to protect infill drilling.
+                Institutional memory decay in Digboi &amp; Kharsang assets requires digitization prioritization to protect infill drilling.
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href="/decay-index"
-              className="px-3.5 py-1.5 rounded-xl bg-neutral-950 dark:bg-amber-600 hover:bg-neutral-800 dark:hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors shadow-2xs"
+              className="px-3.5 py-1.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 dark:bg-amber-600 dark:hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors shadow-2xs"
             >
               Inspect Decay Index →
             </Link>

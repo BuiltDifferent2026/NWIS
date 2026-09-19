@@ -33,12 +33,12 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
 }) => {
   // Default stratigraphic formations if none provided
   const formations: DepthIntervalBand[] = highlightIntervals || [
-    { name: 'Alluvium / Dihing', from: 0, to: 600, color: '#e5e7eb' },
-    { name: 'Namsang Formation', from: 600, to: 1200, color: '#d1d5db' },
-    { name: 'Girujan Clay (Seal)', from: 1200, to: 1800, color: '#c7d2fe' },
-    { name: 'Tipam Sandstone (Target)', from: 1800, to: 2600, color: '#fed7aa' },
-    { name: 'Barail Group (Target/Kick)', from: 2600, to: 3500, color: '#fbcfe8' },
-    { name: 'Kopili Formation (Overpressure)', from: 3500, to: maxDepthMD, color: '#fecdd3' }
+    { name: 'Alluvium / Dihing', from: 0, to: 600, color: '#1e293b' },
+    { name: 'Namsang Formation', from: 600, to: 1200, color: '#1e2230' },
+    { name: 'Girujan Clay (Seal)', from: 1200, to: 1800, color: '#1e1b4b' },
+    { name: 'Tipam Sandstone (Target)', from: 1800, to: 2600, color: '#451a03' },
+    { name: 'Barail Group (Target/Kick)', from: 2600, to: 3500, color: '#3b0764' },
+    { name: 'Kopili Formation (Overpressure)', from: 3500, to: maxDepthMD, color: '#4c0519' }
   ];
 
   const svgWidth = 340;
@@ -89,9 +89,9 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
 
       <div className="relative flex justify-center">
         <svg
-          width={svgWidth}
-          height={height}
-          className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#0d1017] transition-colors"
+          viewBox={`0 0 ${svgWidth} ${height}`}
+          className="w-full max-w-[360px] rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#090d16] transition-colors"
+          style={{ height }}
           role="img"
           aria-label="Stratigraphic depth track visualization"
         >
@@ -135,16 +135,17 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
                   y={y1}
                   width={trackWidth}
                   height={bandHeight}
-                  fill={f.color || '#f3f4f6'}
-                  stroke="#9ca3af"
-                  strokeWidth="0.75"
+                  fill={f.color || '#1e293b'}
+                  stroke="#334155"
+                  strokeWidth="1"
                 />
                 <text
                   x={trackLeft + 8}
                   y={y1 + 14}
                   fontSize="10"
                   fontWeight="600"
-                  fill="#111827"
+                  fill="#ffffff"
+                  fontFamily="monospace"
                 >
                   {f.name}
                 </text>
@@ -154,7 +155,7 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
                   textAnchor="end"
                   fontSize="9"
                   fontFamily="monospace"
-                  fill="#4b5563"
+                  fill="#94a3b8"
                 >
                   {f.from}m–{f.to}m
                 </text>

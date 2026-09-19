@@ -160,15 +160,11 @@ export default function AnalogsPage() {
       {/* ─── Header Strip ─── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-[11px] font-mono font-semibold mb-1">
-            <GitCompare className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
-            <span>PETROPHYSICAL TWINNING ENGINE</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
             Cross-Formation Analog Engine
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5 font-medium">
-            Bridging institutional memory across basins: proving that petrophysical similarity outweighs pure geographic distance.
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Petrophysical similarity and stratigraphic twin matching across the Assam-Arakan Basin.
           </p>
         </div>
 
@@ -188,22 +184,22 @@ export default function AnalogsPage() {
               onClick={() => setSelectedCaseId(item.id)}
               className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-neutral-950 dark:bg-neutral-900 text-white border-neutral-900 dark:border-amber-500/50 shadow-md ring-2 ring-amber-500/20'
+                  ? 'bg-amber-500/10 dark:bg-neutral-900 text-neutral-950 dark:text-white border-amber-500 dark:border-amber-500/50 shadow-xs ring-2 ring-amber-500/20'
                   : 'bg-white dark:bg-[#12151c] text-neutral-800 dark:text-neutral-200 border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900 shadow-xs'
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className={`text-[10px] font-mono uppercase font-bold ${isSelected ? 'text-amber-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
+                <span className={`text-[10px] font-mono uppercase font-bold ${isSelected ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
                   {item.targetField}
                 </span>
-                <span className={`text-[11px] font-mono font-extrabold ${isSelected ? 'text-emerald-400' : 'text-emerald-700 dark:text-emerald-400'}`}>
+                <span className={`text-[11px] font-mono font-extrabold ${isSelected ? 'text-emerald-700 dark:text-emerald-400' : 'text-emerald-700 dark:text-emerald-400'}`}>
                   {item.matchScore}% Match
                 </span>
               </div>
               <div className="font-extrabold text-sm tracking-tight truncate">
                 {item.targetFormation}
               </div>
-              <div className={`text-xs mt-1 truncate ${isSelected ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
+              <div className={`text-xs mt-1 truncate ${isSelected ? 'text-neutral-700 dark:text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
                 Matched: {item.analogFormation}
               </div>
             </button>
@@ -280,44 +276,44 @@ export default function AnalogsPage() {
         </div>
 
         {/* ─── Transferable Operational Playbook ─── */}
-        <div className="p-5 rounded-xl border border-neutral-800 bg-neutral-950 text-neutral-200 space-y-4">
+        <div className="p-5 rounded-xl border border-emerald-300 dark:border-emerald-800/80 bg-emerald-50/70 dark:bg-[#0c141c] text-neutral-900 dark:text-neutral-200 space-y-4 shadow-2xs">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <h3 className="font-extrabold text-sm text-white">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h3 className="font-extrabold text-sm text-neutral-950 dark:text-white">
                 Transferable Engineering Playbook
               </h3>
             </div>
-            <Badge className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-mono">
+            <Badge className="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] font-mono font-bold">
               PRE-CLEARED GUIDANCE
             </Badge>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
-              <span className="text-neutral-400 uppercase text-[10px] font-mono block">Recommended Mud Weight</span>
-              <strong className="text-emerald-400 text-sm font-mono block">
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] font-mono font-bold block">Recommended Mud Weight</span>
+              <strong className="text-emerald-700 dark:text-emerald-400 text-sm font-mono block">
                 {currentCase.transferableLesson.provenMudWeight}
               </strong>
             </div>
 
             <div className="space-y-1">
-              <span className="text-neutral-400 uppercase text-[10px] font-mono block">Proven Mitigation Strategy</span>
-              <p className="text-neutral-300 font-sans leading-relaxed">
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] font-mono font-bold block">Proven Mitigation Strategy</span>
+              <p className="text-neutral-700 dark:text-neutral-300 font-sans leading-relaxed">
                 {currentCase.transferableLesson.effectiveMitigation}
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-neutral-400 uppercase text-[10px] font-mono block">Hydraulics & Tripping Rules</span>
-              <p className="text-neutral-300 font-sans leading-relaxed">
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] font-mono font-bold block">Hydraulics & Tripping Rules</span>
+              <p className="text-neutral-700 dark:text-neutral-300 font-sans leading-relaxed">
                 {currentCase.transferableLesson.hydraulicsRule}
               </p>
             </div>
 
             <div className="space-y-1">
-              <span className="text-neutral-400 uppercase text-[10px] font-mono block">Verified Historical Outcome</span>
-              <p className="text-neutral-300 font-sans leading-relaxed">
+              <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] font-mono font-bold block">Verified Historical Outcome</span>
+              <p className="text-neutral-700 dark:text-neutral-300 font-sans leading-relaxed">
                 {currentCase.transferableLesson.verifiedOutcome}
               </p>
             </div>

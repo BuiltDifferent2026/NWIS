@@ -41,11 +41,10 @@ export default function RootLayout({
               (function() {
                 try {
                   var saved = localStorage.getItem('nwis-theme');
-                  var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  if (saved === 'dark' || (!saved && prefersDark)) {
-                    document.documentElement.classList.add('dark');
-                  } else {
+                  if (saved === 'light') {
                     document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
                   }
                 } catch(e) {}
               })();
@@ -53,7 +52,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full bg-neutral-50 dark:bg-[#08090d] text-neutral-900 dark:text-neutral-100 font-sans antialiased selection:bg-amber-100 selection:text-amber-900 transition-colors">
+      <body className="h-full bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-neutral-950 transition-colors">
         <AppShell>{children}</AppShell>
       </body>
     </html>

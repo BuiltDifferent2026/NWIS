@@ -26,11 +26,11 @@ export default function AlertsListPage() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight font-mono">
           Proactive Alert Inbox
         </h1>
-        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-          Subsurface hazard advisories generated ahead of depth by correlating live rig data against 130+ years of offset well records.
+        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
+          Lookahead subsurface hazard advisories generated from active telemetry and offset well correlations.
         </p>
       </div>
 
