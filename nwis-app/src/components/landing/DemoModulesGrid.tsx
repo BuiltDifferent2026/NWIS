@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { 
-  HardHat, 
+  Layers, 
   Activity, 
   GitCompare, 
   TrendingDown, 
@@ -18,52 +18,100 @@ import { Badge } from '@/components/ui/badge';
 export const DemoModulesGrid: React.FC = () => {
   const modules = [
     {
-      title: 'Rig Floor Cockpit & 75m Lookahead',
+      title: 'Live Operations Cockpit',
       subtitle: 'Real-Time Telemetry & Proactive Warning',
-      description: 'Sits alongside eRTMAC streaming depth, ROP, torque, and mud weight. Fires hazard advisories 75m before entering the Tipam micro-fracture loss horizon.',
+      description: 'Active drilling workspace alongside eRTMAC. Real-time wellbore telemetry, 75m lookahead hazard alert countdown, and synchronized geospatial offset map.',
       href: '/wells/well-glk-14',
-      icon: HardHat,
-      badge: 'LIVE TELEMETRY',
+      icon: Layers,
+      badge: 'CORE COCKPIT',
       badgeColor: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-      actionText: 'Open Rig Cockpit',
-      metric: '75m Proactive Buffer',
-      metricSub: 'OIL-GLK-14 Active Stream'
+      actionText: 'Launch Live Cockpit',
+      preview: {
+        label: 'Active Well',
+        val: 'OIL-GLK-14 @ 2,165m',
+        metric: '14.8 m/h ROP',
+        status: 'Streaming'
+      }
     },
     {
-      title: 'Historical Replay Benchmark Simulator',
-      subtitle: 'Falsifiable Lead-Time Verification',
-      description: 'Interactive step simulator proving NWIS triggers advisories 75m before reaching the 1996 OIL-GLK-07 total lost circulation horizon (2,280m MD).',
+      title: 'Historical Well Replay Simulator',
+      subtitle: 'Deterministic Benchmark Verifier',
+      description: 'Deterministic benchmark simulator. Replays historical 1988–2004 drilling feeds at 1x–20x to verify proactive lookahead alerts before documented losses.',
       href: '/replay',
       icon: Activity,
-      badge: 'BENCHMARK VERIFIER',
+      badge: 'VALIDATION ENGINE',
       badgeColor: 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-      actionText: 'Launch Simulator',
-      metric: '34 NPT Hours Saved',
-      metricSub: 'Empirical Verification'
+      actionText: 'Run Replay Simulator',
+      preview: {
+        label: 'Validated Scenario',
+        val: 'OIL-GLK-07 (1996)',
+        metric: '34h NPT Avoided',
+        status: 'Falsifiable'
+      }
     },
     {
       title: 'Cross-Formation Petrophysical Analogs',
-      subtitle: 'Stratigraphic Twin Engine',
-      description: 'Calculates 5-vector correlation (stratigraphy, depth, trajectory, operational parameters, geographic proximity) across 25+ Assam-Arakan Basin wells.',
+      subtitle: 'Stratigraphic Twin Correlation Engine',
+      description: 'Multi-well correlation panel & petrophysical similarity engine. Surfaces true stratigraphic analogs across complex Assam fault blocks (Similarity ≠ Distance).',
       href: '/analogs',
       icon: GitCompare,
-      badge: 'CORRELATION ENGINE',
+      badge: 'STRATIGRAPHIC TWINS',
       badgeColor: 'bg-sky-50 dark:bg-sky-950/40 text-sky-800 dark:text-sky-300 border-sky-200 dark:border-sky-800',
-      actionText: 'Explore Analogs',
-      metric: '5-Vector Matrix',
-      metricSub: '25+ Basin Wells Indexed'
+      actionText: 'Explore Offset Analogs',
+      preview: {
+        label: 'Best Geological Twin',
+        val: 'OIL-GLK-07 (87% Sim)',
+        metric: '1.8 km SE Offset',
+        status: 'Correlated'
+      }
+    },
+    {
+      title: 'Fleet Well Register & Watcher',
+      subtitle: 'Basin-Wide Multi-Rig Oversight',
+      description: 'Assam-Arakan basin-wide multi-rig register tracking active drilling corridors, calibrated lookahead proximity gauges, and shift operations checklists.',
+      href: '/dashboard',
+      icon: Compass,
+      badge: 'BASIN FLEET',
+      badgeColor: 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+      actionText: 'Open Fleet Register',
+      preview: {
+        label: 'Active Rig Fleet',
+        val: '3 Rigs Drilling',
+        metric: 'GLK-COR-03 Watcher',
+        status: 'Live Stream'
+      }
+    },
+    {
+      title: 'Archival OCR & Ingestion Pipeline',
+      subtitle: 'Legacy WCR & DDR Vectorization',
+      description: 'Standardizes 130+ years of typewritten WCRs & daily drilling logs into structured schemas with bounding-box OCR, layout parsing, and human-in-the-loop audit.',
+      href: '/admin/ingestion',
+      icon: Database,
+      badge: 'DOCUMENT INGESTION',
+      badgeColor: 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
+      actionText: 'Inspect Ingestion Pipeline',
+      preview: {
+        label: 'Layout OCR Accuracy',
+        val: '94.2% Conf Score',
+        metric: '14 pages / min',
+        status: 'Batch #4'
+      }
     },
     {
       title: 'Institutional Memory Decay Index',
       subtitle: 'Basin Knowledge Erosion Quantification',
-      description: 'A per-field algorithmic score measuring physical archive deterioration, scanned TIFF percentages, and retiring workforce knowledge risk.',
+      description: 'Quantifies subsurface knowledge loss risks across Digboi, Kharsang, and Geleki to prioritize fragile physical records before senior superintendents retire.',
       href: '/decay-index',
       icon: TrendingDown,
-      badge: 'DIGBOI 88% RISK',
+      badge: 'GOVERNANCE AUDIT',
       badgeColor: 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800',
-      actionText: 'Inspect Decay Matrix',
-      metric: '851 Records at Risk',
-      metricSub: 'Physical Paper Heritage'
+      actionText: 'Check Field Risk Index',
+      preview: {
+        label: 'Highest Decay Risk',
+        val: 'Digboi: 88 / 100',
+        metric: '851 At-Risk WCRs',
+        status: 'Critical'
+      }
     }
   ];
 
@@ -79,24 +127,24 @@ export const DemoModulesGrid: React.FC = () => {
               <span>SIH26121 EVALUATION TRACKS</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
-              Interactive Demo Modules
+              Assam Basin Drilling Intelligence Modules
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1 max-w-xl">
-              Select any core scenario below to directly test the platform capabilities built for Oil India Limited.
+            <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1 max-w-2xl">
+              Six integrated modules bridging live eRTMAC rig streaming with 130 years of archival memory across the Naga Thrust & Fold Belt.
             </p>
           </div>
 
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 dark:bg-amber-600 hover:bg-neutral-800 dark:hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors shadow-xs shrink-0 self-start sm:self-auto"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-950 dark:bg-amber-600 hover:bg-neutral-800 dark:hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors shadow-xs shrink-0 self-start sm:self-auto cursor-pointer"
           >
-            <span>Open Fleet Dashboard</span>
+            <span>Open Fleet Register</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        {/* 4 Interactive Demo Pathway Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* 6 Balanced Interactive Module Cards (3x2 Grid) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {modules.map((m) => {
             const Icon = m.icon;
             return (
@@ -128,23 +176,26 @@ export const DemoModulesGrid: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Bottom Metric Strip & Action Link */}
-                <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3">
+                {/* Miniature Instrument Preview Badge */}
+                <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#0c0f16] border border-neutral-200 dark:border-neutral-800/80 flex items-center justify-between text-xs font-mono">
                   <div>
-                    <div className="text-sm font-extrabold font-mono text-neutral-950 dark:text-white">
-                      {m.metric}
-                    </div>
-                    <div className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono">
-                      {m.metricSub}
-                    </div>
+                    <span className="text-neutral-500 dark:text-neutral-400 text-[10px] block font-bold">{m.preview.label}</span>
+                    <span className="font-bold text-neutral-900 dark:text-neutral-200 text-[11px]">{m.preview.val}</span>
                   </div>
+                  <div className="text-right">
+                    <span className="text-neutral-500 dark:text-neutral-400 text-[10px] block">{m.preview.status}</span>
+                    <span className="font-bold text-amber-600 dark:text-amber-400 text-[11px]">{m.preview.metric}</span>
+                  </div>
+                </div>
 
+                {/* Bottom Action Link */}
+                <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between gap-3">
                   <Link
                     href={m.href}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-amber-600 dark:hover:bg-amber-600 hover:text-white dark:hover:text-white text-neutral-800 dark:text-neutral-200 text-xs font-bold font-mono transition-all group-hover:bg-amber-600 group-hover:text-white"
+                    className="w-full inline-flex items-center justify-between px-3.5 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800/90 hover:bg-amber-600 dark:hover:bg-amber-600 hover:text-white dark:hover:text-white text-neutral-800 dark:text-neutral-200 text-xs font-bold font-mono transition-all group-hover:bg-amber-600 group-hover:text-white cursor-pointer"
                   >
                     <span>{m.actionText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </Card>
@@ -158,13 +209,9 @@ export const DemoModulesGrid: React.FC = () => {
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>Auditable Pedigree: Every advisory strictly separates observed facts, model estimates, and field mitigations with WCR line citations.</span>
           </div>
-          <Link
-            href="/admin/ingestion"
-            className="text-amber-700 dark:text-amber-400 font-bold hover:underline shrink-0 flex items-center gap-1"
-          >
-            <span>View Ingestion OCR Pipeline</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="text-amber-700 dark:text-amber-400 font-bold">OIL INDIA LIMITED eRTMAC COMPANION</span>
+          </div>
         </div>
 
       </div>
