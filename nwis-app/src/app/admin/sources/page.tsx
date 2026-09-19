@@ -4,10 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from '../../../components/layout/Breadcrumb';
 import { SourceDocument } from '../../../lib/data/types';
 import { getSourceDocuments } from '../../../lib/data/service';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
-import { FileText, Archive, Filter } from 'lucide-react';
 
 export default function AdminSourcesPage() {
   const [sources, setSources] = useState<SourceDocument[]>([]);
@@ -29,48 +25,42 @@ export default function AdminSourcesPage() {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-4 max-w-[1440px] mx-auto pb-12 font-sans">
       <Breadcrumb
         items={[
-          { label: 'Administration' },
+          { label: 'Governance & Institutional Memory', href: '/' },
           { label: 'Source Document Register' }
         ]}
       />
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
-            Source Document &amp; Evidence Register
-          </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-            Register of archival Daily Drilling Reports (DDRs) and Well Completion Reports (WCRs).
-          </p>
-        </div>
-
-        <Badge variant="outline" className="text-xs font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700 py-1.5 px-3 self-start sm:self-auto">
-          VERIFIABLE PEDIGREE
-        </Badge>
-      </div>
-
-      {/* Semantic Documents Table Card */}
-      <Card className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] shadow-xs overflow-hidden">
-        <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-neutral-50/50 dark:bg-neutral-900/50">
+      {/* ─── Header ─── */}
+      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
+        
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border/80">
           <div>
-            <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white">
-              Assam Basin Historical Document Index
-            </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              Showing {filteredSources.length} of {sources.length} indexed records.
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <div className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/40 text-blue-700 dark:text-blue-400 font-mono font-bold text-xs rounded-xs">
+                ARCHIVE REPOSITORY
+              </div>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+                Source Document &amp; Evidence Register
+              </h1>
+              <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-xs rounded-xs">
+                VERIFIABLE ARCHIVE
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground font-sans mt-1">
+              Catalogue of historical Daily Drilling Reports (DDRs) and Well Completion Reports (WCRs) powering the lookahead model.
             </p>
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="text-neutral-500 dark:text-neutral-400">Filter by Field:</span>
+            <span className="text-muted-foreground font-bold">Field:</span>
             <select
               value={filterField}
               onChange={(e) => setFilterField(e.target.value)}
-              className="border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-xl px-2.5 py-1 text-xs font-bold text-neutral-800 dark:text-neutral-200 focus:outline-hidden"
+              className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
             >
               <option value="all">All Fields</option>
               <option value="geleki">Geleki Field</option>
@@ -79,57 +69,58 @@ export default function AdminSourcesPage() {
             </select>
           </div>
         </div>
+      </div>
 
+      {/* Table */}
+      <div className="gov-panel space-y-2">
         <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#181c26] text-xs font-mono uppercase">
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Document Identifier</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Type</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Subject Well</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Field</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Date Range</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Pages</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Confidence</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Events</TableHead>
-                <TableHead className="font-bold text-neutral-700 dark:text-neutral-300">Archive Reference</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <table className="gov-table font-mono text-xs">
+            <thead>
+              <tr>
+                <th>Document Identifier</th>
+                <th>Type</th>
+                <th>Subject Well</th>
+                <th>Field</th>
+                <th>Date Range</th>
+                <th>Pages</th>
+                <th>Confidence</th>
+                <th>Events</th>
+                <th>Archive Reference</th>
+              </tr>
+            </thead>
+            <tbody>
               {filteredSources.map((doc) => (
-                <TableRow key={doc.id} className="border-neutral-100 dark:border-neutral-800/60 hover:bg-neutral-50/70 dark:hover:bg-neutral-900/40 transition-colors">
-                  <TableCell className="font-extrabold font-mono text-neutral-950 dark:text-white text-xs">
-                    {doc.documentName}
-                  </TableCell>
-                  <TableCell className="text-xs text-neutral-700 dark:text-neutral-300">{doc.documentType}</TableCell>
-                  <TableCell className="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-200">{doc.wellName}</TableCell>
-                  <TableCell className="text-xs text-neutral-600 dark:text-neutral-400">{doc.field}</TableCell>
-                  <TableCell className="font-mono text-xs text-neutral-600 dark:text-neutral-400">{doc.dateRange}</TableCell>
-                  <TableCell className="font-mono text-xs text-neutral-600 dark:text-neutral-400">{doc.pageCount} pp</TableCell>
-                  <TableCell>
-                    <Badge 
-                      variant="outline" 
-                      className={`font-mono text-[10px] font-bold ${
-                        doc.ingestionConfidence === 'STRUCTURED-HIGH'
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
-                          : 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800'
-                      }`}
-                    >
+                <tr key={doc.id}>
+                  <td className="font-bold text-foreground">{doc.documentName}</td>
+                  <td>
+                    <span className="px-2 py-0.5 bg-secondary text-foreground border border-border font-bold rounded-xs text-[10px]">
+                      {doc.documentType}
+                    </span>
+                  </td>
+                  <td className="font-bold text-foreground">{doc.wellName}</td>
+                  <td className="text-foreground">{doc.field}</td>
+                  <td className="text-muted-foreground">{doc.dateRange}</td>
+                  <td className="text-foreground font-bold">{doc.pageCount} pp</td>
+                  <td>
+                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded-xs ${
+                      doc.ingestionConfidence === 'STRUCTURED-HIGH' || doc.ingestionConfidence === 'OCR-HIGH'
+                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
+                        : doc.ingestionConfidence === 'OCR-MEDIUM'
+                        ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
+                        : 'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30'
+                    }`}>
                       {doc.ingestionConfidence}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="font-mono text-xs font-extrabold text-amber-700 dark:text-amber-400">
-                    {doc.extractedEventsCount}
-                  </TableCell>
-                  <TableCell className="font-mono text-[11px] text-neutral-500 dark:text-neutral-400">
-                    {doc.archiveReference}
-                  </TableCell>
-                </TableRow>
+                    </span>
+                  </td>
+                  <td className="font-bold text-amber-700 dark:text-amber-400">{doc.extractedEventsCount}</td>
+                  <td className="text-muted-foreground font-medium">{doc.archiveReference}</td>
+                </tr>
               ))}
-            </TableBody>
-          </Table>
+            </tbody>
+          </table>
         </div>
-      </Card>
+      </div>
+
     </div>
   );
 }

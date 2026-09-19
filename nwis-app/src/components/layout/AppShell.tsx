@@ -12,24 +12,23 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
-  const isLandingPage = pathname === '/' || pathname === '/landing' || pathname === '/login';
+  const isLoginPage = pathname === '/login';
 
-  if (isLandingPage) {
+  if (isLoginPage) {
     return <>{children}</>;
   }
 
-  // Enterprise operational console layout with top bar, navigation, and main workspace
   return (
-    <div className="h-full flex flex-col bg-neutral-50 dark:bg-[#090b0f] text-neutral-900 dark:text-neutral-100 antialiased transition-colors">
-      {/* Skip to main content link (Accessibility requirement) */}
+    <div className="min-h-screen flex flex-col bg-[#f4f6f8] dark:bg-[#090c13] text-[#0b0c0c] dark:text-[#f1f5f9] antialiased transition-colors">
+      {/* Skip to main content link (Accessibility requirement under GIGW / WCAG) */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-amber-400 focus:text-neutral-950 focus:p-2 focus:font-bold"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-[#ffdd00] focus:text-[#0b0c0c] focus:p-2 focus:font-bold focus:outline-2"
       >
         Skip to main content
       </a>
 
-      {/* Modern Operations Top Bar */}
+      {/* Government Operations Header */}
       <GovHeader />
 
       {/* Main Body Shell: Left Nav + Content Area */}
@@ -37,7 +36,7 @@ export function AppShell({ children }: AppShellProps) {
         <GovNav />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto p-4 md:p-6 bg-neutral-50 dark:bg-[#090b0f] transition-colors"
+          className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#f4f6f8] dark:bg-[#090c13] transition-colors"
         >
           {children}
         </main>

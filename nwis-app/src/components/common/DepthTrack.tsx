@@ -31,14 +31,13 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
   className = '',
   height = 540
 }) => {
-  // Default stratigraphic formations if none provided
   const formations: DepthIntervalBand[] = highlightIntervals || [
-    { name: 'Alluvium / Dihing', from: 0, to: 600, color: '#1e293b' },
-    { name: 'Namsang Formation', from: 600, to: 1200, color: '#1e2230' },
-    { name: 'Girujan Clay (Seal)', from: 1200, to: 1800, color: '#1e1b4b' },
-    { name: 'Tipam Sandstone (Target)', from: 1800, to: 2600, color: '#451a03' },
-    { name: 'Barail Group (Target/Kick)', from: 2600, to: 3500, color: '#3b0764' },
-    { name: 'Kopili Formation (Overpressure)', from: 3500, to: maxDepthMD, color: '#4c0519' }
+    { name: 'Alluvium / Dihing', from: 0, to: 600, color: '#64748b' },
+    { name: 'Namsang Formation', from: 600, to: 1200, color: '#475569' },
+    { name: 'Girujan Clay (Seal)', from: 1200, to: 1800, color: '#334155' },
+    { name: 'Tipam Sandstone (Target)', from: 1800, to: 2600, color: '#b25900' },
+    { name: 'Barail Group (Kick Zone)', from: 2600, to: 3500, color: '#581c87' },
+    { name: 'Kopili Formation (Overpressure)', from: 3500, to: maxDepthMD, color: '#831843' }
   ];
 
   const svgWidth = 340;
@@ -46,7 +45,6 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
   const trackWidth = 240;
   const trackLeft = paddingLeft + 10;
 
-  // Depth-to-Y mapping (0m at top, maxDepth at bottom)
   const depthToY = (depth: number) => {
     const clamped = Math.max(0, Math.min(depth, maxDepthMD));
     return (clamped / maxDepthMD) * (height - 40) + 20;
@@ -57,30 +55,29 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
   const depthTicks = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500];
 
   return (
-    <div className={`rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs transition-colors ${className}`}>
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-neutral-200 dark:border-neutral-800">
+    <div className={`gov-panel space-y-3 font-sans ${className}`}>
+      <div className="flex items-center justify-between pb-2 border-b border-border">
         <div>
-          <span className="text-xs font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide font-mono">
+          <span className="text-xs font-bold text-foreground uppercase tracking-wide font-mono">
             Stratigraphic Depth-Track (MD)
           </span>
-          <div className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
-            Vertical Depth Scale • 0m to {maxDepthMD}m MD
+          <div className="text-[11px] text-muted-foreground font-mono">
+            Vertical Depth Scale · 0m to {maxDepthMD}m MD
           </div>
         </div>
 
-        {/* Replay / Comparison Readout */}
         {showComparisonReadout && historicalIncidentDepth !== undefined && (
-          <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-3 py-1.5 text-xs font-mono">
-            <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] block font-bold">
-              Advance Comparison:
+          <div className="border border-border bg-secondary px-2.5 py-1 text-xs font-mono">
+            <span className="text-muted-foreground uppercase text-[10px] block font-bold">
+              Comparison:
             </span>
             {currentDepthMD < historicalIncidentDepth ? (
-              <span className="font-bold text-amber-600 dark:text-amber-400">
-                {(historicalIncidentDepth - currentDepthMD).toFixed(0)}m BEFORE historical incident
+              <span className="font-bold text-[#b25900] dark:text-[#fbbf24]">
+                {(historicalIncidentDepth - currentDepthMD).toFixed(0)}m BEFORE incident
               </span>
             ) : (
-              <span className="font-bold text-rose-600 dark:text-rose-400">
-                {(currentDepthMD - historicalIncidentDepth).toFixed(0)}m PAST historical incident
+              <span className="font-bold text-[#d4351c] dark:text-[#f87171]">
+                {(currentDepthMD - historicalIncidentDepth).toFixed(0)}m PAST incident
               </span>
             )}
           </div>
@@ -90,202 +87,144 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
       <div className="relative flex justify-center">
         <svg
           viewBox={`0 0 ${svgWidth} ${height}`}
-          className="w-full max-w-[360px] rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#090d16] transition-colors"
+          className="w-full max-w-[360px] border border-border bg-secondary/30 transition-colors"
           style={{ height }}
           role="img"
           aria-label="Stratigraphic depth track visualization"
         >
-          {/* Depth Axis Ticks (Left) */}
+          {/* Depth Axis Ticks */}
           {depthTicks.map((tick) => {
             const y = depthToY(tick);
             return (
               <g key={tick}>
-                <line
-                  x1={paddingLeft - 5}
-                  y1={y}
-                  x2={paddingLeft + 5}
-                  y2={y}
-                  stroke="currentColor"
-                  className="text-neutral-300 dark:text-neutral-700"
-                  strokeWidth="1"
-                />
                 <text
                   x={paddingLeft - 8}
-                  y={y + 3}
+                  y={y + 4}
                   textAnchor="end"
-                  fontSize="10"
-                  fontFamily="monospace"
-                  className="fill-neutral-500 dark:fill-neutral-400"
+                  className="fill-muted-foreground font-mono text-[10px]"
                 >
                   {tick}m
                 </text>
+                <line
+                  x1={paddingLeft - 4}
+                  y1={y}
+                  x2={paddingLeft + 4}
+                  y2={y}
+                  stroke="currentColor"
+                  className="text-border"
+                  strokeWidth="1"
+                />
               </g>
             );
           })}
 
-          {/* Stratigraphic Formation Intervals */}
+          {/* Formations Track */}
           {formations.map((f, i) => {
-            const y1 = depthToY(f.from);
-            const y2 = depthToY(f.to);
-            const bandHeight = y2 - y1;
+            const yFrom = depthToY(f.from);
+            const yTo = depthToY(f.to);
+            const rectHeight = Math.max(2, yTo - yFrom);
             return (
               <g key={i}>
                 <rect
                   x={trackLeft}
-                  y={y1}
+                  y={yFrom}
                   width={trackWidth}
-                  height={bandHeight}
-                  fill={f.color || '#1e293b'}
-                  stroke="#334155"
-                  strokeWidth="1"
+                  height={rectHeight}
+                  fill={f.color}
+                  opacity={0.35}
+                  stroke="currentColor"
+                  className="text-border"
+                  strokeWidth="0.5"
                 />
                 <text
                   x={trackLeft + 8}
-                  y={y1 + 14}
-                  fontSize="10"
-                  fontWeight="600"
-                  fill="#ffffff"
-                  fontFamily="monospace"
+                  y={yFrom + 14}
+                  className="fill-foreground font-mono font-bold text-[10px]"
                 >
                   {f.name}
-                </text>
-                <text
-                  x={trackLeft + trackWidth - 8}
-                  y={y1 + 14}
-                  textAnchor="end"
-                  fontSize="9"
-                  fontFamily="monospace"
-                  fill="#94a3b8"
-                >
-                  {f.from}m–{f.to}m
                 </text>
               </g>
             );
           })}
 
-          {/* Risk Corridors (Hatched / Bordered Warning Zones) */}
+          {/* Risk Corridors Bands */}
           {riskCorridors.map((rc) => {
-            const y1 = depthToY(rc.depthInterval.from);
-            const y2 = depthToY(rc.depthInterval.to);
-            const corridorH = y2 - y1;
+            const yFrom = depthToY(rc.depthInterval.from);
+            const yTo = depthToY(rc.depthInterval.to);
+            const rectHeight = Math.max(2, yTo - yFrom);
             return (
               <g key={rc.id}>
                 <rect
                   x={trackLeft}
-                  y={y1}
+                  y={yFrom}
                   width={trackWidth}
-                  height={corridorH}
-                  fill="rgba(202, 53, 53, 0.15)"
-                  stroke="#ca3535"
-                  strokeWidth="1.5"
-                  strokeDasharray="4 2"
-                />
-                <rect
-                  x={trackLeft + 6}
-                  y={y1 + 4}
-                  width={trackWidth - 12}
-                  height={16}
-                  fill="#ca3535"
+                  height={rectHeight}
+                  fill="#d4351c"
+                  opacity={0.25}
+                  stroke="#d4351c"
+                  strokeWidth="1"
+                  strokeDasharray="3 3"
                 />
                 <text
-                  x={trackLeft + 12}
-                  y={y1 + 16}
-                  fontSize="9"
-                  fontWeight="700"
-                  fill="#ffffff"
-                  fontFamily="monospace"
+                  x={trackLeft + trackWidth - 8}
+                  y={yFrom + 12}
+                  textAnchor="end"
+                  className="fill-[#d4351c] dark:fill-[#fca5a5] font-mono font-bold text-[9px]"
                 >
-                  RISK CORRIDOR: {rc.eventType.replace('_', ' ').toUpperCase()} ({rc.depthInterval.from}–{rc.depthInterval.to}m)
+                  ⚠ HAZARD: {rc.eventType.toUpperCase()}
                 </text>
               </g>
             );
           })}
 
-          {/* Historical Actual Incident Marker (if passed, for Replay) */}
+          {/* Historical Incident Line */}
           {incidentY !== undefined && (
             <g>
               <line
-                x1={trackLeft - 10}
+                x1={trackLeft}
                 y1={incidentY}
-                x2={trackLeft + trackWidth + 10}
+                x2={trackLeft + trackWidth}
                 y2={incidentY}
-                stroke="#b91c1c"
-                strokeWidth="2.5"
-              />
-              <polygon
-                points={`${trackLeft + trackWidth + 4},${incidentY - 6} ${trackLeft + trackWidth + 14},${incidentY} ${trackLeft + trackWidth + 4},${incidentY + 6}`}
-                fill="#b91c1c"
-              />
-              <rect
-                x={trackLeft + 10}
-                y={incidentY + 3}
-                width={190}
-                height={15}
-                fill="#ffffff"
-                stroke="#b91c1c"
-                strokeWidth="1"
+                stroke="#d4351c"
+                strokeWidth="2"
+                strokeDasharray="4 2"
               />
               <text
-                x={trackLeft + 14}
-                y={incidentY + 14}
-                fontSize="9"
-                fontWeight="700"
-                fill="#b91c1c"
-                fontFamily="monospace"
+                x={trackLeft + trackWidth - 8}
+                y={incidentY - 4}
+                textAnchor="end"
+                className="fill-[#d4351c] dark:fill-[#fca5a5] font-mono font-bold text-[10px]"
               >
-                HISTORICAL INCIDENT: {historicalIncidentDepth}m MD
+                INCIDENT DEPTH ({historicalIncidentDepth}m)
               </text>
             </g>
           )}
 
-          {/* Active Bit Current Depth Marker (Blue Solid Line with Flag) */}
+          {/* Current Bit Depth Line */}
           <g>
             <line
-              x1={trackLeft - 15}
+              x1={trackLeft - 10}
               y1={currentY}
               x2={trackLeft + trackWidth + 10}
               y2={currentY}
-              stroke="#ea580c"
+              stroke="#1d70b8"
               strokeWidth="2.5"
             />
-            <polygon
-              points={`${trackLeft - 18},${currentY - 6} ${trackLeft - 8},${currentY} ${trackLeft - 18},${currentY + 6}`}
-              fill="#ea580c"
-            />
-            <rect
-              x={trackLeft + trackWidth - 110}
-              y={currentY - 18}
-              width={105}
-              height={16}
-              fill="#ea580c"
+            <circle
+              cx={trackLeft}
+              cy={currentY}
+              r="4"
+              fill="#1d70b8"
             />
             <text
-              x={trackLeft + trackWidth - 58}
-              y={currentY - 6}
-              textAnchor="middle"
-              fontSize="10"
-              fontWeight="700"
-              fill="#ffffff"
-              fontFamily="monospace"
+              x={trackLeft + 12}
+              y={currentY - 4}
+              className="fill-foreground font-mono font-bold text-[11px]"
             >
-              BIT: {currentDepthMD.toFixed(1)}m MD
+              BIT: {currentDepthMD}m MD
             </text>
           </g>
         </svg>
-      </div>
-
-      <div className="mt-3 pt-2 border-t border-neutral-200 flex flex-wrap items-center justify-between text-[11px] text-neutral-600 font-mono">
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-0.5 bg-[#ea580c] inline-block" /> Live Bit Depth
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-3 h-2 bg-red-100 border border-red-500 inline-block" /> Risk Corridor
-        </span>
-        {historicalIncidentDepth && (
-          <span className="flex items-center gap-1.5">
-            <span className="w-3 h-0.5 bg-[#b91c1c] inline-block" /> Historical Incident
-          </span>
-        )}
       </div>
     </div>
   );

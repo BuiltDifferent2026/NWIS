@@ -16,7 +16,8 @@ import {
   Sparkles,
   Info,
   CheckCircle2,
-  X
+  X,
+  Search
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
 import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
@@ -30,220 +31,236 @@ export const GovHeader: React.FC = () => {
   const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
   const [showErtmacBridgeModal, setShowErtmacBridgeModal] = useState<boolean>(false);
   
+  const [fontSizeLevel, setFontSizeLevel] = useState<'sm' | 'md' | 'lg'>('md');
+  const [lang, setLang] = useState<'en' | 'hi'>('en');
+
   // Unread high-priority notifications
   const unreadAlerts = alerts.filter((a) => a.status === 'new').length;
 
-  const navItems = [
-    {
-      name: 'Operations',
-      href: '/operations',
-      icon: Layers,
-      match: (p: string) => p.startsWith('/operations') || p === '/dashboard' || p.startsWith('/wells'),
-      badge: 'LIVE'
-    },
-    {
-      name: 'Well Replay',
-      href: '/replay',
-      icon: Activity,
-      match: (p: string) => p.startsWith('/replay'),
-      badge: 'DEMO'
-    },
-    {
-      name: 'Offset Intelligence',
-      href: '/analogs',
-      icon: GitCompare,
-      match: (p: string) => p.startsWith('/analogs'),
-    },
-    {
-      name: 'Archive & Evidence',
-      href: '/admin/ingestion',
-      icon: Database,
-      match: (p: string) => p.startsWith('/admin'),
-    },
-    {
-      name: 'Governance',
-      href: '/decay-index',
-      icon: Scale,
-      match: (p: string) => p.startsWith('/decay-index'),
-    },
-    {
-      name: 'Home',
-      href: '/',
-      icon: Sparkles,
-      match: (p: string) => p === '/' || p === '/landing',
-    }
-  ];
-
   return (
     <>
-      <header className="border-b border-neutral-200 dark:border-[#1e2536] bg-white dark:bg-[#0c0f17] sticky top-0 z-40 transition-colors shadow-xs">
+      <header className="border-b border-[#d0d7de] dark:border-[#1e3a5f] bg-white dark:bg-[#071d36] sticky top-0 z-40 transition-colors shadow-xs">
         
-        {/* ─── Clean Header Bar ─── */}
-        <div className="px-4 py-2.5 flex items-center justify-between gap-4">
+        {/* ─── 1. National Tricolor Accent Strip ─── */}
+        <div className="gov-in-tricolor" />
+
+        {/* ─── 2. GIGW Top Accessibility & Ministry Identification Bar ─── */}
+        <div className="gov-in-topbar px-4 py-1.5 flex items-center justify-between text-[11px] font-sans border-b border-[#d0d7de] dark:border-[#1e3a5f]">
           
-          {/* Brand & eRTMAC Tag */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-600 to-amber-700 dark:from-amber-600 dark:to-amber-800 flex items-center justify-center text-white font-mono font-extrabold text-sm shadow-sm ring-1 ring-amber-500/30">
-              OIL
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-base tracking-tight text-neutral-950 dark:text-white font-mono">
-                NWIS
-              </span>
-              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-[9px] font-mono font-bold uppercase tracking-wider">
-                eRTMAC
-              </span>
-            </div>
-          </Link>
-
-          {/* Right Control Group */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            
-            {/* Shift Context Badge */}
-            <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-[#141a27] border border-neutral-200 dark:border-[#1e2638] text-[11px] font-mono text-neutral-700 dark:text-neutral-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>Shift: <strong className="text-neutral-950 dark:text-white">Day (06:00–18:00)</strong></span>
-              <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <span className="text-neutral-500">Rig OIL-E2000-IV</span>
-            </div>
-
-            {/* Role Switcher Pill */}
-            <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-[#141a27] border border-neutral-200 dark:border-[#1e2638] rounded-xl px-2.5 py-1">
-              <HardHat className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-              <div className="flex flex-col">
-                <span className="text-[9px] font-mono uppercase text-neutral-400 leading-none">Role</span>
-                <select
-                  value={currentRole}
-                  onChange={(e) => setRole(e.target.value as UserRole)}
-                  className="bg-transparent text-xs font-bold text-neutral-900 dark:text-neutral-100 cursor-pointer focus:outline-hidden font-sans py-0.5"
-                  title="Switch User Role View"
-                >
-                  <option value="field_engineer">P. Bora (Rig Engineer)</option>
-                  <option value="operations_manager">D. Deka (Superintendent)</option>
-                  <option value="admin">M. Saikia (PSU Auditor)</option>
-                </select>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 font-semibold text-[#1f2328] dark:text-[#cbd5e1]">
+              <div className="w-5 h-5 rounded-full bg-[#0b3c6d] text-white flex items-center justify-center font-serif text-[10px] font-extrabold border border-[#ff9933]">
+                🏛️
               </div>
+              <span className="font-bold text-[#b45309] dark:text-[#f59e0b]">भारत सरकार</span>
+              <span className="text-[#8c959f]">|</span>
+              <span>Government of India</span>
+            </div>
+            <span className="hidden md:inline text-[#8c959f]">·</span>
+            <div className="hidden md:flex items-center gap-1 text-[#57606a] dark:text-[#94a3b8]">
+              <span>पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय</span>
+              <span className="text-[#8c959f]">|</span>
+              <span>Ministry of Petroleum &amp; Natural Gas</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5 font-mono text-[11px]">
+            {/* National Initiative Badge */}
+            <span className="hidden xl:inline-flex items-center gap-1 px-2 py-0.5 bg-[#fff8eb] dark:bg-[#1a2312] border border-[#fde68a] dark:border-[#3f6212] text-[10px] text-[#92400e] dark:text-[#bef264] font-bold">
+              🇮🇳 आत्मनिर्भर ऊर्जा | Atmanirbhar Energy Security
+            </span>
+
+            {/* SIH / Problem Statement Tag */}
+            <span className="hidden lg:inline-flex items-center gap-1 px-1.5 py-0.5 bg-[#f0f2f5] dark:bg-[#0c2847] border border-[#d0d7de] dark:border-[#1e3a5f] text-[10px] text-[#0b3c6d] dark:text-[#60a5fa] font-bold">
+              SIH 2026: PS #26121
+            </span>
+
+            {/* Font Size Accessibility Controls */}
+            <div className="hidden sm:flex items-center gap-1 border border-[#d0d7de] dark:border-[#1e3a5f] bg-white dark:bg-[#0c2847] px-1 py-0.2">
+              <button
+                type="button"
+                onClick={() => setFontSizeLevel('sm')}
+                className={`px-1 text-[10px] ${fontSizeLevel === 'sm' ? 'font-bold text-[#0b3c6d] dark:text-[#60a5fa]' : 'text-[#57606a]'}`}
+                title="Decrease Font Size"
+              >
+                A-
+              </button>
+              <button
+                type="button"
+                onClick={() => setFontSizeLevel('md')}
+                className={`px-1 text-[11px] ${fontSizeLevel === 'md' ? 'font-bold text-[#0b3c6d] dark:text-[#60a5fa]' : 'text-[#57606a]'}`}
+                title="Standard Font Size"
+              >
+                A
+              </button>
+              <button
+                type="button"
+                onClick={() => setFontSizeLevel('lg')}
+                className={`px-1 text-[12px] ${fontSizeLevel === 'lg' ? 'font-bold text-[#0b3c6d] dark:text-[#60a5fa]' : 'text-[#57606a]'}`}
+                title="Increase Font Size"
+              >
+                A+
+              </button>
             </div>
 
-            {/* Return / Connected to eRTMAC button */}
+            {/* Language Switcher */}
             <button
               type="button"
-              onClick={() => setShowErtmacBridgeModal(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-600/40 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-900 dark:text-amber-300 text-xs font-semibold font-mono transition-colors"
+              onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
+              className="px-2 py-0.5 border border-[#d0d7de] dark:border-[#1e3a5f] bg-white dark:bg-[#0c2847] hover:bg-[#edf2f7] dark:hover:bg-[#12365c] text-[#0b3c6d] dark:text-[#93c5fd] font-bold text-[10px] transition-colors cursor-pointer"
             >
-              <ExternalLink className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-              <span>eRTMAC Bridge</span>
+              {lang === 'en' ? 'हिन्दी' : 'English'}
             </button>
 
-            {/* Ask NWIS Copilot */}
-            <button
-              type="button"
-              onClick={() => setIsCopilotOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-              <span className="hidden sm:inline">Ask NWIS</span>
-            </button>
-
-            {/* Theme Toggle */}
+            {/* Theme Toggle Button */}
             <ThemeToggle />
+          </div>
 
-            {/* Alert Bell */}
+        </div>
+
+        {/* ─── 3. Main Indian PSU Branding & Operations Ribbon ─── */}
+        <div className="px-4 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-[#071d36]">
+          
+          {/* Brand & Organization Title */}
+          <div className="flex items-center gap-3.5">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-10 h-10 rounded-xs bg-[#0b3c6d] dark:bg-[#0a2f58] border-2 border-[#ff9933] text-white font-mono font-bold text-xs flex flex-col items-center justify-center tracking-wider shadow-xs">
+                <span className="text-[11px] leading-tight font-black text-[#ff9933]">OIL</span>
+                <span className="text-[8px] leading-tight text-white/90 font-bold">INDIA</span>
+              </div>
+              <div className="leading-tight">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-extrabold text-base text-[#0b3c6d] dark:text-[#93c5fd] font-sans tracking-tight">
+                    ऑयल इंडिया लिमिटेड | Oil India Limited
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.2 bg-[#fffbeb] dark:bg-[#1c2a1c] text-[#b45309] dark:text-[#34d399] border border-[#fde68a] dark:border-[#166534] font-mono font-bold">
+                    Navratna CPSE
+                  </span>
+                </div>
+                <div className="text-xs font-semibold text-[#1f2328] dark:text-[#f0f2f5] font-sans flex items-center gap-1.5 mt-0.5">
+                  <span className="text-[#b45309] dark:text-[#fbbf24] font-bold">निकटवर्ती कूप आसूचना प्रणाली (NWIS)</span>
+                  <span className="text-[#8c959f] font-normal">·</span>
+                  <span className="text-[#57606a] dark:text-[#94a3b8] font-normal text-[11px]">
+                    eRTMAC Subsurface Offset Intelligence Companion (Assam-Arakan Basin)
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Right Operational Control Group */}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            
+            {/* Live eRTMAC Status Tag */}
+            <button
+              onClick={() => setShowErtmacBridgeModal(true)}
+              className="flex items-center gap-1.5 px-2 py-1 rounded-xs border border-[#bbf7d0] dark:border-[#166534] bg-[#f0fdf4] dark:bg-[#0c2419] text-[11px] font-mono hover:bg-[#dcfce7] transition-colors cursor-pointer"
+              title="Click to view eRTMAC Bridge contract specifications"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#138808] animate-pulse" />
+              <span className="font-bold text-[#0e6406] dark:text-[#4ade80]">eRTMAC:</span>
+              <span className="text-[#1f2328] dark:text-[#cbd5e1] font-semibold">WITSML (380ms)</span>
+            </button>
+
+            {/* Quick Well Selector */}
+            <div className="flex items-center gap-1 text-xs font-mono">
+              <label htmlFor="active-well-select" className="text-[#57606a] dark:text-[#94a3b8] text-[10px] uppercase font-bold">
+                Well:
+              </label>
+              <select
+                id="active-well-select"
+                value={activeWellId}
+                onChange={(e) => setActiveWellId(e.target.value)}
+                className="border border-[#d0d7de] dark:border-[#1e3a5f] bg-white dark:bg-[#0c2847] text-[#1f2328] dark:text-[#f0f2f5] rounded-xs px-2 py-1 text-xs font-bold focus:outline-2 focus:outline-[#ff9933]"
+              >
+                <option value="well-glk-14">OIL-GLK-14 (Geleki · Active)</option>
+                <option value="well-dgb-09">OIL-DGB-09 (Digboi · Active)</option>
+                <option value="well-khs-04">OIL-KHS-04 (Kharsang · Standby)</option>
+              </select>
+            </div>
+
+            {/* Role Switcher */}
+            <div className="flex items-center gap-1 text-xs font-mono">
+              <select
+                value={currentRole}
+                onChange={(e) => setRole(e.target.value as UserRole)}
+                className="border border-[#d0d7de] dark:border-[#1e3a5f] bg-white dark:bg-[#0c2847] text-[#1f2328] dark:text-[#f0f2f5] rounded-xs px-2 py-1 text-xs font-medium focus:outline-2 focus:outline-[#ff9933]"
+                title="Switch Operating Role Persona"
+              >
+                <option value="field_engineer">Lead Rig Engineer</option>
+                <option value="operations_manager">Drilling Superintendent</option>
+                <option value="admin">PSU Data Auditor</option>
+              </select>
+            </div>
+
+            {/* Alert Inbox Jump */}
             <Link
               href="/alerts"
-              title={unreadAlerts > 0 ? `${unreadAlerts} active lookahead advisories` : 'No unread advisories'}
-              className="relative p-2 rounded-xl text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-[#192233] transition-colors border border-neutral-200 dark:border-[#1e2638] bg-white dark:bg-[#121723]"
+              className="relative p-1.5 rounded-xs border border-[#d0d7de] dark:border-[#1e3a5f] bg-white dark:bg-[#0c2847] text-[#57606a] dark:text-[#94a3b8] hover:text-[#0b3c6d] dark:hover:text-[#93c5fd] hover:bg-[#edf2f7] dark:hover:bg-[#12365c] transition-colors"
+              title={`${unreadAlerts} Open Hazard Advisories`}
+              aria-label="Alert Inbox"
             >
               <Bell className="w-4 h-4" />
               {unreadAlerts > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[10px] font-mono font-bold text-white ring-2 ring-white dark:ring-[#0c0f17]">
+                <span className="absolute -top-1 -right-1 px-1 bg-[#c92a2a] text-white text-[9px] font-mono font-bold rounded-xs leading-tight">
                   {unreadAlerts}
                 </span>
               )}
             </Link>
 
+            {/* Subsurface Copilot Button */}
+            <button
+              onClick={() => setIsCopilotOpen(true)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xs bg-[#0b3c6d] hover:bg-[#072a4d] text-white text-xs font-bold font-sans transition-colors cursor-pointer shadow-2xs border border-[#0b3c6d]"
+            >
+              <Search className="w-3.5 h-3.5 text-[#ff9933]" />
+              <span className="hidden md:inline">Search Archives</span>
+            </button>
           </div>
 
         </div>
-
       </header>
 
-      {/* Slide-Out AI Copilot Drawer */}
-      <AskNwisDrawer
-        isOpen={isCopilotOpen}
-        onClose={() => setIsCopilotOpen(false)}
-      />
+      {/* Ask NWIS Copilot Drawer */}
+      <AskNwisDrawer isOpen={isCopilotOpen} onClose={() => setIsCopilotOpen(false)} />
 
-      {/* eRTMAC Bridge & Safety Contract Modal */}
+      {/* eRTMAC Bridge Contract Modal */}
       {showErtmacBridgeModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-[#0f141f] border border-[#263147] rounded-2xl max-w-xl w-full p-6 text-neutral-100 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#1e273b] pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/40">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-white font-mono">eRTMAC System Boundary & Integration</h3>
-                  <p className="text-[11px] text-neutral-400">Strict Read-Only Integration Contract</p>
-                </div>
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 backdrop-blur-xs">
+          <div className="bg-white dark:bg-[#101520] border border-[#d1d5db] dark:border-[#232c3f] rounded-xs max-w-lg w-full p-5 space-y-4 shadow-lg animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between pb-3 border-b border-[#d1d5db] dark:border-[#232c3f]">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#00703c]" />
+                <h3 className="font-bold text-sm text-[#0b0c0c] dark:text-[#f1f5f9] font-sans">
+                  eRTMAC Bridge Architectural Contract
+                </h3>
               </div>
               <button
                 onClick={() => setShowErtmacBridgeModal(false)}
-                className="text-neutral-400 hover:text-white p-1 rounded-lg hover:bg-neutral-800"
+                className="p-1 rounded-xs hover:bg-[#f3f4f6] dark:hover:bg-[#192336] text-[#4b5563] dark:text-[#94a3b8]"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-3 text-xs text-neutral-300">
-              <div className="p-3 rounded-xl bg-[#151c2c] border border-[#222d44] space-y-2">
-                <div className="font-mono text-amber-400 font-semibold text-[11px] uppercase tracking-wider">
-                  Operational Safety Boundary
-                </div>
-                <p className="leading-relaxed text-neutral-300">
-                  NWIS sits strictly alongside Oil India's <strong>eRTMAC</strong> (real-time monitoring system). NWIS provides the missing <strong>institutional memory layer</strong> and depth-aware offset hazard correlation.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 font-mono text-[11px]">
-                <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 space-y-1">
-                  <div className="flex items-center gap-1.5 font-bold text-emerald-400">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Inbound (Read-Only)</span>
-                  </div>
-                  <p className="text-[10px] text-emerald-200/80 font-sans">
-                    Reads live state: <code className="text-white">GET /live-state/OIL-GLK-14</code> ({INITIAL_LIVE_TELEMETRY.depthMD}m MD, formation, ROP, torque, mud wt).
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-800/60 text-rose-300 space-y-1">
-                  <div className="flex items-center gap-1.5 font-bold text-rose-400">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Outbound (Zero Control)</span>
-                  </div>
-                  <p className="text-[10px] text-rose-200/80 font-sans">
-                    Zero write commands to rig hardware or eRTMAC controls. Advisory and decision-support only.
-                  </p>
-                </div>
-              </div>
-
-              <div className="text-[11px] text-neutral-400 bg-neutral-900/60 p-3 rounded-xl border border-neutral-800 space-y-1">
-                <div className="font-mono text-white font-bold">PSU Deployment Specifications:</div>
-                <ul className="list-disc list-inside space-y-0.5 text-neutral-300 text-[11px]">
-                  <li>100% On-premise air-gapped containerized deployment.</li>
-                  <li>Local embedding models (no third-party cloud API dependencies).</li>
-                  <li>DGMS & OISD auditable decision and acknowledgement trails.</li>
-                </ul>
+            <div className="text-xs text-[#4b5563] dark:text-[#cbd5e1] space-y-3 leading-relaxed font-sans">
+              <p>
+                NWIS is an <strong>advisory-only read consumer</strong> designed to run in parallel with Oil India Limited&apos;s real-time drilling management system (eRTMAC).
+              </p>
+              <div className="p-3 bg-[#f8fafc] dark:bg-[#141b2a] border border-[#d1d5db] dark:border-[#232c3f] rounded-xs space-y-1.5 font-mono text-[11px]">
+                <div className="text-[#0b0c0c] dark:text-[#f8fafc] font-bold">Safety Guarantees:</div>
+                <div className="text-[#00703c] dark:text-[#34d399]">✓ Zero telemetry write commands to rig surface instrumentation</div>
+                <div className="text-[#00703c] dark:text-[#34d399]">✓ WITSML 1.4.1.1 / ETP 1.2 compliant read stream</div>
+                <div className="text-[#00703c] dark:text-[#34d399]">✓ Failsafe isolation: rig drilling is unaffected if NWIS goes offline</div>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-[#1e273b]">
+            <div className="pt-2 flex justify-end">
               <button
                 onClick={() => setShowErtmacBridgeModal(false)}
-                className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors"
+                className="px-3 py-1.5 bg-[#1d70b8] hover:bg-[#003078] text-white rounded-xs text-xs font-bold font-sans cursor-pointer"
               >
-                Close Integration View
+                Close Specification
               </button>
             </div>
           </div>

@@ -21,73 +21,73 @@ export const FactEstimateRecommendation: React.FC<FactEstimateRecommendationProp
   className = ''
 }) => {
   return (
-    <div className={`space-y-4 ${className}`}>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* 1. What happened before (Observed Historical Fact) */}
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs flex flex-col justify-between">
+    <div className={`space-y-3 ${className}`}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* 1. Observed Historical Fact */}
+        <div className="gov-callout gov-callout-fact flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-2 mb-3 border-b border-neutral-200 dark:border-neutral-800">
-              <span className="text-xs font-extrabold text-neutral-900 dark:text-white uppercase tracking-wide font-mono">
-                1. What Happened Before
+            <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-border/70">
+              <span className="text-xs font-bold text-foreground uppercase tracking-wide font-mono">
+                1. Observed Historical Fact
               </span>
-              <span className="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 font-bold uppercase">Fact</span>
+              <span className="text-[10px] font-mono text-muted-foreground font-bold uppercase">Fact</span>
             </div>
-            <p className="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed font-sans">{fact}</p>
+            <p className="text-xs sm:text-sm text-foreground leading-relaxed font-sans">{fact}</p>
           </div>
           {sourceReference && (
-            <div className="mt-4 pt-2.5 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-400 font-mono">
-              <span className="font-bold text-neutral-900 dark:text-neutral-200">Source: </span>
+            <div className="mt-3 pt-2 border-t border-border/50 text-[11px] text-muted-foreground font-mono">
+              <span className="font-bold text-foreground">Source: </span>
               {sourceReference}
             </div>
           )}
         </div>
 
-        {/* 2. What the model estimates (Model-Estimated Risk) */}
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs flex flex-col justify-between">
+        {/* 2. Model-Estimated Risk */}
+        <div className="gov-callout gov-callout-risk flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-2 mb-3 border-b border-neutral-200 dark:border-neutral-800">
-              <span className="text-xs font-extrabold text-neutral-900 dark:text-white uppercase tracking-wide font-mono">
+            <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-border/70">
+              <span className="text-xs font-bold text-foreground uppercase tracking-wide font-mono">
                 2. Model Risk Estimate
               </span>
               {riskLevel && <StatusTag label={riskLevel.toUpperCase()} />}
             </div>
-            <p className="text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed font-sans">{estimate}</p>
+            <p className="text-xs sm:text-sm text-foreground leading-relaxed font-sans">{estimate}</p>
           </div>
-          <div className="mt-4 pt-2.5 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-400 font-mono">
-            <span className="font-bold text-neutral-900 dark:text-neutral-200">Logic: </span>
-            Assam Basin Stratigraphic Model v3.2
+          <div className="mt-3 pt-2 border-t border-border/50 text-[11px] text-muted-foreground font-mono">
+            <span className="font-bold text-foreground">Model: </span>
+            Assam Basin Stratigraphic Correlation v3.2
           </div>
         </div>
 
-        {/* 3. Suggested mitigation (Recommendation) */}
-        <div className="rounded-2xl border border-amber-300 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/20 p-5 shadow-xs flex flex-col justify-between">
+        {/* 3. Suggested Mitigation */}
+        <div className="gov-callout gov-callout-mitigation flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between pb-2 mb-3 border-b border-amber-200 dark:border-amber-800/60">
-              <span className="text-xs font-extrabold text-amber-900 dark:text-amber-300 uppercase tracking-wide font-mono">
+            <div className="flex items-center justify-between pb-1.5 mb-2 border-b border-border/70">
+              <span className="text-xs font-bold text-foreground uppercase tracking-wide font-mono">
                 3. Suggested Mitigation
               </span>
-              <StatusTag label="RECOMMENDED" variant="amber" />
+              <StatusTag label="ADVISORY" variant="blue" />
             </div>
-            <p className="text-sm text-neutral-900 dark:text-white leading-relaxed font-semibold font-sans">{recommendation}</p>
+            <p className="text-xs sm:text-sm text-foreground leading-relaxed font-semibold font-sans">{recommendation}</p>
           </div>
-          <div className="mt-4 pt-2.5 border-t border-amber-200 dark:border-amber-800/60 text-xs text-neutral-600 dark:text-neutral-400 font-mono">
-            <span className="font-bold text-neutral-900 dark:text-neutral-200">Protocol: </span>
-            OIL Field Best Practice Guide
+          <div className="mt-3 pt-2 border-t border-border/50 text-[11px] text-muted-foreground font-mono">
+            <span className="font-bold text-foreground">Protocol: </span>
+            OIL Field Standard Operating Procedure
           </div>
         </div>
       </div>
 
-      {/* Disconfirming Evidence Panel (Deliberate Product Principle) */}
+      {/* Disconfirming Evidence Panel */}
       {disconfirmingEvidence && (
-        <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/50 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="gov-callout gov-callout-safe flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex-1">
-            <span className="font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide mr-2 font-mono text-[11px]">
+            <span className="font-bold text-foreground uppercase tracking-wide mr-2 font-mono text-[11px]">
               Disconfirming Safe Passes:
             </span>
-            <span className="text-neutral-700 dark:text-neutral-300">{disconfirmingEvidence}</span>
+            <span className="text-foreground font-sans">{disconfirmingEvidence}</span>
           </div>
-          <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono shrink-0 px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800">
-            Balances Risk • Prevents Alarm Fatigue
+          <span className="text-[10px] text-muted-foreground font-mono shrink-0">
+            Validated Baseline • Alarm Fatigue Protection
           </span>
         </div>
       )}

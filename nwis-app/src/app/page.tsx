@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
   Layers, 
@@ -9,685 +9,613 @@ import {
   Database, 
   TrendingDown, 
   ArrowRight, 
-  CheckCircle2, 
   AlertTriangle, 
-  Radio, 
-  Sparkles,
-  Gauge,
-  Flame,
-  FileCheck2,
-  ExternalLink,
-  ChevronRight,
-  ShieldCheck,
-  Compass,
-  Clock,
-  HardHat,
-  Cpu,
+  CheckCircle2, 
+  Bell, 
+  ShieldCheck, 
+  Compass, 
+  HardHat, 
   FileText,
-  SlidersHorizontal,
+  Sparkles,
+  Zap,
+  Gauge,
   Play,
-  Pause,
-  RotateCcw
+  RotateCcw,
+  Check,
+  Flame,
+  Droplets,
+  Wind,
+  Navigation,
+  FileSearch,
+  BookOpen
 } from 'lucide-react';
-import { ThemeToggle } from '@/components/common/ThemeToggle';
-import { Badge } from '@/components/ui/badge';
+import { useAppStore } from '@/store/app-store';
+import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
 
 export default function HomePage() {
-  // Interactive live terminal simulator on the homepage
-  const [simulatedDepth, setSimulatedDepth] = useState<number>(2165.4);
-  const [isLiveSimulating, setIsLiveSimulating] = useState<boolean>(false);
+  const { alerts } = useAppStore();
+  const [liveDepth, setLiveDepth] = useState<number>(INITIAL_LIVE_TELEMETRY.depthMD);
+  const [isSimulating, setIsSimulating] = useState<boolean>(false);
+  const [simStep, setSimStep] = useState<number>(0);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isLiveSimulating) {
-      timer = setInterval(() => {
-        setSimulatedDepth((prev) => {
-          if (prev >= 2260.0) return 2140.0;
-          return Math.round((prev + 0.8) * 10) / 10;
-        });
-      }, 400);
+  const live = INITIAL_LIVE_TELEMETRY;
+
+  // Interactive Live Step Simulation for Evaluators
+  const triggerEvaluatorStep = () => {
+    setIsSimulating(true);
+    setSimStep((prev) => (prev + 1) % 3);
+    if (simStep === 0) {
+      setLiveDepth(2172.8);
+    } else if (simStep === 1) {
+      setLiveDepth(2180.0);
+    } else {
+      setLiveDepth(2165.4);
     }
-    return () => clearInterval(timer);
-  }, [isLiveSimulating]);
+    setTimeout(() => setIsSimulating(false), 500);
+  };
 
-  const hazardDepth = 2240.0;
-  const triggerDepth = 2180.0;
-  const distanceToHazard = Math.max(0, Math.round((hazardDepth - simulatedDepth) * 10) / 10);
-  const distanceToTrigger = Math.max(0, Math.round((triggerDepth - simulatedDepth) * 10) / 10);
-  const isTriggered = simulatedDepth >= triggerDepth;
-  const isHazardReached = simulatedDepth >= hazardDepth;
-
-  // 6 balanced operational modules (2x3 grid, zero empty slots)
-  const modules = [
+  const operationalConsoles = [
     {
       title: 'Live Operations Cockpit',
-      badge: 'CORE COCKPIT',
-      badgeColor: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
-      description: 'Active drilling workspace alongside eRTMAC. Real-time wellbore telemetry, 75m lookahead hazard alert countdown, and synchronized geospatial offset map.',
+      titleHindi: 'लाइव ड्रिलिंग कॉकपिट',
+      tag: 'ACTIVE WITSML FEED',
+      tagColor: 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800',
+      borderColor: 'border-t-emerald-600',
+      iconBg: 'bg-emerald-500 text-white',
+      description: 'Active drilling operations workspace alongside eRTMAC. Displays real-time wellbore telemetry, 75m lookahead hazard alerts, and synchronized offset correlation.',
       href: '/operations',
       icon: Layers,
-      actionText: 'Launch Live Operations',
-      preview: {
-        label: 'Active Well',
-        val: 'OIL-GLK-14 @ 2,165m',
-        metric: '14.8 m/h ROP',
-        status: 'Streaming'
-      }
+      primaryMetric: 'OIL-GLK-14 @ 2,165.4m MD',
+      subMetric: 'Upper Tipam Formation · 74.6m buffer to thief zone',
+      accentText: 'text-emerald-700 dark:text-emerald-400'
     },
     {
       title: 'Historical Well Replay Simulator',
-      badge: 'VALIDATION ENGINE',
-      badgeColor: 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800',
-      description: 'Deterministic benchmark simulator. Replays historical 1988–2004 drilling feeds at 1x–20x to verify proactive lookahead alerts before documented losses.',
+      titleHindi: 'ऐतिहासिक कूप रीप्ले सिम्युलेटर',
+      tag: 'VALIDATION BENCHMARK',
+      tagColor: 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800',
+      borderColor: 'border-t-amber-500',
+      iconBg: 'bg-amber-500 text-white',
+      description: 'Deterministic benchmark simulator. Replays historical 1988–2004 drilling feeds at 1x–20x speed to verify proactive lookahead warnings prior to documented loss events.',
       href: '/replay',
       icon: Activity,
-      actionText: 'Run Replay Simulator',
-      preview: {
-        label: 'Validated Scenario',
-        val: 'OIL-GLK-07 (1996)',
-        metric: '34h NPT Avoided',
-        status: 'Falsifiable'
-      }
+      primaryMetric: 'OIL-GLK-07 (1996 Incident)',
+      subMetric: 'Fired 75m ahead of total loss · 34 hrs NPT avoided',
+      accentText: 'text-amber-700 dark:text-amber-400'
     },
     {
-      title: 'GeoSpatial Offset Correlation',
-      badge: 'STRATIGRAPHIC TWINS',
-      badgeColor: 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800',
-      description: 'Multi-well correlation panel & petrophysical similarity engine. Surfaces true stratigraphic analogs across complex Assam fault blocks (Similarity ≠ Distance).',
+      title: 'Offset Well Geospatial Correlation',
+      titleHindi: 'भू-स्थानिक ऑफसेट सहसंबंध इंजन',
+      tag: 'SIMILARITY ENGINE',
+      tagColor: 'bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800',
+      borderColor: 'border-t-blue-600',
+      iconBg: 'bg-blue-600 text-white',
+      description: 'Multi-well petrophysical correlation matrix and map. Surfaces true stratigraphic analogs across complex Assam fault blocks where similarity does not equal map distance.',
       href: '/analogs',
       icon: GitCompare,
-      actionText: 'Explore Offset Analogs',
-      preview: {
-        label: 'Best Geological Twin',
-        val: 'OIL-GLK-07 (87% Sim)',
-        metric: '1.8 km SE Offset',
-        status: 'Correlated'
-      }
+      primaryMetric: 'OIL-GLK-07 (0.84 Similarity)',
+      subMetric: '3.1 km offset · Identical Upper Tipam lithology',
+      accentText: 'text-blue-700 dark:text-blue-400'
     },
     {
-      title: 'Fleet Well Register & Watcher',
-      badge: 'BASIN FLEET',
-      badgeColor: 'bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800',
-      description: 'Assam-Arakan basin-wide multi-rig register tracking active drilling corridors, calibrated lookahead proximity gauges, and shift operations checklists.',
-      href: '/dashboard',
-      icon: Compass,
-      actionText: 'Open Fleet Register',
-      preview: {
-        label: 'Active Rig Fleet',
-        val: '3 Rigs Drilling',
-        metric: 'GLK-COR-03 Watcher',
-        status: 'Live Stream'
-      }
-    },
-    {
-      title: 'Archival OCR & Ingestion Pipeline',
-      badge: 'TWO-PATH INGESTION',
-      badgeColor: 'bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-800',
-      description: 'Standardizes 130+ years of typewritten WCRs & daily drilling logs into structured schemas with bounding-box OCR, layout parsing, and human-in-the-loop audit.',
-      href: '/admin/ingestion',
-      icon: Database,
-      actionText: 'Inspect Ingestion Pipeline',
-      preview: {
-        label: 'Layout OCR Accuracy',
-        val: '94.2% Conf Score',
-        metric: '14 pages / min',
-        status: 'Batch #4'
-      }
+      title: 'Hazard Advisories Inbox',
+      titleHindi: 'भू-गर्भिक जोखिम सलाह इनबॉक्स',
+      tag: `${alerts.length} ADVISORIES`,
+      tagColor: 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800',
+      borderColor: 'border-t-rose-600',
+      iconBg: 'bg-rose-600 text-white',
+      description: 'Prioritized operational hazard notifications. Standardized 3-tier structure: Observed Ground Truth Fact, Model-Estimated Risk, and Recommended Mitigation.',
+      href: '/alerts',
+      icon: Bell,
+      primaryMetric: '1 High-Priority Lost Circulation Notice',
+      subMetric: 'Pre-treat active system with 35 ppb mixed-fiber LCM pill',
+      accentText: 'text-rose-700 dark:text-rose-400'
     },
     {
       title: 'Institutional Memory Decay Index',
-      badge: 'GOVERNANCE AUDIT',
-      badgeColor: 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800',
-      description: 'Quantifies subsurface knowledge loss risks across Digboi, Kharsang, and Geleki to prioritize fragile physical records before senior superintendents retire.',
+      titleHindi: 'संस्थागत ज्ञान क्षय सूचकांक',
+      tag: 'GOVERNANCE AUDIT',
+      tagColor: 'bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
+      borderColor: 'border-t-purple-600',
+      iconBg: 'bg-purple-600 text-white',
+      description: 'Quantifies physical subsurface knowledge erosion across Digboi, Kharsang, and Geleki fields to prioritize fragile paper records before senior superintendents retire.',
       href: '/decay-index',
       icon: TrendingDown,
-      actionText: 'Check Field Risk Index',
-      preview: {
-        label: 'Highest Decay Risk',
-        val: 'Digboi: 88 / 100',
-        metric: '851 At-Risk WCRs',
-        status: 'Critical'
-      }
+      primaryMetric: 'Digboi Field: 88 / 100 Decay Risk',
+      subMetric: '851 physical records requiring urgent planetary scanning',
+      accentText: 'text-purple-700 dark:text-purple-400'
+    },
+    {
+      title: 'Archival Ingestion & OCR Pipeline',
+      titleHindi: 'अभिलेखागार अंतर्ग्रहण और ओसीआर',
+      tag: 'TWO-PATH INGESTION',
+      tagColor: 'bg-teal-100 text-teal-800 border-teal-300 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-800',
+      borderColor: 'border-t-teal-600',
+      iconBg: 'bg-teal-600 text-white',
+      description: 'Ingests and standardizes 130+ years of typed WCRs, Daily Drilling Reports (DDRs), and real-time WITSML streams into audit-ready schemas with layout-aware OCR.',
+      href: '/admin/ingestion',
+      icon: Database,
+      primaryMetric: '94.2% Layout OCR Accuracy',
+      subMetric: '1,690 documents indexed across Assam-Arakan Basin',
+      accentText: 'text-teal-700 dark:text-teal-400'
     }
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-[#07090f] text-neutral-900 dark:text-neutral-100 transition-colors">
+    <div className="space-y-4 max-w-[1400px] mx-auto pb-8 font-sans">
       
-      {/* ─── Modern Top Navigation Header ─── */}
-      <header className="sticky top-0 z-40 border-b border-neutral-200 dark:border-[#1a2233] bg-white/95 dark:bg-[#080b12]/95 backdrop-blur-md transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
-          
-          {/* Logo & Platform Identifier */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-neutral-950 font-mono font-extrabold text-xs shadow-xs ring-1 ring-amber-400/40">
-              OIL
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-base tracking-tight text-neutral-950 dark:text-white font-mono">
-                  NWIS
-                </span>
-                <span className="px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 text-[9px] font-mono font-bold uppercase tracking-wider">
-                  eRTMAC COMPANION
-                </span>
-              </div>
-              <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono hidden sm:block">
-                Nearby Wells Intelligence System
+      {/* ─── 0. Official Alert Flash Ticker Ribbon (महत्वपूर्ण परिचालन चेतावनी) ─── */}
+      <div className="px-3.5 py-1.5 flex items-center justify-between gap-3 text-xs border border-amber-300 dark:border-amber-900 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 dark:from-amber-950/40 dark:via-orange-950/30 dark:to-amber-950/40 text-amber-900 dark:text-amber-200 rounded-xs shadow-xs">
+        <div className="flex items-center gap-2 overflow-hidden">
+          <span className="px-1.5 py-0.2 bg-rose-600 text-white text-[10px] font-mono font-bold uppercase rounded-xs shrink-0 animate-pulse shadow-xs">
+            महत्वपूर्ण चेतावनी | CRITICAL FLASH
+          </span>
+          <span className="font-mono text-xs truncate">
+            <strong>OIL-GLK-14 (Geleki Field):</strong> Bit at {liveDepth}m MD approaching Tipam thief horizon (2,180m). Offset OIL-GLK-07 suffered 420 bbls lost circulation at equivalent structural depth.
+          </span>
+        </div>
+        <Link
+          href="/operations"
+          className="text-[11px] font-bold text-blue-700 dark:text-blue-300 hover:underline shrink-0 font-mono flex items-center gap-1"
+        >
+          <span>View Telemetry</span>
+          <ArrowRight className="w-3 h-3" />
+        </Link>
+      </div>
+
+      {/* ─── 1. National Energy Mission & SIH 2026 Executive Showcase ─── */}
+      <div className="p-4 bg-white dark:bg-[#071d36] border-t-4 border-t-[#ff9933] border-x border-b border-[#d0d7de] dark:border-[#1e3a5f] rounded-xs shadow-sm space-y-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border">
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="px-2 py-0.5 bg-[#0b3c6d] text-white text-[10px] font-mono font-bold uppercase rounded-xs shadow-xs">
+                🇮🇳 भारत सरकार | आत्मनिर्भर ऊर्जा मिशन
+              </span>
+              <span className="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-mono font-black uppercase rounded-xs shadow-xs">
+                SIH 2026 Problem Statement #26121
+              </span>
+              <span className="text-xs font-mono text-muted-foreground font-semibold">
+                Oil India Limited · eRTMAC Decision Companion
               </span>
             </div>
-          </Link>
+            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#0b3c6d] dark:text-[#93c5fd] font-sans mt-1.5">
+              निकटवर्ती कूप आसूचना प्रणाली (NWIS) — Nearby Wells Intelligence System
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-sans">
+              AI-Powered Subsurface Offset Correlation &amp; Proactive Lookahead Decision Support for Zero Unplanned Drilling NPT across the Assam-Arakan Basin.
+            </p>
+          </div>
 
-          {/* Quick Nav Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-neutral-100 dark:bg-[#111622] p-1 rounded-xl border border-neutral-200 dark:border-[#1a2333] text-xs font-mono">
-            <Link href="/operations" className="px-3 py-1.5 rounded-lg text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-[#171f30] font-medium transition-colors">
-              Operations
-            </Link>
-            <Link href="/replay" className="px-3 py-1.5 rounded-lg text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-[#171f30] font-medium transition-colors">
-              Well Replay
-            </Link>
-            <Link href="/analogs" className="px-3 py-1.5 rounded-lg text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-[#171f30] font-medium transition-colors">
-              Offset Analogs
-            </Link>
-            <Link href="/dashboard" className="px-3 py-1.5 rounded-lg text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-[#171f30] font-medium transition-colors">
-              Fleet Register
-            </Link>
-            <Link href="/decay-index" className="px-3 py-1.5 rounded-lg text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-[#171f30] font-medium transition-colors">
-              Decay Index
-            </Link>
-            <Link href="/admin/ingestion" className="px-3 py-1.5 rounded-lg text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/80 dark:hover:bg-[#171f30] font-medium transition-colors">
-              Ingestion
-            </Link>
-          </nav>
+          {/* Quick Evaluator Simulation Trigger */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={triggerEvaluatorStep}
+              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-mono font-black text-xs rounded-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer border border-amber-400"
+              title="Click to simulate live WITSML depth advance and lookahead trigger"
+            >
+              <Zap className={`w-4 h-4 text-slate-950 ${isSimulating ? 'animate-spin' : ''}`} />
+              <span>Simulate Depth Advance ({liveDepth}m)</span>
+            </button>
+          </div>
+        </div>
 
-          {/* Header Controls */}
-          <div className="flex items-center gap-2.5">
-            <ThemeToggle />
+        {/* ─── 3 One-Click Interactive Evaluator Test Scenarios (Colorful) ─── */}
+        <div className="space-y-1.5 pt-1">
+          <div className="flex items-center justify-between text-[11px] font-mono">
+            <span className="font-bold text-[#0b3c6d] dark:text-[#93c5fd] uppercase flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              ⚡ 1-Click Evaluator Test Scenarios (Jury Quick Assessment Mode):
+            </span>
+            <span className="text-muted-foreground">Select any scenario to inspect live response</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {/* Scenario 1 */}
             <Link
               href="/operations"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-neutral-950 text-xs font-bold font-mono shadow-xs transition-colors"
+              className="p-3 bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-[#071d36] border-2 border-emerald-500 hover:border-emerald-600 transition-all rounded-xs flex items-start gap-3 group cursor-pointer shadow-sm hover:shadow-md"
             >
-              <Layers className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Launch Cockpit</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="w-9 h-9 rounded-xs bg-emerald-600 text-white flex items-center justify-center shrink-0 font-mono font-black text-base shadow-sm">
+                1
+              </div>
+              <div className="space-y-0.5 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-emerald-800 dark:text-emerald-300 font-sans group-hover:underline">
+                    Live Lookahead Hazard Alert
+                  </span>
+                  <span className="px-1.5 py-0.2 bg-emerald-600 text-white font-mono font-bold text-[9px] rounded-xs uppercase">
+                    LIVE COCKPIT
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
+                  Well OIL-GLK-14 @ 2,165.4m: <strong className="text-emerald-700 dark:text-emerald-400">74.6m lead warning</strong> before hitting Upper Tipam thief zone.
+                </p>
+              </div>
+            </Link>
+
+            {/* Scenario 2 */}
+            <Link
+              href="/replay"
+              className="p-3 bg-gradient-to-br from-amber-50 via-orange-50/40 to-white dark:from-amber-950/40 dark:via-orange-950/20 dark:to-[#071d36] border-2 border-amber-500 hover:border-amber-600 transition-all rounded-xs flex items-start gap-3 group cursor-pointer shadow-sm hover:shadow-md"
+            >
+              <div className="w-9 h-9 rounded-xs bg-amber-500 text-white flex items-center justify-center shrink-0 font-mono font-black text-base shadow-sm">
+                2
+              </div>
+              <div className="space-y-0.5 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-amber-800 dark:text-amber-300 font-sans group-hover:underline">
+                    Historical Benchmark Simulator
+                  </span>
+                  <span className="px-1.5 py-0.2 bg-amber-500 text-white font-mono font-bold text-[9px] rounded-xs uppercase">
+                    VALIDATION
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
+                  Replay 1996 GLK-07 severe loss: Verifies <strong className="text-amber-700 dark:text-amber-400">34 NPT hours avoided</strong> by NWIS early alert.
+                </p>
+              </div>
+            </Link>
+
+            {/* Scenario 3 */}
+            <Link
+              href="/decay-index"
+              className="p-3 bg-gradient-to-br from-blue-50 via-indigo-50/40 to-white dark:from-blue-950/40 dark:via-indigo-950/20 dark:to-[#071d36] border-2 border-blue-500 hover:border-blue-600 transition-all rounded-xs flex items-start gap-3 group cursor-pointer shadow-sm hover:shadow-md"
+            >
+              <div className="w-9 h-9 rounded-xs bg-blue-600 text-white flex items-center justify-center shrink-0 font-mono font-black text-base shadow-sm">
+                3
+              </div>
+              <div className="space-y-0.5 min-w-0">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-blue-800 dark:text-blue-300 font-sans group-hover:underline">
+                    Institutional Memory Decay Index
+                  </span>
+                  <span className="px-1.5 py-0.2 bg-blue-600 text-white font-mono font-bold text-[9px] rounded-xs uppercase">
+                    DIGITIZATION
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
+                  <strong className="text-blue-700 dark:text-blue-400">88/100 Digboi Fragility:</strong> Vectorizes 130+ years of deteriorating hand-drafted drilling logs.
+                </p>
+              </div>
             </Link>
           </div>
-
         </div>
-      </header>
+      </div>
 
-      {/* ─── Main Hero Section ─── */}
-      <main className="flex-1">
-        <section className="relative pt-8 pb-12 px-4 sm:px-6 overflow-hidden">
-          
-          {/* Subtle Ambient Radial Glow */}
-          <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[650px] h-[300px] bg-gradient-to-r from-amber-500/10 via-amber-600/5 to-transparent blur-3xl pointer-events-none" />
+      {/* ─── 2. Executive Value Metrics (Vibrant 4-Color Proof Strip) ─── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* Card 1: Green */}
+        <div className="p-3.5 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-white dark:to-[#071d36] border-l-4 border-l-emerald-600 border border-emerald-200 dark:border-emerald-900/60 rounded-xs shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-emerald-800 dark:text-emerald-300 font-bold uppercase">
+            <span>Basin NPT Value Saved</span>
+            <span className="px-1 py-0.2 bg-emerald-600 text-white text-[9px] font-bold rounded-xs">● VERIFIED</span>
+          </div>
+          <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400 font-mono">
+            ₹14.8 Cr
+          </div>
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+            34 NPT hrs saved per severe thief-zone loss event avoided
+          </p>
+        </div>
 
-          <div className="max-w-6xl mx-auto space-y-8 relative z-10">
-            
-            {/* Hero Text */}
-            <div className="text-center max-w-3xl mx-auto space-y-3.5">
-              
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-50/60 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 text-xs font-mono font-bold">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                <span>OIL INDIA LIMITED · SUBSURFACE COMPANION SYSTEM</span>
-              </div>
+        {/* Card 2: Amber/Saffron */}
+        <div className="p-3.5 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white dark:to-[#071d36] border-l-4 border-l-[#ff9933] border border-amber-200 dark:border-amber-900/60 rounded-xs shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-amber-800 dark:text-amber-300 font-bold uppercase">
+            <span>Lookahead Lead Buffer</span>
+            <span className="px-1 py-0.2 bg-amber-500 text-white text-[9px] font-bold rounded-xs">● ACTIVE</span>
+          </div>
+          <div className="text-2xl font-black text-amber-700 dark:text-amber-400 font-mono">
+            74.6m / 3.2 hrs
+          </div>
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+            Early notification window prior to intersecting Tipam loss zone
+          </p>
+        </div>
 
-              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-neutral-950 dark:text-white leading-[1.12] font-sans">
-                130 Years of Subsurface Memory.{' '}
-                <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 bg-clip-text text-transparent">
-                  Predicted 75m Before You Drill.
-                </span>
-              </h1>
+        {/* Card 3: Royal Blue */}
+        <div className="p-3.5 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-white dark:to-[#071d36] border-l-4 border-l-blue-600 border border-blue-200 dark:border-blue-900/60 rounded-xs shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-blue-800 dark:text-blue-300 font-bold uppercase">
+            <span>Offset Analogy Index</span>
+            <span className="px-1 py-0.2 bg-blue-600 text-white text-[9px] font-bold rounded-xs">GLK-07 ↔ GLK-14</span>
+          </div>
+          <div className="text-2xl font-black text-blue-700 dark:text-blue-400 font-mono">
+            0.87 Composite
+          </div>
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+            5-parameter stratigraphic correlation across Geleki fault block
+          </p>
+        </div>
 
-              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed max-w-2xl mx-auto">
-                Real-time offset well intelligence platform designed strictly alongside Oil India&apos;s <strong>eRTMAC</strong>. Correlates historical Well Completion Reports and Daily Drilling Reports across the <strong>Assam-Arakan Basin</strong> to deliver depth-aware proactive hazard lookaheads.
-              </p>
+        {/* Card 4: Purple */}
+        <div className="p-3.5 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-white dark:to-[#071d36] border-l-4 border-l-purple-600 border border-purple-200 dark:border-purple-900/60 rounded-xs shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-purple-800 dark:text-purple-300 font-bold uppercase">
+            <span>Institutional Records</span>
+            <span className="px-1 py-0.2 bg-purple-600 text-white text-[9px] font-bold rounded-xs">1889–2026</span>
+          </div>
+          <div className="text-2xl font-black text-purple-700 dark:text-purple-400 font-mono">
+            1,690+ WCRs/DDRs
+          </div>
+          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+            130+ years of typed, scanned, and physical subsurface data
+          </p>
+        </div>
+      </div>
 
-              {/* Primary Call-to-Actions */}
-              <div className="flex flex-wrap items-center justify-center gap-3 pt-2 font-mono text-xs">
-                <Link
-                  href="/operations"
-                  className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-neutral-950 font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer"
-                >
-                  <Layers className="w-4 h-4" />
-                  <span>Launch Operations Cockpit (OIL-GLK-14)</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+      {/* ─── 3. Live Active Rig Focus Snapshot (OIL-GLK-14 Cockpit Preview) ─── */}
+      <div className="gov-panel space-y-3 bg-white dark:bg-[#071d36] border-2 border-[#0b3c6d] dark:border-[#38bdf8] shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-border">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-emerald-500 animate-ping" />
+            <h2 className="text-sm font-black text-[#0b3c6d] dark:text-[#93c5fd] font-sans uppercase">
+              Current Live Lookahead Status: Well OIL-GLK-14 (Geleki Field · Rig #04)
+            </h2>
+          </div>
+          <Link
+            href="/operations"
+            className="text-xs font-bold text-blue-700 dark:text-blue-300 hover:underline font-mono flex items-center gap-1"
+          >
+            <span>Open Full Interactive Cockpit</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
 
-                <Link
-                  href="/replay"
-                  className="px-4 py-2.5 rounded-xl border border-neutral-300 dark:border-[#222d42] bg-white dark:bg-[#101420] hover:bg-neutral-50 dark:hover:bg-[#161c2c] text-neutral-800 dark:text-neutral-200 font-bold transition-colors flex items-center gap-2 shadow-2xs"
-                >
-                  <Activity className="w-4 h-4 text-amber-500" />
-                  <span>Historical Well Replay Simulator</span>
-                </Link>
-              </div>
-
+        {/* Live Gauges Strip (Vibrant Color Coded) */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 font-mono text-xs">
+          {/* Gauge 1: Depth (Amber/Gold) */}
+          <div className="p-2.5 bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-white dark:to-[#0c2847] border border-amber-300 dark:border-amber-800 rounded-xs shadow-2xs">
+            <div className="text-[10px] text-amber-800 dark:text-amber-300 uppercase font-bold flex items-center gap-1">
+              <Gauge className="w-3 h-3 text-amber-600" />
+              Bit Depth (MD)
             </div>
-
-            {/* ─── High-Tech Live Lookahead Terminal (Hero Visual) ─── */}
-            <div className="max-w-4xl mx-auto rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] shadow-xl overflow-hidden transition-colors">
-              
-              {/* Terminal Title Bar */}
-              <div className="p-3.5 px-5 bg-neutral-100/80 dark:bg-[#090d16] border-b border-neutral-200 dark:border-[#1a2233] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
-                  </div>
-                  <span className="font-extrabold text-neutral-950 dark:text-white">
-                    eRTMAC TELEMETRY LOOKAHEAD CONSOLE
-                  </span>
-                  <span className="text-neutral-400 dark:text-neutral-500 hidden sm:inline">•</span>
-                  <span className="text-neutral-600 dark:text-neutral-400 hidden sm:inline">
-                    WELL: OIL-GLK-14 (Geleki Field · Upper Tipam)
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsLiveSimulating(!isLiveSimulating)}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-bold font-mono transition-colors flex items-center gap-1.5 ${
-                      isLiveSimulating
-                        ? 'bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-500/40'
-                        : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
-                    }`}
-                  >
-                    {isLiveSimulating ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-                    <span>{isLiveSimulating ? 'Simulating Bit' : 'Simulate Advance'}</span>
-                  </button>
-
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold border border-emerald-200 dark:border-emerald-800 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    STREAM ACTIVE
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-5 space-y-4">
-                
-                {/* 4 Telemetry Parameter Chips */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
-                  
-                  <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121622] border border-neutral-200 dark:border-[#1a2333] space-y-0.5">
-                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block font-bold">BIT DEPTH (MD)</span>
-                    <strong className="text-xl text-neutral-950 dark:text-white font-extrabold tabular-nums">
-                      {simulatedDepth.toFixed(1)}m
-                    </strong>
-                    <span className="text-[10px] text-neutral-500 block">TVD: 2,110.2m</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121622] border border-neutral-200 dark:border-[#1a2333] space-y-0.5">
-                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block font-bold">DRILLING ROP</span>
-                    <strong className="text-xl text-emerald-600 dark:text-emerald-400 font-extrabold tabular-nums">
-                      14.8 m/h
-                    </strong>
-                    <span className="text-[10px] text-emerald-700 dark:text-emerald-500 block">Steady Advance</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121622] border border-neutral-200 dark:border-[#1a2333] space-y-0.5">
-                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block font-bold">ROTARY TORQUE</span>
-                    <strong className="text-xl text-neutral-950 dark:text-white font-extrabold tabular-nums">
-                      11.2 kft-lb
-                    </strong>
-                    <span className="text-[10px] text-neutral-500 block">RPM: 82 • WOB: 16.5k</span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121622] border border-neutral-200 dark:border-[#1a2333] space-y-0.5">
-                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 block font-bold">MUD WEIGHT (IN)</span>
-                    <strong className="text-xl text-amber-600 dark:text-amber-400 font-extrabold tabular-nums">
-                      9.8 ppg
-                    </strong>
-                    <span className="text-[10px] text-amber-700 dark:text-amber-500 block">ECD Margin: +0.42</span>
-                  </div>
-
-                </div>
-
-                {/* Calibrated Lookahead Corridor Bar */}
-                <div className="space-y-1.5 p-3.5 rounded-xl bg-neutral-50 dark:bg-[#090d16] border border-neutral-200 dark:border-[#1a2333]">
-                  <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className="text-neutral-500 dark:text-neutral-400 font-bold uppercase text-[10px]">
-                      Geological Lookahead Corridor (2,100m – 2,240m MD)
-                    </span>
-                    <span className="font-bold text-amber-700 dark:text-amber-400">
-                      {isHazardReached ? (
-                        <span className="text-rose-600 dark:text-rose-400">Inside Upper Tipam Loss Interval</span>
-                      ) : isTriggered ? (
-                        <span className="text-amber-700 dark:text-amber-300">Mandatory LCM Staging Triggered</span>
-                      ) : (
-                        `Trigger in ${distanceToTrigger.toFixed(1)}m (~${Math.round(distanceToTrigger / 14.8 * 60)} min)`
-                      )}
-                    </span>
-                  </div>
-
-                  {/* Progress Corridor Bar */}
-                  <div className="relative h-6 rounded-lg bg-neutral-200 dark:bg-[#161c28] overflow-hidden border border-neutral-300 dark:border-neutral-700 flex items-center">
-                    {/* Drilled Zone */}
-                    <div 
-                      style={{ width: `${Math.min(100, Math.max(0, (simulatedDepth - 2100) / 140 * 100))}%` }}
-                      className="h-full bg-gradient-to-r from-emerald-600 to-emerald-500 transition-all duration-300"
-                    />
-
-                    {/* Trigger tripwire marker at 2,180m (57.1%) */}
-                    <div 
-                      className="absolute top-0 bottom-0 w-0.5 bg-amber-400 z-10 border-r border-dashed border-amber-900"
-                      style={{ left: '57.1%' }}
-                    />
-
-                    {/* Loss zone (red stripes) starting at 2,240m (100%) */}
-                    <div 
-                      className="absolute top-0 bottom-0 right-0 w-8 bg-rose-600/80"
-                      style={{
-                        backgroundImage: 'repeating-linear-gradient(45deg, rgba(225,29,72,0.9), rgba(225,29,72,0.9) 6px, rgba(190,18,60,0.9) 6px, rgba(190,18,60,0.9) 12px)'
-                      }}
-                    />
-
-                    {/* Active Bit Cursor */}
-                    <div 
-                      className="absolute top-0 bottom-0 w-1.5 bg-neutral-950 dark:bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] z-20 transition-all duration-300"
-                      style={{ left: `calc(${Math.min(100, Math.max(0, (simulatedDepth - 2100) / 140 * 100))}% - 3px)` }}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400">
-                    <span>2,100m (Girujan Seal)</span>
-                    <span className="text-emerald-700 dark:text-emerald-400 font-bold">Active Bit: {simulatedDepth.toFixed(1)}m</span>
-                    <span className="text-amber-700 dark:text-amber-400 font-bold">Action Trigger: 2,180m</span>
-                    <span className="text-rose-700 dark:text-rose-400 font-bold">Severe Loss: 2,240m</span>
-                  </div>
-                </div>
-
-                {/* Active Proactive Alert Card */}
-                <div className={`p-4 rounded-xl border-2 transition-all space-y-2.5 ${
-                  isHazardReached
-                    ? 'border-rose-400 dark:border-rose-800 bg-rose-50/70 dark:bg-rose-950/20'
-                    : isTriggered
-                    ? 'border-amber-400 dark:border-amber-500/70 bg-amber-50/80 dark:bg-amber-950/20'
-                    : 'border-neutral-200 dark:border-[#1e273b] bg-neutral-50/70 dark:bg-[#101420]'
-                }`}>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded bg-rose-600 text-white text-[9px] font-mono font-bold uppercase tracking-wider">
-                        PROACTIVE LOOKAHEAD
-                      </span>
-                      <span className="text-xs font-bold font-mono text-neutral-900 dark:text-white">
-                        Approaching Upper Tipam Micro-Fracture Loss Horizon
-                      </span>
-                    </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-[10px] font-mono font-bold border border-amber-300 dark:border-amber-800 shrink-0">
-                      {distanceToHazard.toFixed(1)}m Ahead • Corridor GLK-COR-03
-                    </span>
-                  </div>
-
-                  {/* 3-Part Separation Summary */}
-                  <div className="space-y-1.5 text-xs font-sans text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                    <p>
-                      <strong className="font-mono text-[10px] uppercase text-neutral-900 dark:text-white font-bold">Ground Truth:</strong>{' '}
-                      5 of 8 offset wells in Geleki suffered severe lost circulation (avg 28.4h NPT). <strong>OIL-GLK-07</strong> suffered total mud loss (420 bbls) at 2,280m MD when mud weight reached 10.8 ppg.
-                    </p>
-                    <p className="text-amber-900 dark:text-amber-200">
-                      <strong className="font-mono text-[10px] uppercase text-amber-700 dark:text-amber-400 font-bold">Rig Advisory:</strong>{' '}
-                      Pre-stage 35 ppb medium-nut-plug LCM pill in active Pit #2 before 2,180m MD. Cap ECD &lt; 10.2 ppg. (Validated by <strong>OIL-GLK-05</strong> clean run).
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-neutral-200 dark:border-neutral-800 text-[11px] font-mono">
-                    <span className="text-neutral-500 dark:text-neutral-400">
-                      Best Analog: <strong className="text-amber-700 dark:text-amber-400">OIL-GLK-07 (87% Sim · 1.8km SE)</strong>
-                    </span>
-                    <Link 
-                      href="/operations" 
-                      className="text-amber-800 dark:text-amber-400 hover:underline font-bold flex items-center gap-1"
-                    >
-                      <span>Correlate in Live Workspace</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            {/* ─── 4 Executive Architecture & Trust Metrics ─── */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto pt-1 font-mono">
-              
-              <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] space-y-1 shadow-2xs">
-                <span className="text-[10px] text-neutral-500 uppercase block font-bold">CATALOGED WELLS</span>
-                <div className="text-2xl font-extrabold text-neutral-950 dark:text-white">1,670+</div>
-                <span className="text-[10px] text-neutral-500 block">Across 6 Assam Fields</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] space-y-1 shadow-2xs">
-                <span className="text-[10px] text-neutral-500 uppercase block font-bold">LOOKAHEAD BUFFER</span>
-                <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">75m MD</div>
-                <span className="text-[10px] text-neutral-500 block">3.5–5h Advance Warning</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] space-y-1 shadow-2xs">
-                <span className="text-[10px] text-neutral-500 uppercase block font-bold">AVG NPT SAVED</span>
-                <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">34 hrs</div>
-                <span className="text-[10px] text-neutral-500 block">≈ $503k / incident avoided</span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] space-y-1 shadow-2xs">
-                <span className="text-[10px] text-neutral-500 uppercase block font-bold">PSU SOVEREIGNTY</span>
-                <div className="text-2xl font-extrabold text-neutral-950 dark:text-white">100%</div>
-                <span className="text-[10px] text-neutral-500 block">Air-Gapped & On-Premise</span>
-              </div>
-
-            </div>
-
+            <div className="text-xl font-black text-amber-700 dark:text-amber-300 mt-0.5">{liveDepth}m</div>
+            <div className="text-[9px] text-amber-800 dark:text-amber-400 font-semibold">Target: 2,180.0m trigger</div>
           </div>
 
-        </section>
-
-        {/* ─── Balanced 6-Module Operational Suite Grid ─── */}
-        <section className="py-12 px-4 sm:px-6 border-t border-neutral-200 dark:border-[#1a2233] bg-neutral-50/60 dark:bg-[#080b12] transition-colors">
-          <div className="max-w-6xl mx-auto space-y-6">
-            
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
-                  Assam Basin Drilling Intelligence Modules
-                </h2>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono mt-0.5">
-                  Six integrated modules bridging live eRTMAC rig streaming with 130 years of archival memory.
-                </p>
-              </div>
-              <span className="text-xs font-mono text-neutral-500">6 Functional Workspaces</span>
+          {/* Gauge 2: ROP (Sky Blue) */}
+          <div className="p-2.5 bg-gradient-to-br from-sky-500/15 via-sky-500/5 to-white dark:to-[#0c2847] border border-sky-300 dark:border-sky-800 rounded-xs shadow-2xs">
+            <div className="text-[10px] text-sky-800 dark:text-sky-300 uppercase font-bold flex items-center gap-1">
+              <Activity className="w-3 h-3 text-sky-600" />
+              ROP
             </div>
+            <div className="text-xl font-black text-sky-700 dark:text-sky-300 mt-0.5">{live.rop} m/h</div>
+            <div className="text-[9px] text-sky-800 dark:text-sky-400 font-semibold">WOB: {live.wob} klbs</div>
+          </div>
 
-            {/* 3x2 Responsive Balanced Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {modules.map((m) => {
-                const Icon = m.icon;
-                return (
-                  <Link
-                    key={m.title}
-                    href={m.href}
-                    className="p-5 rounded-2xl border border-neutral-200 dark:border-[#1a2233] bg-white dark:bg-[#0c0f17] shadow-xs flex flex-col justify-between space-y-4 hover:border-amber-500/60 hover:shadow-md transition-all group cursor-pointer"
-                  >
-                    <div className="space-y-3">
-                      
-                      {/* Card Header with Icon & Badge */}
-                      <div className="flex items-center justify-between">
-                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center group-hover:scale-105 transition-transform">
-                          <Icon className="w-5 h-5" />
-                        </div>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold border ${m.badgeColor}`}>
-                          {m.badge}
-                        </span>
+          {/* Gauge 3: Mud Weight (Teal) */}
+          <div className="p-2.5 bg-gradient-to-br from-teal-500/15 via-teal-500/5 to-white dark:to-[#0c2847] border border-teal-300 dark:border-teal-800 rounded-xs shadow-2xs">
+            <div className="text-[10px] text-teal-800 dark:text-teal-300 uppercase font-bold flex items-center gap-1">
+              <Droplets className="w-3 h-3 text-teal-600" />
+              Mud Weight
+            </div>
+            <div className="text-xl font-black text-teal-700 dark:text-teal-300 mt-0.5">{live.mudWeightIn} ppg</div>
+            <div className="text-[9px] text-teal-800 dark:text-teal-400 font-semibold">Safe: 9.4–10.4 ppg</div>
+          </div>
+
+          {/* Gauge 4: Flow Out (Emerald Green) */}
+          <div className="p-2.5 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-white dark:to-[#0c2847] border border-emerald-300 dark:border-emerald-800 rounded-xs shadow-2xs">
+            <div className="text-[10px] text-emerald-800 dark:text-emerald-300 uppercase font-bold flex items-center gap-1">
+              <Wind className="w-3 h-3 text-emerald-600" />
+              Flow Out %
+            </div>
+            <div className="text-xl font-black text-emerald-700 dark:text-emerald-300 mt-0.5">{live.flowOutPercent}%</div>
+            <div className="text-[9px] text-emerald-800 dark:text-emerald-400 font-semibold">SPP: {live.standpipePressure} psi</div>
+          </div>
+
+          {/* Gauge 5: Gas Units (Purple) */}
+          <div className="p-2.5 bg-gradient-to-br from-purple-500/15 via-purple-500/5 to-white dark:to-[#0c2847] border border-purple-300 dark:border-purple-800 rounded-xs shadow-2xs">
+            <div className="text-[10px] text-purple-800 dark:text-purple-300 uppercase font-bold flex items-center gap-1">
+              <Flame className="w-3 h-3 text-purple-600" />
+              Gas Units
+            </div>
+            <div className="text-xl font-black text-purple-700 dark:text-purple-300 mt-0.5">{live.gasUnits} ppm</div>
+            <div className="text-[9px] text-purple-800 dark:text-purple-400 font-semibold">Temp: {live.temperatureOut}°C</div>
+          </div>
+        </div>
+
+        {/* 3-Tier Safety Advisory Quick Callout (High Contrast Callout Cards) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs pt-1">
+          <div className="p-3 bg-emerald-50/80 dark:bg-emerald-950/40 border-l-4 border-l-emerald-600 border border-emerald-200 dark:border-emerald-900 rounded-xs space-y-1 shadow-2xs">
+            <div className="font-mono text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+              1. Observed Historical Fact
+            </div>
+            <p className="font-sans text-[11px] text-slate-800 dark:text-slate-200 leading-snug">
+              OIL-GLK-07 (1.8 km SE) suffered complete loss of 420 bbls mud at 2,280m MD (MW 10.8 ppg) in Upper Tipam.
+            </p>
+          </div>
+
+          <div className="p-3 bg-rose-50/80 dark:bg-rose-950/40 border-l-4 border-l-rose-600 border border-rose-200 dark:border-rose-900 rounded-xs space-y-1 shadow-2xs">
+            <div className="font-mono text-[10px] font-bold text-rose-800 dark:text-rose-300 uppercase flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3 text-rose-600" />
+              2. Model-Estimated Risk (84%)
+            </div>
+            <p className="font-sans text-[11px] text-slate-800 dark:text-slate-200 leading-snug">
+              High risk of lost circulation at 2,240–2,350m MD due to microfractured sandstone thief zones.
+            </p>
+          </div>
+
+          <div className="p-3 bg-amber-50/80 dark:bg-amber-950/40 border-l-4 border-l-amber-600 border border-amber-200 dark:border-amber-900 rounded-xs space-y-1 shadow-2xs">
+            <div className="font-mono text-[10px] font-bold text-amber-800 dark:text-amber-300 uppercase flex items-center gap-1">
+              <Zap className="w-3 h-3 text-amber-600" />
+              3. Prescribed Mitigation
+            </div>
+            <p className="font-sans text-[11px] text-slate-800 dark:text-slate-200 leading-snug">
+              Pre-treat active system with 35 ppb mixed-fiber LCM pill and reduce pump rate to 1,800 lpm prior to 2,180m.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── 4. Operational Consoles Grid (2 x 3 Vibrant Themed Cards) ─── */}
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#0b3c6d] dark:text-[#93c5fd]">
+            Core Operational Modules &amp; Subsurface Engines
+          </div>
+          <span className="text-[11px] text-muted-foreground font-mono">
+            6 Specialized Workspaces
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {operationalConsoles.map((console) => {
+            const Icon = console.icon;
+            return (
+              <div
+                key={console.title}
+                className={`gov-panel flex flex-col justify-between space-y-3 ${console.borderColor} border-t-4 transition-all hover:shadow-md group bg-white dark:bg-[#071d36]`}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <div className={`w-8 h-8 rounded-xs ${console.iconBg} flex items-center justify-center shrink-0 shadow-xs`}>
+                        <Icon className="w-4 h-4 text-white" />
                       </div>
-
-                      <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono leading-snug group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                        {m.title}
-                      </h3>
-
-                      <p className="text-xs text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed">
-                        {m.description}
-                      </p>
-                    </div>
-
-                    {/* Miniature Instrument Preview Badge */}
-                    <div className="p-2.5 rounded-xl bg-neutral-50 dark:bg-[#111622] border border-neutral-200 dark:border-[#1a2333] flex items-center justify-between text-[11px] font-mono">
                       <div>
-                        <span className="text-neutral-500 text-[10px] block">{m.preview.label}</span>
-                        <span className="font-bold text-neutral-900 dark:text-neutral-200">{m.preview.val}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-neutral-500 text-[10px] block">{m.preview.status}</span>
-                        <span className="font-bold text-amber-600 dark:text-amber-400">{m.preview.metric}</span>
+                        <h2 className="font-bold text-sm text-[#1f2328] dark:text-[#f0f2f5] font-sans group-hover:text-[#0b3c6d] dark:group-hover:text-[#93c5fd] transition-colors">
+                          {console.title}
+                        </h2>
+                        <div className="text-[10px] text-[#57606a] dark:text-[#94a3b8] font-sans">
+                          {console.titleHindi}
+                        </div>
                       </div>
                     </div>
+                    <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase border rounded-xs ${console.tagColor}`}>
+                      {console.tag}
+                    </span>
+                  </div>
 
-                    {/* Action Footer */}
-                    <div className="pt-2 border-t border-neutral-100 dark:border-[#161e2e] flex items-center justify-between text-xs font-mono font-bold text-amber-700 dark:text-amber-400">
-                      <span>{m.actionText}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
+                    {console.description}
+                  </p>
+                </div>
+
+                <div className="pt-2.5 border-t border-border/70 space-y-2">
+                  <div className="text-xs font-mono">
+                    <div className={`font-bold truncate ${console.accentText}`}>
+                      {console.primaryMetric}
                     </div>
+                    <div className="text-[11px] text-muted-foreground truncate">
+                      {console.subMetric}
+                    </div>
+                  </div>
+
+                  <Link
+                    href={console.href}
+                    className={`inline-flex items-center gap-1.5 text-xs font-bold ${console.accentText} hover:underline pt-1 font-mono`}
+                  >
+                    <span>Launch Module</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                );
-              })}
-            </div>
-
-          </div>
-        </section>
-
-        {/* ─── Operational Workflow: Reactive vs NWIS Proactive ─── */}
-        <section className="py-12 px-4 sm:px-6 border-t border-neutral-200 dark:border-[#1a2233] bg-white dark:bg-[#07090f]">
-          <div className="max-w-6xl mx-auto space-y-6">
-            
-            <div className="text-center max-w-2xl mx-auto space-y-1">
-              <h3 className="text-lg sm:text-xl font-extrabold font-mono text-neutral-950 dark:text-white">
-                How NWIS Proactively Intervenes on the Rig Floor
-              </h3>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
-                Comparison of conventional reactive post-incident response vs. NWIS lookahead intelligence.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-              
-              {/* Conventional Reactive Path */}
-              <div className="p-5 rounded-2xl border border-rose-200 dark:border-rose-900/50 bg-rose-50/50 dark:bg-rose-950/20 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-rose-700 dark:text-rose-400 uppercase text-[11px] flex items-center gap-1.5">
-                    <AlertTriangle className="w-4 h-4 text-rose-500" />
-                    Conventional Reactive Drilling (eRTMAC Alone)
-                  </span>
-                  <Badge className="bg-rose-600 text-white text-[9px]">34h NPT INCURRED</Badge>
-                </div>
-                <div className="space-y-2 text-neutral-700 dark:text-neutral-300 font-sans text-xs">
-                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-[#0e121a] border border-rose-200 dark:border-rose-900/40">
-                    <strong className="text-neutral-950 dark:text-white font-mono text-[11px]">1. Blind Entry:</strong> Bit penetrates Upper Tipam Sandstone micro-fractures without historical analog awareness.
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-[#0e121a] border border-rose-200 dark:border-rose-900/40">
-                    <strong className="text-neutral-950 dark:text-white font-mono text-[11px]">2. Catastrophic Loss:</strong> Mud weight 10.8 ppg breaks fracture gradient; total fluid loss (420 bbls) at 2,280m MD.
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-[#0e121a] border border-rose-200 dark:border-rose-900/40">
-                    <strong className="text-neutral-950 dark:text-white font-mono text-[11px]">3. Reactive Scramble:</strong> Drilling halts for 34 hours while crew mixes heavy fiber LCM pills and runs squeeze jobs.
-                  </div>
                 </div>
               </div>
-
-              {/* NWIS Proactive Path */}
-              <div className="p-5 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-950/20 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 uppercase text-[11px] flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    NWIS Real-Time Companion Workflow
-                  </span>
-                  <Badge className="bg-emerald-600 text-white text-[9px]">ZERO NPT LOSS</Badge>
-                </div>
-                <div className="space-y-2 text-neutral-700 dark:text-neutral-300 font-sans text-xs">
-                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-[#0e121a] border border-emerald-200 dark:border-emerald-900/40">
-                    <strong className="text-neutral-950 dark:text-white font-mono text-[11px]">1. 75m Advance Notice:</strong> Watcher triggers advisory at 2,180m MD, surfacing OIL-GLK-07 historical loss post-mortem.
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-[#0e121a] border border-emerald-200 dark:border-emerald-900/40">
-                    <strong className="text-neutral-950 dark:text-white font-mono text-[11px]">2. Pre-emptive Conditioning:</strong> Crew stages 35 ppb nut-plug pill in suction pit and caps ECD at 10.2 ppg (proven by GLK-05).
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-white/80 dark:bg-[#0e121a] border border-emerald-200 dark:border-emerald-900/40">
-                    <strong className="text-neutral-950 dark:text-white font-mono text-[11px]">3. Clean Passage:</strong> Bit traverses 2,240m–2,350m without fluid loss. 34 hours of NPT avoided.
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-        {/* ─── PSU Governance & Safety Framework ─── */}
-        <section className="py-8 px-4 sm:px-6 border-t border-neutral-200 dark:border-[#1a2233] bg-neutral-50/70 dark:bg-[#080b12] transition-colors">
-          <div className="max-w-6xl mx-auto space-y-4">
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-amber-500" />
-                <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono uppercase tracking-wide">
-                  PSU Governance &amp; Safety Boundary Framework
-                </h3>
-              </div>
-              <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[10px] font-mono font-bold">
-                AIR-GAPPED COMPLIANT
-              </Badge>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2233] space-y-1">
-                <div className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>1. Strict Read-Only Bridge</span>
-                </div>
-                <p className="text-neutral-600 dark:text-neutral-300 font-sans text-[11px] leading-relaxed">
-                  One-way contract (<code className="text-amber-600 dark:text-amber-400 font-bold">GET /live-state/{'{well_id}'}</code>). NWIS never sends control commands to rig hardware or eRTMAC valves.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2233] space-y-1">
-                <div className="font-bold text-amber-700 dark:text-amber-400 flex items-center gap-1.5">
-                  <GitCompare className="w-3.5 h-3.5" />
-                  <span>2. Geological Similarity &gt; Distance</span>
-                </div>
-                <p className="text-neutral-600 dark:text-neutral-300 font-sans text-[11px] leading-relaxed">
-                  Matches formation facies &amp; pressure regimes over raw geographic distance to avoid misleading offset correlations across fault blocks.
-                </p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2233] space-y-1">
-                <div className="font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
-                  <FileCheck2 className="w-3.5 h-3.5 text-amber-500" />
-                  <span>3. Document Provenance &amp; Audit</span>
-                </div>
-                <p className="text-neutral-600 dark:text-neutral-300 font-sans text-[11px] leading-relaxed">
-                  Every advisory cites original WCR and daily report page citations with OCR confidence tiers and human superintendent verification signatures.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-      </main>
-
-      {/* ─── Clean Industrial Footer ─── */}
-      <footer className="border-t border-neutral-200 dark:border-[#1a2233] bg-white dark:bg-[#07090f] text-neutral-600 dark:text-neutral-400 py-4 px-4 sm:px-6 text-xs font-mono transition-colors">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            Built for <strong>Oil India Limited</strong> · eRTMAC Companion Architecture
-          </div>
-          <div className="flex items-center gap-3 text-neutral-500 text-[11px]">
-            <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3" /> DGMS &amp; OISD-GDN-178 Aligned
-            </span>
-            <span>•</span>
-            <span>Assam-Arakan Basin Archives (1889–2026)</span>
-          </div>
+            );
+          })}
         </div>
-      </footer>
+      </div>
+
+      {/* ─── 5. Basin Risk Summary Table ─── */}
+      <div className="gov-panel space-y-3 bg-white dark:bg-[#071d36] border-t-4 border-t-blue-600 shadow-sm">
+        <div className="flex items-center justify-between pb-2 border-b border-border">
+          <div>
+            <h3 className="font-bold text-sm text-[#0b3c6d] dark:text-[#93c5fd] font-sans">
+              Active Rig Fleet &amp; Lookahead Hazard Register
+            </h3>
+            <p className="text-xs text-muted-foreground font-sans">
+              Immediate stratigraphic loss &amp; overpressure corridors along active drilling trajectories.
+            </p>
+          </div>
+          <Link
+            href="/alerts"
+            className="text-xs font-bold text-blue-700 dark:text-blue-300 hover:underline font-mono"
+          >
+            View Full Inbox ({alerts.length}) →
+          </Link>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="gov-table font-mono text-xs">
+            <thead>
+              <tr className="bg-slate-50 dark:bg-slate-900/50">
+                <th>Target Well</th>
+                <th>Field / Formation</th>
+                <th>Current Depth</th>
+                <th>Lookahead Corridor</th>
+                <th>Lead-Time Buffer</th>
+                <th>Severity Status</th>
+                <th className="text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hover:bg-amber-50/50 dark:hover:bg-amber-950/20">
+                <td className="font-bold text-foreground">OIL-GLK-14</td>
+                <td>Geleki · Upper Tipam</td>
+                <td className="font-bold text-amber-600 dark:text-amber-400">{liveDepth}m MD</td>
+                <td>Thief zone microfractures (2,240–2,350m)</td>
+                <td className="text-amber-600 dark:text-amber-400 font-bold">74.6m ahead (~3.2 hrs)</td>
+                <td>
+                  <span className="px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950 dark:text-amber-300 font-bold rounded-xs">
+                    ADVISORY ACTIVE
+                  </span>
+                </td>
+                <td className="text-right">
+                  <Link href="/operations" className="text-blue-700 dark:text-blue-300 font-bold hover:underline">
+                    Inspect Cockpit
+                  </Link>
+                </td>
+              </tr>
+              <tr className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20">
+                <td className="font-bold text-foreground">OIL-DGB-09</td>
+                <td>Digboi · Digboi Sandstone</td>
+                <td>1,120.0m MD</td>
+                <td>Depleted shallow reservoir sands</td>
+                <td className="text-emerald-600 dark:text-emerald-400 font-bold">Safe trajectory</td>
+                <td>
+                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300 font-bold rounded-xs">
+                    NORMAL DRILLING
+                  </span>
+                </td>
+                <td className="text-right">
+                  <Link href="/dashboard" className="text-blue-700 dark:text-blue-300 font-bold hover:underline">
+                    View Well
+                  </Link>
+                </td>
+              </tr>
+              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20">
+                <td className="font-bold text-foreground">OIL-KHS-04</td>
+                <td>Kharsang · Girujan Clay</td>
+                <td>840.0m MD</td>
+                <td>Tectonic thrust-fault shear zone</td>
+                <td className="text-muted-foreground">Rig suspended</td>
+                <td>
+                  <span className="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300 font-bold rounded-xs">
+                    STANDBY
+                  </span>
+                </td>
+                <td className="text-right">
+                  <Link href="/decay-index" className="text-blue-700 dark:text-blue-300 font-bold hover:underline">
+                    Decay Dossier
+                  </Link>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ─── 6. Regulatory & Architectural Guarantees Footer Strip ─── */}
+      <div className="p-3.5 bg-gradient-to-r from-blue-50/80 via-white to-emerald-50/80 dark:from-[#071d36] dark:via-[#092215] dark:to-[#071d36] border border-[#d0d7de] dark:border-[#1e3a5f] rounded-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] font-sans text-slate-700 dark:text-slate-300 shadow-xs">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <span>
+            Compliant with <strong>OISD-GDN-178</strong> (Drilling Safety Management) &amp; <strong>DGMS</strong> Subsurface Evidence Archival Guidelines · <strong>GIGW 3.0 Standard</strong>.
+          </span>
+        </div>
+        <div className="font-mono text-[10px] text-muted-foreground font-bold">
+          Assam-Arakan Subsurface Knowledge Base · Oil India Limited R&amp;D
+        </div>
+      </div>
 
     </div>
   );

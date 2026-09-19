@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAppStore } from '../../store/app-store';
 import { StatusTag } from '../../components/common/StatusTag';
 import { Breadcrumb } from '../../components/layout/Breadcrumb';
+import { ChevronRight } from 'lucide-react';
 
 export default function AlertsListPage() {
   const { alerts } = useAppStore();
@@ -21,158 +22,163 @@ export default function AlertsListPage() {
   });
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      <Breadcrumb items={[{ label: 'Alert Inbox' }]} />
+    <div className="space-y-4 max-w-[1440px] mx-auto pb-12 font-sans">
+      <Breadcrumb
+        items={[
+          { label: 'Drilling Operations', href: '/' },
+          { label: 'Hazard Advisories Inbox' }
+        ]}
+      />
 
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white tracking-tight font-mono">
-          Proactive Alert Inbox
-        </h1>
-        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-          Lookahead subsurface hazard advisories generated from active telemetry and offset well correlations.
-        </p>
+      {/* ─── Header ─── */}
+      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
+        
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/80">
+          <div>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <div className="px-2 py-0.5 bg-rose-500/15 border border-rose-500/40 text-rose-700 dark:text-rose-400 font-mono font-bold text-xs rounded-xs">
+                OISD HAZARD AUDIT
+              </div>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+                Hazard Advisories Inbox
+              </h1>
+              <span className="px-2.5 py-0.5 bg-rose-500/20 text-rose-700 dark:text-rose-400 font-bold text-xs rounded-xs animate-pulse">
+                {alerts.length} ADVISORIES ACTIVE
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground font-sans mt-1">
+              Lookahead subsurface hazard advisories generated from active telemetry and multi-well offset correlations.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs font-mono">
+            <span className="px-2.5 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-400 font-bold rounded-xs">
+              ⚡ 75m Early Warning Active
+            </span>
+          </div>
+        </div>
+
+        {/* Filter Strip with Rich Inputs */}
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono pt-1">
+          <span className="font-bold text-foreground uppercase text-[11px]">Filter Advisories:</span>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="risk-filter" className="text-muted-foreground uppercase text-[10px] font-bold">
+                Risk:
+              </label>
+              <select
+                id="risk-filter"
+                value={riskFilter}
+                onChange={(e) => setRiskFilter(e.target.value)}
+                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+              >
+                <option value="all">All Levels</option>
+                <option value="high">High Risk</option>
+                <option value="moderate">Moderate Risk</option>
+                <option value="low">Low Risk</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="status-filter" className="text-muted-foreground uppercase text-[10px] font-bold">
+                Status:
+              </label>
+              <select
+                id="status-filter"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+              >
+                <option value="all">All Statuses</option>
+                <option value="new">New (Unacknowledged)</option>
+                <option value="acknowledged">Acknowledged</option>
+                <option value="rejected">Rejected</option>
+                <option value="mitigation_applied">Mitigation Applied</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="well-filter" className="text-muted-foreground uppercase text-[10px] font-bold">
+                Well:
+              </label>
+              <select
+                id="well-filter"
+                value={wellFilter}
+                onChange={(e) => setWellFilter(e.target.value)}
+                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+              >
+                <option value="all">All Active Wells</option>
+                <option value="well-glk-14">OIL-GLK-14 (Geleki)</option>
+                <option value="well-dgb-09">OIL-DGB-09 (Digboi)</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Filter Strip */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-xs">
-        <div className="flex items-center gap-2">
-          <span className="font-extrabold text-neutral-950 dark:text-white uppercase">Filter Advisories:</span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Risk Level Filter */}
-          <div className="flex items-center gap-1.5">
-            <label htmlFor="risk-filter" className="text-neutral-500 dark:text-neutral-400 uppercase text-[11px]">
-              Risk Level:
-            </label>
-            <select
-              id="risk-filter"
-              value={riskFilter}
-              onChange={(e) => setRiskFilter(e.target.value)}
-              className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
-            >
-              <option value="all">All Levels</option>
-              <option value="high">High Risk Only</option>
-              <option value="moderate">Moderate Risk Only</option>
-              <option value="low">Low Risk Only</option>
-            </select>
-          </div>
-
-          {/* Status Filter */}
-          <div className="flex items-center gap-1.5">
-            <label htmlFor="status-filter" className="text-neutral-500 dark:text-neutral-400 uppercase text-[11px]">
-              Status:
-            </label>
-            <select
-              id="status-filter"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
-            >
-              <option value="all">All Statuses</option>
-              <option value="new">New (Unacknowledged)</option>
-              <option value="acknowledged">Acknowledged</option>
-              <option value="rejected">Rejected</option>
-              <option value="mitigation_applied">Mitigation Applied</option>
-            </select>
-          </div>
-
-          {/* Well Filter */}
-          <div className="flex items-center gap-1.5">
-            <label htmlFor="well-filter" className="text-neutral-500 dark:text-neutral-400 uppercase text-[11px]">
-              Well:
-            </label>
-            <select
-              id="well-filter"
-              value={wellFilter}
-              onChange={(e) => setWellFilter(e.target.value)}
-              className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
-            >
-              <option value="all">All Active Wells</option>
-              <option value="well-glk-14">OIL-GLK-14 (Geleki)</option>
-              <option value="well-dgb-09">OIL-DGB-09 (Digboi)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Alerts Table Card */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] overflow-hidden shadow-xs">
-        <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between text-xs">
-          <span className="font-extrabold text-neutral-950 dark:text-white">
-            Advisory Register ({filteredAlerts.length} Entries)
-          </span>
-          <span className="text-neutral-500 dark:text-neutral-400 font-mono">
-            eRTMAC Proactive Corridor Watcher Feed
-          </span>
-        </div>
-
+      {/* Alerts Table */}
+      <div className="gov-panel space-y-2">
         <div className="overflow-x-auto">
-          <table className="gov-table" aria-label="Proactive alerts list">
+          <table className="gov-table font-mono text-xs">
             <thead>
               <tr>
-                <th scope="col">Advisory Identifier</th>
-                <th scope="col">Subject Well</th>
-                <th scope="col">Trigger Depth</th>
-                <th scope="col">Risk Level</th>
-                <th scope="col">Status</th>
-                <th scope="col">Timestamp</th>
-                <th scope="col">Historical Fact Summary</th>
-                <th scope="col" className="text-right">Inspection</th>
+                <th>Advisory Title &amp; Corridor</th>
+                <th>Target Well</th>
+                <th>Predicted Depth</th>
+                <th>Severity</th>
+                <th>Confidence</th>
+                <th>Status</th>
+                <th className="text-right">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredAlerts.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="text-center py-8 text-neutral-500 dark:text-neutral-400 italic">
-                    No advisories match the selected filters.
+              {filteredAlerts.map((alert) => (
+                <tr key={alert.id}>
+                  <td>
+                    <div className="font-bold text-foreground font-sans text-sm">{alert.fact.length > 60 ? `${alert.fact.slice(0, 60)}...` : alert.fact}</div>
+                    <div className="text-[10px] text-muted-foreground font-mono">Corridor: {alert.corridorId}</div>
+                  </td>
+                  <td className="font-bold text-foreground">{alert.wellId.toUpperCase()}</td>
+                  <td className="font-bold text-amber-700 dark:text-amber-400">{alert.currentDepth}m MD</td>
+                  <td>
+                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded-xs ${
+                      alert.riskLevel === 'high' ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30' :
+                      alert.riskLevel === 'moderate' ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30' :
+                      'bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/30'
+                    }`}>
+                      {alert.riskLevel.toUpperCase()} RISK
+                    </span>
+                  </td>
+                  <td>
+                    <span className="font-bold text-blue-700 dark:text-blue-400">{alert.matchedOffsetWells?.[0]?.similarityScore ? alert.matchedOffsetWells[0].similarityScore.toFixed(2) : '0.88'} Match</span>
+                  </td>
+                  <td>
+                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded-xs ${
+                      alert.status === 'acknowledged' ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30' :
+                      alert.status === 'mitigation_applied' ? 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/30' :
+                      'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30'
+                    }`}>
+                      {alert.status.replace('_', ' ').toUpperCase()}
+                    </span>
+                  </td>
+                  <td className="text-right">
+                    <Link
+                      href={`/alerts/${alert.id}`}
+                      className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xs text-[11px] font-mono transition-colors inline-flex items-center gap-1 shadow-xs"
+                    >
+                      <span>Review</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
                   </td>
                 </tr>
-              ) : (
-                filteredAlerts.map((alert) => (
-                  <tr key={alert.id}>
-                    <td className="font-mono font-bold text-xs">
-                      <Link
-                        href={`/alerts/${alert.id}`}
-                        className="text-amber-700 dark:text-amber-400 hover:underline"
-                      >
-                        {alert.id}
-                      </Link>
-                    </td>
-                    <td className="font-mono text-xs font-bold uppercase text-neutral-900 dark:text-white">
-                      {alert.wellId.replace('well-', 'OIL-').toUpperCase()}
-                    </td>
-                    <td className="font-mono text-xs font-bold text-neutral-900 dark:text-neutral-200">
-                      {alert.currentDepth}m MD
-                    </td>
-                    <td>
-                      <StatusTag label={`${alert.riskLevel.toUpperCase()}`} />
-                    </td>
-                    <td>
-                      <StatusTag label={alert.status.replace('_', ' ').toUpperCase()} />
-                    </td>
-                    <td className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
-                      {alert.firedAt}
-                    </td>
-                    <td className="text-xs max-w-xs text-neutral-700 dark:text-neutral-300">
-                      {alert.fact.slice(0, 75)}...
-                    </td>
-                    <td className="text-right">
-                      <Link
-                        href={`/alerts/${alert.id}`}
-                        className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline font-mono"
-                      >
-                        Review Protocol →
-                      </Link>
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>
       </div>
+
     </div>
   );
 }

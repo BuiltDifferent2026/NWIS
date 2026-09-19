@@ -164,25 +164,25 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
   const glk02KickY = depthToY(2740.0 + glk02Shift);
 
   return (
-    <div className={`rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] shadow-xs overflow-hidden transition-colors ${className}`}>
+    <div className={`gov-panel ${className}`}>
       
       {/* ─── Panel Header & Interactive Toolbar ─── */}
-      <div className="p-4 border-b border-neutral-200 dark:border-[#1a2233] flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-neutral-50/70 dark:bg-[#0a0d14]">
+      <div className="p-3 border-b border-neutral-200 dark:border-neutral-800 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-neutral-50/70 dark:bg-neutral-900/60">
         
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
-            <Layers className="w-4 h-4" />
+          <div className="w-7 h-7 rounded-xs bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-slate-300 border border-neutral-200 dark:border-neutral-700 flex items-center justify-center">
+            <Layers className="w-3.5 h-3.5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono uppercase tracking-wide">
+              <h3 className="text-xs font-bold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider font-mono">
                 Multi-Well Stratigraphic Correlation Panel
               </h3>
-              <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[9px] font-mono font-bold">
+              <span className="gov-tag gov-tag-neutral">
                 GELEKI FAULT BLOCK
-              </Badge>
+              </span>
             </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
+            <p className="text-[11px] text-neutral-500 font-mono">
               Structural &amp; Lithological Tie-Lines · Active Well OIL-GLK-14 vs. Key Analog Offset Wells
             </p>
           </div>
@@ -192,13 +192,13 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
         <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
           
           {/* Depth View Mode Toggle */}
-          <div className="flex items-center bg-neutral-100 dark:bg-[#121622] p-1 rounded-xl border border-neutral-200 dark:border-[#1e2638]">
+          <div className="flex items-center bg-white dark:bg-neutral-950 p-0.5 rounded-xs border border-neutral-300 dark:border-neutral-800">
             <button
               type="button"
               onClick={() => setZoomMode('full')}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+              className={`px-2 py-1 rounded-xs text-[11px] font-mono font-bold transition-all ${
                 zoomMode === 'full'
-                  ? 'bg-amber-600 text-white shadow-xs'
+                  ? 'bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
                   : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
@@ -207,9 +207,9 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
             <button
               type="button"
               onClick={() => setZoomMode('target')}
-              className={`px-2.5 py-1 rounded-lg font-bold transition-all flex items-center gap-1 ${
+              className={`px-2 py-1 rounded-xs text-[11px] font-mono font-bold transition-all flex items-center gap-1 ${
                 zoomMode === 'target'
-                  ? 'bg-amber-600 text-white shadow-xs'
+                  ? 'bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900'
                   : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
@@ -222,10 +222,10 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
           <button
             type="button"
             onClick={() => setShowTieLines(!showTieLines)}
-            className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-colors ${
+            className={`px-2 py-1 rounded-xs border text-[11px] font-mono font-bold transition-colors ${
               showTieLines
-                ? 'border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-400'
-                : 'border-neutral-200 dark:border-neutral-800 text-neutral-500'
+                ? 'border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900'
+                : 'border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 bg-white dark:bg-neutral-950'
             }`}
           >
             Tie-Ribbons
@@ -234,10 +234,10 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
           <button
             type="button"
             onClick={() => setShowPPFG(!showPPFG)}
-            className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-colors ${
+            className={`px-2 py-1 rounded-xs border text-[11px] font-mono font-bold transition-colors ${
               showPPFG
-                ? 'border-cyan-500/40 bg-cyan-500/10 text-cyan-700 dark:text-cyan-400'
-                : 'border-neutral-200 dark:border-neutral-800 text-neutral-500'
+                ? 'border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900'
+                : 'border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 bg-white dark:bg-neutral-950'
             }`}
           >
             PPFG Window
@@ -248,87 +248,87 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
       </div>
 
       {/* ─── Column Legend / Well Card Headers ─── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 p-4 bg-neutral-100/60 dark:bg-[#0e121c] border-b border-neutral-200 dark:border-[#1a2233] text-xs font-mono">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 p-3 bg-neutral-100/50 dark:bg-neutral-900/40 border-b border-neutral-200 dark:border-neutral-800 text-xs font-mono">
         
         {/* Active Well Header */}
-        <div className="p-2.5 rounded-xl bg-white dark:bg-[#141926] border-2 border-amber-500/80 shadow-xs space-y-1">
+        <div className="p-2 rounded-xs bg-white dark:bg-neutral-900 border-2 border-amber-600 dark:border-amber-500 space-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-amber-700 dark:text-amber-400 uppercase text-[10px] flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-bold text-amber-700 dark:text-amber-400 uppercase text-[10px] flex items-center gap-1 font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
               ACTIVE DRILLING
             </span>
-            <span className="text-[10px] text-neutral-400">RIG #04</span>
+            <span className="text-[10px] text-neutral-500 font-mono">RIG #04</span>
           </div>
-          <div className="text-sm font-extrabold text-neutral-950 dark:text-white">OIL-GLK-14</div>
-          <div className="flex items-center justify-between text-[11px] pt-1">
+          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-mono">OIL-GLK-14</div>
+          <div className="flex items-center justify-between text-[10px] pt-0.5">
             <span className="text-neutral-500">Bit Depth:</span>
-            <span className="font-bold text-amber-600 dark:text-amber-400">{currentDepthMD}m MD</span>
+            <span className="font-bold text-amber-600 dark:text-amber-400 font-mono">{currentDepthMD}m MD</span>
           </div>
-          <div className="text-[10px] text-neutral-500">Mud Wt: 9.8 ppg • Upper Tipam</div>
+          <div className="text-[10px] text-neutral-500 font-mono">Mud Wt: 9.8 ppg • Upper Tipam</div>
         </div>
 
         {/* Analog 1: OIL-GLK-07 */}
-        <div className="p-2.5 rounded-xl bg-white dark:bg-[#121622] border border-rose-500/40 shadow-xs space-y-1">
+        <div className="p-2 rounded-xs bg-white dark:bg-neutral-900 border border-red-300 dark:border-red-900/60 space-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-rose-600 dark:text-rose-400 uppercase text-[10px]">
+            <span className="font-bold text-red-700 dark:text-red-400 uppercase text-[10px] font-mono">
               BEST ANALOG (87%)
             </span>
-            <span className="text-[10px] text-neutral-400">1.8 km SE</span>
+            <span className="text-[10px] text-neutral-500 font-mono">1.8 km SE</span>
           </div>
-          <div className="text-sm font-extrabold text-neutral-950 dark:text-white">OIL-GLK-07</div>
-          <div className="flex items-center justify-between text-[11px] pt-1">
+          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-mono">OIL-GLK-07</div>
+          <div className="flex items-center justify-between text-[10px] pt-0.5 font-mono">
             <span className="text-neutral-500">1996 Incident:</span>
-            <span className="font-bold text-rose-600 dark:text-rose-400">2,280m MD</span>
+            <span className="font-bold text-red-600 dark:text-red-400">2,280m MD</span>
           </div>
-          <div className="text-[10px] text-rose-600 dark:text-rose-400 font-semibold">420 bbls lost (MW 10.8 ppg)</div>
+          <div className="text-[10px] text-red-600 dark:text-red-400 font-mono">420 bbls lost (MW 10.8 ppg)</div>
         </div>
 
         {/* Analog 2: OIL-GLK-05 */}
-        <div className="p-2.5 rounded-xl bg-white dark:bg-[#121622] border border-emerald-500/40 shadow-xs space-y-1">
+        <div className="p-2 rounded-xs bg-white dark:bg-neutral-900 border border-emerald-300 dark:border-emerald-900/60 space-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-emerald-600 dark:text-emerald-400 uppercase text-[10px]">
+            <span className="font-bold text-emerald-700 dark:text-emerald-400 uppercase text-[10px] font-mono">
               CLEAN PASS (91%)
             </span>
-            <span className="text-[10px] text-neutral-400">2.4 km NW</span>
+            <span className="text-[10px] text-neutral-500 font-mono">2.4 km NW</span>
           </div>
-          <div className="text-sm font-extrabold text-neutral-950 dark:text-white">OIL-GLK-05</div>
-          <div className="flex items-center justify-between text-[11px] pt-1">
+          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-mono">OIL-GLK-05</div>
+          <div className="flex items-center justify-between text-[10px] pt-0.5 font-mono">
             <span className="text-neutral-500">2018 Run:</span>
             <span className="font-bold text-emerald-600 dark:text-emerald-400">Zero Loss</span>
           </div>
-          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Pre-treated 35 ppb LCM</div>
+          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">Pre-treated 35 ppb LCM</div>
         </div>
 
         {/* Analog 3: OIL-GLK-02 */}
-        <div className="p-2.5 rounded-xl bg-white dark:bg-[#121622] border border-purple-500/40 shadow-xs space-y-1">
+        <div className="p-2 rounded-xs bg-white dark:bg-neutral-900 border border-purple-300 dark:border-purple-900/60 space-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-purple-600 dark:text-purple-400 uppercase text-[10px]">
+            <span className="font-bold text-purple-700 dark:text-purple-400 uppercase text-[10px] font-mono">
               LOW SIM (42%)
             </span>
-            <span className="text-[10px] text-neutral-400">0.9 km W</span>
+            <span className="text-[10px] text-neutral-500 font-mono">0.9 km W</span>
           </div>
-          <div className="text-sm font-extrabold text-neutral-950 dark:text-white">OIL-GLK-02</div>
-          <div className="flex items-center justify-between text-[11px] pt-1">
+          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-mono">OIL-GLK-02</div>
+          <div className="flex items-center justify-between text-[10px] pt-0.5 font-mono">
             <span className="text-neutral-500">1984 Kick:</span>
             <span className="font-bold text-purple-600 dark:text-purple-400">2,740m MD</span>
           </div>
-          <div className="text-[10px] text-neutral-500">Barail Gas Influx (480 psi)</div>
+          <div className="text-[10px] text-neutral-500 font-mono">Barail Gas Influx (480 psi)</div>
         </div>
 
         {/* PPFG Curve Window Header */}
-        <div className="p-2.5 rounded-xl bg-white dark:bg-[#121622] border border-cyan-500/40 shadow-xs space-y-1">
+        <div className="p-2 rounded-xs bg-white dark:bg-neutral-900 border border-sky-300 dark:border-sky-900/60 space-y-0.5">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-cyan-600 dark:text-cyan-400 uppercase text-[10px]">
+            <span className="font-bold text-sky-700 dark:text-sky-400 uppercase text-[10px] font-mono">
               PRESSURE WINDOW
             </span>
-            <span className="text-[10px] text-neutral-400">PPFG</span>
+            <span className="text-[10px] text-neutral-500 font-mono">PPFG</span>
           </div>
-          <div className="text-sm font-extrabold text-neutral-950 dark:text-white">Drilling Margin</div>
-          <div className="flex items-center justify-between text-[11px] pt-1">
+          <div className="text-xs font-bold text-neutral-900 dark:text-neutral-100 font-mono">Drilling Margin</div>
+          <div className="flex items-center justify-between text-[10px] pt-0.5 font-mono">
             <span className="text-neutral-500">Safe Window:</span>
-            <span className="font-bold text-cyan-600 dark:text-cyan-400">9.4 – 10.4 ppg</span>
+            <span className="font-bold text-sky-600 dark:text-sky-400">9.4 – 10.4 ppg</span>
           </div>
-          <div className="text-[10px] text-amber-600 dark:text-amber-400">GLK-07 broke FG @ 10.8</div>
+          <div className="text-[10px] text-amber-600 dark:text-amber-400 font-mono">GLK-07 broke FG @ 10.8</div>
         </div>
 
       </div>

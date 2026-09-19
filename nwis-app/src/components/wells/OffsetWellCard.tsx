@@ -38,142 +38,121 @@ export const OffsetWellCard: React.FC<OffsetWellCardProps> = ({
 
   return (
     <div
-      className={`rounded-xl border transition-all duration-200 bg-slate-900/60 backdrop-blur-md p-4 ${
-        isSelected
-          ? 'border-blue-500 bg-blue-950/20 shadow-lg shadow-blue-500/10'
-          : 'border-white/[0.06] hover:border-slate-700'
+      className={`gov-panel space-y-2.5 transition-colors ${
+        isSelected ? 'border-l-4 border-l-[#1d70b8] bg-[#eef4f9] dark:bg-[#192336]' : ''
       }`}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3 font-sans">
         <div>
           <div className="flex items-center gap-2">
-            <h4 className="font-semibold text-slate-100 text-sm tracking-tight">
+            <h4 className="font-bold text-foreground text-sm font-mono">
               {offsetWell.name}
             </h4>
             <StatusBadge status={offsetWell.status} size="sm" />
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            {offsetWell.field} Field • Block {offsetWell.block} • {offsetWell.totalDepthMD}m TD
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {offsetWell.field} Field · Block {offsetWell.block} · {offsetWell.totalDepthMD}m TD
           </p>
         </div>
 
-        {/* Dual Metric Badges: Distance (Geospatial) vs Similarity (Geological/Depth) */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Dual Metric Badges: Distance vs Similarity */}
+        <div className="flex items-center gap-3 shrink-0 font-mono text-xs">
           <div className="text-right">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">Distance</div>
-            <div className="text-xs font-mono font-bold text-slate-200 flex items-center justify-end gap-1">
-              <MapPin className="w-3 h-3 text-cyan-400" />
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">Distance</div>
+            <div className="text-xs font-bold text-foreground">
               {distKm} km
             </div>
           </div>
-          <div className="h-6 w-px bg-slate-800" />
+          <div className="h-6 w-px bg-border" />
           <div className="text-right">
-            <div className="text-[10px] font-mono text-slate-400 uppercase">Similarity</div>
-            <div
-              className={`text-xs font-mono font-bold flex items-center justify-end gap-1 ${
-                simPercent >= 75
-                  ? 'text-emerald-400'
-                  : simPercent >= 50
-                  ? 'text-amber-400'
-                  : 'text-slate-400'
-              }`}
-            >
-              <Compass className="w-3 h-3" />
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">Similarity</div>
+            <div className="text-xs font-bold text-[#1d70b8] dark:text-[#60a5fa]">
               {simPercent}%
             </div>
           </div>
         </div>
       </div>
 
-      {/* Mini Progress Bar for Composite Similarity */}
-      <div className="mt-3">
-        <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1">
-          <span>Composite Geological Correlation</span>
-          <span className="text-slate-300 font-semibold">{sim.total.toFixed(2)} / 1.00</span>
+      {/* Flat Neutral Similarity Bar */}
+      <div className="space-y-1 font-mono text-xs">
+        <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+          <span>Composite Similarity</span>
+          <span className="text-foreground font-bold">{sim.total.toFixed(2)} / 1.00</span>
         </div>
-        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden flex">
+        <div className="h-1.5 w-full bg-border rounded-xs overflow-hidden">
           <div
             style={{ width: `${simPercent}%` }}
-            className={`h-full transition-all duration-500 rounded-full ${
-              simPercent >= 75
-                ? 'bg-gradient-to-r from-blue-500 to-emerald-400'
-                : 'bg-gradient-to-r from-blue-500 to-amber-400'
-            }`}
+            className="h-full bg-[#1d70b8] transition-all duration-300"
           />
         </div>
       </div>
 
-      {/* Historical Incidents Summary in this offset well */}
-      {events.length > 0 && (
-        <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-1.5 text-amber-400 font-mono text-[11px]">
-            <AlertCircle className="w-3.5 h-3.5" />
-            <span>{events.length} Historical Incident{events.length > 1 ? 's' : ''} Documented</span>
-          </div>
-          <span className="text-[10px] text-slate-400 font-mono">
-            {events.reduce((acc, e) => acc + e.nptHours, 0).toFixed(1)} hrs NPT
-          </span>
-        </div>
-      )}
-
-      {/* Expandable Breakdown Drawer */}
-      <div className="mt-2.5">
+      {/* Toggle Button */}
+      <div className="pt-1 flex items-center justify-between">
         <button
-          onClick={() => setExpanded(!expanded)}
-          className="w-full py-1 text-[11px] font-mono text-slate-400 hover:text-slate-200 flex items-center justify-center gap-1 transition"
+          type="button"
+          onClick={() => {
+            setExpanded(!expanded);
+            if (onSelect) onSelect(offsetWell);
+          }}
+          className="text-xs font-mono font-bold text-[#1d70b8] dark:text-[#60a5fa] hover:underline flex items-center gap-1 cursor-pointer"
         >
           {expanded ? (
             <>
-              Hide Multi-Vector Breakdown <ChevronUp className="w-3 h-3" />
+              <span>Hide Details</span>
+              <ChevronUp className="w-3.5 h-3.5" />
             </>
           ) : (
             <>
-              View 5-Vector Similarity Breakdown <ChevronDown className="w-3 h-3" />
+              <span>Inspect Stratigraphy &amp; Incidents</span>
+              <ChevronDown className="w-3.5 h-3.5" />
             </>
           )}
         </button>
 
-        {expanded && (
-          <div className="mt-2 pt-2 border-t border-slate-800 space-y-2 text-xs font-mono">
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="flex items-center gap-1 text-slate-400">
-                <Layers className="w-3 h-3 text-purple-400" />
-                Stratigraphic Sequence Match (30%)
-              </span>
-              <span>{Math.round(sim.formationMatch * 100)}%</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="flex items-center gap-1 text-slate-400">
-                <Gauge className="w-3 h-3 text-cyan-400" />
-                Depth Alignment (25%)
-              </span>
-              <span>{Math.round(sim.depthAlignment * 100)}%</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="text-slate-400">Trajectory Concordance (15%)</span>
-              <span>{Math.round(sim.trajectorySimilarity * 100)}%</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="text-slate-400">Operational & Mud Match (15%)</span>
-              <span>{Math.round(sim.operationalSimilarity * 100)}%</span>
-            </div>
-            <div className="flex items-center justify-between text-slate-300">
-              <span className="text-slate-400">Geographic Proximity (15%)</span>
-              <span>{Math.round(sim.geographicProximity * 100)}%</span>
-            </div>
+        <Link
+          href={`/wells/${offsetWell.id}`}
+          className="text-[11px] font-mono text-muted-foreground hover:text-foreground"
+        >
+          Workspace →
+        </Link>
+      </div>
 
-            <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between">
-              <ConfidenceBadge level={offsetWell.confidenceLevel} />
-              <Link
-                href={`/wells/${offsetWell.id}`}
-                className="text-xs text-blue-400 hover:text-blue-300 hover:underline flex items-center gap-1"
-              >
-                Inspect Well & Logs →
-              </Link>
+      {/* Expanded Details */}
+      {expanded && (
+        <div className="pt-2 border-t border-border space-y-2 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+            <div className="p-1.5 bg-card border border-border">
+              <span className="text-[9px] text-muted-foreground uppercase block">Formation</span>
+              <span className="font-bold text-foreground">{Math.round(sim.formationMatch * 100)}% match</span>
+            </div>
+            <div className="p-1.5 bg-card border border-border">
+              <span className="text-[9px] text-muted-foreground uppercase block">Depth Align</span>
+              <span className="font-bold text-foreground">{Math.round(sim.depthAlignment * 100)}%</span>
+            </div>
+            <div className="p-1.5 bg-card border border-border">
+              <span className="text-[9px] text-muted-foreground uppercase block">Trajectory</span>
+              <span className="font-bold text-foreground">{Math.round(sim.trajectorySimilarity * 100)}%</span>
+            </div>
+            <div className="p-1.5 bg-card border border-border">
+              <span className="text-[9px] text-muted-foreground uppercase block">Operations</span>
+              <span className="font-bold text-foreground">{Math.round(sim.operationalSimilarity * 100)}%</span>
             </div>
           </div>
-        )}
-      </div>
+
+          {events.length > 0 && (
+            <div className="space-y-1">
+              <span className="text-[10px] uppercase font-bold text-muted-foreground">Historical Incidents ({events.length}):</span>
+              {events.map((evt) => (
+                <div key={evt.id} className="p-1.5 bg-card border border-border text-[11px]">
+                  <div className="font-bold text-foreground">{evt.eventType.replace('_', ' ').toUpperCase()} @ {evt.depthMD}m MD ({evt.formationName})</div>
+                  <div className="text-muted-foreground">{evt.description}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

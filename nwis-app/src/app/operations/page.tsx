@@ -5,7 +5,6 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { 
   AlertTriangle, 
-  ShieldAlert, 
   CheckCircle2, 
   Activity, 
   Layers, 
@@ -13,10 +12,8 @@ import {
   ArrowRight, 
   FileText, 
   ExternalLink, 
-  SlidersHorizontal,
   Info,
   Check,
-  Sparkles,
   Search,
   Eye,
   Database,
@@ -25,7 +22,9 @@ import {
   Gauge,
   Thermometer,
   Wind,
-  Droplets
+  Droplets,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { useAppStore } from '@/store/app-store';
 import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
@@ -40,8 +39,8 @@ const WellMapInner = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[460px] w-full rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-neutral-100 dark:bg-[#0c1017] flex flex-col items-center justify-center text-neutral-500 font-mono text-xs gap-2">
-        <Radio className="w-5 h-5 text-amber-500 animate-pulse" />
+      <div className="h-[460px] w-full border border-border bg-secondary flex flex-col items-center justify-center text-muted-foreground font-mono text-xs gap-2">
+        <Radio className="w-5 h-5 text-[#1d70b8] animate-pulse" />
         <span>Initializing Assam Basin Geospatial Correlation Engine...</span>
       </div>
     )
@@ -143,11 +142,12 @@ const GELEKI_OFFSET_WELLS = [
 ];
 
 export default function OperationsPage() {
-  const { currentRole, alerts, acknowledgeAlert } = useAppStore();
+  const { acknowledgeAlert } = useAppStore();
   const [selectedWell, setSelectedWell] = useState(GELEKI_OFFSET_WELLS[0]);
   const [isEvidenceDrawerOpen, setIsEvidenceDrawerOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'similarity' | 'distance'>('similarity');
   const [alertAcknowledged, setAlertAcknowledged] = useState<boolean>(false);
+  const [isStratigraphyExpanded, setIsStratigraphyExpanded] = useState<boolean>(true);
 
   const liveData = INITIAL_LIVE_TELEMETRY;
   const currentDepth = liveData.depthMD; // 2,165.4m
@@ -165,294 +165,283 @@ export default function OperationsPage() {
   };
 
   return (
-    <div className="space-y-5 max-w-[1520px] mx-auto pb-12 animate-in fade-in duration-150">
+    <div className="space-y-4 max-w-[1520px] mx-auto pb-12 font-sans">
       
-      {/* ─── A. TOP LIVE-STATE STRIP (eRTMAC Read-Only Feed) ─── */}
-      <section className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0e121a] p-4 sm:p-5 shadow-xs transition-colors">
+      {/* ─── A. LIVE RIG FEED HEADER & TELEMETRY ─── */}
+      <section className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
+        {/* Tricolor top subtle line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
         
         {/* Top Header Row */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-neutral-200 dark:border-[#1a2233]">
-          <div className="space-y-1">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/80">
+          <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
+              <div className="px-2 py-0.5 bg-[#ff9933]/15 border border-[#ff9933]/40 text-[#b25900] dark:text-[#fbbf24] font-mono font-bold text-xs rounded-xs">
+                OIL INDIA RIG #4
+              </div>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-mono">
                 OIL-GLK-14
               </h1>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                DRILLING IN PROGRESS
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                DRILLING ACTIVE · LIVE WITSML
+              </span>
+              <span className="text-xs text-muted-foreground font-sans">
+                Geleki Field · Assam–Arakan Basin · Rig: <strong className="text-foreground">OIL-E2000-IV</strong> · Spud: 12-Jul-2026
               </span>
             </div>
-            
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
-              Field: <strong className="text-neutral-900 dark:text-neutral-200">Geleki</strong> · Basin: <strong className="text-neutral-900 dark:text-neutral-200">Assam–Arakan Basin</strong> · Rig: <strong className="text-neutral-900 dark:text-neutral-200">OIL-E2000-IV</strong> · Spud: <span className="font-mono">12-Jul-2026</span>
-            </p>
           </div>
 
-          {/* eRTMAC Read-Only Feed Contract Tag */}
-          <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-[#1e273b] bg-neutral-50 dark:bg-[#131926] text-xs font-mono flex items-center gap-2.5">
-              <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />
-              <div>
-                <div className="font-bold text-neutral-900 dark:text-white text-[11px]">
-                  eRTMAC Feed (Read-Only)
-                </div>
-                <div className="text-[10px] text-neutral-500 dark:text-neutral-400">
-                  WITSML 380ms · Zero rig write commands
-                </div>
-              </div>
-            </div>
+          <div className="flex items-center gap-2 font-mono text-xs flex-wrap">
+            <span className="px-2 py-1 bg-blue-500/10 border border-blue-500/30 text-blue-700 dark:text-blue-300 font-semibold rounded-xs">
+              ⚡ eRTMAC Feed: 380ms Latency
+            </span>
+            <span className="px-2 py-1 bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-semibold rounded-xs">
+              🧠 NWIS Memory: 14 Offset Analogs Synced
+            </span>
           </div>
         </div>
 
-        {/* Live Telemetry KPI Gauges */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-4">
+        {/* Live Telemetry 6-Metric Strip with Rich Colors */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
           
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121722] border border-neutral-200/80 dark:border-[#1a2333] space-y-1">
-            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">
+          {/* Bit Depth */}
+          <div className="p-3 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border-l-4 border-l-amber-500 border border-amber-500/30 rounded-xs space-y-0.5 shadow-xs">
+            <div className="text-[10px] font-mono text-amber-700 dark:text-amber-300 uppercase font-bold tracking-wider flex items-center justify-between">
               <span>BIT DEPTH (MD)</span>
-              <Gauge className="w-3 h-3 text-neutral-400" />
+              <Gauge className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
             </div>
-            <div className="text-lg sm:text-xl font-extrabold font-mono text-neutral-950 dark:text-white">
-              {liveData.depthMD} <span className="text-xs font-normal text-neutral-500">m</span>
+            <div className="text-2xl font-black font-mono text-foreground">
+              {liveData.depthMD} <span className="text-xs font-normal text-muted-foreground">m</span>
             </div>
-            <div className="text-[10px] text-neutral-500 font-mono">
-              TVD: 2,110.2 m
+            <div className="text-[10px] text-amber-700 dark:text-amber-400 font-mono font-medium">
+              TVD: 2,110.2 m · Δ +2.4 m/hr
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121722] border border-neutral-200/80 dark:border-[#1a2333] space-y-1">
-            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">
+          {/* Formation */}
+          <div className="p-3 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border-l-4 border-l-blue-500 border border-blue-500/30 rounded-xs space-y-0.5 shadow-xs">
+            <div className="text-[10px] font-mono text-blue-700 dark:text-blue-300 uppercase font-bold tracking-wider flex items-center justify-between">
               <span>FORMATION</span>
-              <Layers className="w-3 h-3 text-amber-500" />
+              <Layers className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="text-sm font-extrabold font-mono text-amber-600 dark:text-amber-400 truncate">
+            <div className="text-base font-bold text-foreground truncate">
               Upper Tipam
             </div>
-            <div className="text-[10px] text-neutral-500 font-mono truncate">
-              Tipam Sandstone (12-1/4&quot;)
+            <div className="text-[10px] text-blue-700 dark:text-blue-400 font-mono truncate font-medium">
+              Sandstone · 12-1/4&quot; Hole
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121722] border border-neutral-200/80 dark:border-[#1a2333] space-y-1">
-            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">
-              <span>RATE OF PENETRATION</span>
-              <Activity className="w-3 h-3 text-emerald-500" />
+          {/* ROP */}
+          <div className="p-3 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent border-l-4 border-l-emerald-500 border border-emerald-500/30 rounded-xs space-y-0.5 shadow-xs">
+            <div className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 uppercase font-bold tracking-wider flex items-center justify-between">
+              <span>PENETRATION RATE</span>
+              <Activity className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <div className="text-lg sm:text-xl font-extrabold font-mono text-neutral-950 dark:text-white">
-              {liveData.rop} <span className="text-xs font-normal text-neutral-500">m/h</span>
+            <div className="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-400">
+              {liveData.rop} <span className="text-xs font-normal text-muted-foreground">m/h</span>
             </div>
-            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
-              Stable ROP Trend
-            </div>
-          </div>
-
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121722] border border-neutral-200/80 dark:border-[#1a2333] space-y-1">
-            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">
-              <span>TORQUE</span>
-              <Wind className="w-3 h-3 text-neutral-400" />
-            </div>
-            <div className="text-lg sm:text-xl font-extrabold font-mono text-neutral-950 dark:text-white">
-              {liveData.torque} <span className="text-xs font-normal text-neutral-500">kft-lb</span>
-            </div>
-            <div className="text-[10px] text-neutral-500 font-mono">
-              WOB: 16.5 klbs
+            <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-mono font-medium">
+              ✓ Stable ROP Trend
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121722] border border-neutral-200/80 dark:border-[#1a2333] space-y-1">
-            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">
+          {/* Surface Torque */}
+          <div className="p-3 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent border-l-4 border-l-purple-500 border border-purple-500/30 rounded-xs space-y-0.5 shadow-xs">
+            <div className="text-[10px] font-mono text-purple-700 dark:text-purple-300 uppercase font-bold tracking-wider flex items-center justify-between">
+              <span>SURFACE TORQUE</span>
+              <Compass className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div className="text-2xl font-black font-mono text-purple-700 dark:text-purple-400">
+              {liveData.torque} <span className="text-xs font-normal text-muted-foreground">kft-lb</span>
+            </div>
+            <div className="text-[10px] text-purple-700 dark:text-purple-400 font-mono font-medium">
+              WOB: 16.5 klbs · 120 RPM
+            </div>
+          </div>
+
+          {/* Mud Weight (In) */}
+          <div className="p-3 bg-gradient-to-br from-cyan-500/10 via-cyan-500/5 to-transparent border-l-4 border-l-cyan-500 border border-cyan-500/30 rounded-xs space-y-0.5 shadow-xs">
+            <div className="text-[10px] font-mono text-cyan-700 dark:text-cyan-300 uppercase font-bold tracking-wider flex items-center justify-between">
               <span>MUD WEIGHT (IN)</span>
-              <Droplets className="w-3 h-3 text-amber-500" />
+              <Droplets className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
             </div>
-            <div className="text-lg sm:text-xl font-extrabold font-mono text-amber-600 dark:text-amber-400">
-              {liveData.mudWeightIn} <span className="text-xs font-normal text-neutral-500">ppg</span>
+            <div className="text-2xl font-black font-mono text-cyan-700 dark:text-cyan-400">
+              {liveData.mudWeightIn} <span className="text-xs font-normal text-muted-foreground">ppg</span>
             </div>
-            <div className="text-[10px] text-neutral-500 font-mono">
-              Water-Based Mud (WBM)
+            <div className="text-[10px] text-cyan-700 dark:text-cyan-400 font-mono font-medium">
+              Target Window: 10.1 - 10.4 ppg
             </div>
           </div>
 
-          <div className="p-3 rounded-xl bg-neutral-50 dark:bg-[#121722] border border-neutral-200/80 dark:border-[#1a2333] space-y-1">
-            <div className="flex items-center justify-between text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase">
-              <span>STANDPIPE PRESSURE</span>
-              <Thermometer className="w-3 h-3 text-neutral-400" />
+          {/* Standpipe Pressure & Loss Risk */}
+          <div className="p-3 bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-transparent border-l-4 border-l-rose-500 border border-rose-500/30 rounded-xs space-y-0.5 shadow-xs">
+            <div className="text-[10px] font-mono text-rose-700 dark:text-rose-300 uppercase font-bold tracking-wider flex items-center justify-between">
+              <span>STANDPIPE PRESS.</span>
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             </div>
-            <div className="text-lg sm:text-xl font-extrabold font-mono text-neutral-950 dark:text-white">
-              {liveData.standpipePressure} <span className="text-xs font-normal text-neutral-500">psi</span>
+            <div className="text-2xl font-black font-mono text-rose-700 dark:text-rose-400">
+              {liveData.standpipePressure} <span className="text-xs font-normal text-muted-foreground">psi</span>
             </div>
-            <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
-              Flow Out: {liveData.flowOutPercent}%
+            <div className="text-[10px] text-rose-700 dark:text-rose-400 font-mono font-bold">
+              ⚠ Thief Zone in 74.6m
             </div>
           </div>
 
         </div>
-
       </section>
 
       {/* ─── B. CENTRAL PROACTIVE OPERATIONAL ALERT PANEL ─── */}
-      <section className="rounded-2xl border-2 border-amber-500/80 dark:border-amber-500/70 bg-gradient-to-br from-amber-500/5 via-white to-amber-500/10 dark:from-amber-950/20 dark:via-[#10141f] dark:to-amber-950/30 p-5 sm:p-6 shadow-md relative overflow-hidden">
+      <section className="bg-gradient-to-br from-card via-card to-amber-500/5 border-2 border-amber-500/40 p-4 rounded-sm shadow-sm space-y-4 border-l-8 border-l-amber-500">
         
-        {/* Top Lookahead Ribbon */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-amber-200/80 dark:border-amber-500/30">
-          <div className="flex items-start sm:items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0 shadow-sm animate-pulse">
-              <AlertTriangle className="w-5 h-5" />
+        {/* Alert Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="gov-tag gov-tag-red">CRITICAL SEVERITY</span>
+              <span className="gov-tag gov-tag-amber">{distanceToHazard}m BUFFER AHEAD</span>
+              <span className="text-xs font-mono text-muted-foreground">Corridor: GLK-COR-03</span>
             </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap mb-1">
-                <span className="px-2 py-0.5 rounded-full bg-rose-600 text-white font-mono text-[10px] font-extrabold">
-                  HIGH SEVERITY
-                </span>
-                <span className="px-2 py-0.5 rounded bg-neutral-900 text-amber-400 font-mono text-[10px] font-bold">
-                  {distanceToHazard}m Buffer Ahead
-                </span>
-              </div>
-              <h2 className="text-lg sm:text-xl font-extrabold text-neutral-950 dark:text-white font-mono">
-                Approaching Historical Lost Circulation Corridor (2,240–2,350 m MD)
-              </h2>
-            </div>
+            <h2 className="text-base sm:text-lg font-bold text-foreground font-sans">
+              Approaching Historical Lost Circulation Corridor (2,240–2,350 m MD)
+            </h2>
           </div>
 
-          {/* Metric Confidence Badges */}
-          <div className="flex items-center gap-2 font-mono text-xs">
-            <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-[#151c2a] border border-neutral-200 dark:border-[#222d42] text-neutral-800 dark:text-neutral-200">
-              <span className="text-neutral-400 text-[10px] block font-bold">COMPOSITE CONFIDENCE</span>
-              <strong className="text-amber-600 dark:text-amber-400 text-sm">0.82 (High)</strong>
+          <div className="flex items-center gap-3 font-mono text-xs">
+            <div className="text-right">
+              <span className="text-[10px] text-muted-foreground block uppercase font-bold">Composite Confidence</span>
+              <strong className="text-[#b25900] dark:text-[#fbbf24] text-sm">0.82 (High)</strong>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-white dark:bg-[#151c2a] border border-neutral-200 dark:border-[#222d42] text-neutral-800 dark:text-neutral-200">
-              <span className="text-neutral-400 text-[10px] block font-bold">OFFSET EVIDENCE</span>
-              <strong className="text-neutral-950 dark:text-white text-sm">5 Analogous Wells</strong>
+            <div className="text-right border-l border-border pl-3">
+              <span className="text-[10px] text-muted-foreground block uppercase font-bold">Offset Evidence</span>
+              <strong className="text-foreground text-sm">5 Analog Wells</strong>
             </div>
           </div>
         </div>
 
         {/* ─── STRICT 3-PART SEPARATION: FACT vs ESTIMATE vs MITIGATION ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           
           {/* 1. OBSERVED HISTORICAL FACT */}
-          <div className="rounded-xl border border-neutral-200 dark:border-[#222c40] bg-white dark:bg-[#121724] p-4 flex flex-col justify-between shadow-xs">
+          <div className="p-3.5 bg-gradient-to-br from-blue-500/15 via-blue-500/5 to-card border-l-4 border-l-blue-600 border border-blue-500/30 rounded-xs flex flex-col justify-between shadow-xs">
             <div className="space-y-2">
-              <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-[#1d2638]">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+              <div className="flex items-center justify-between pb-1.5 border-b border-blue-500/20 text-xs font-mono font-bold uppercase text-blue-700 dark:text-blue-300">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-blue-600"></span>
                   1. Observed Historical Fact
                 </span>
-                <span className="px-1.5 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-mono text-[9px] font-bold">
+                <span className="px-1.5 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-300 text-[10px] font-bold rounded-xs">
                   GROUND TRUTH
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed font-sans">
-                <strong>5 offset wells</strong> in Geleki encountering Upper Tipam sandstones experienced severe lost circulation (12–35 m³/hr) between 2,180 m and 2,350 m MD. Historical average NPT: <strong>28.4 hours lost per incident</strong> (~$420k loss).
+              <p className="text-xs sm:text-sm text-foreground leading-relaxed font-sans">
+                <strong className="text-blue-700 dark:text-blue-300">5 offset wells</strong> in Geleki encountering Upper Tipam sandstones experienced severe lost circulation (12–35 m³/hr) between 2,180 m and 2,350 m MD. Historical average NPT: <strong className="text-rose-600 dark:text-rose-400">28.4 hours lost per incident</strong> (~₹42.6 Lakhs loss).
               </p>
             </div>
-            <div className="mt-3 pt-2 border-t border-neutral-100 dark:border-[#1d2638] text-[11px] font-mono text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
-              <span>Primary Analog: <strong className="text-neutral-900 dark:text-white">OIL-GLK-07</strong></span>
-              <span className="text-amber-500 font-bold">WCR-1996/p19</span>
+            <div className="mt-3 pt-2 border-t border-blue-500/20 text-[11px] font-mono text-muted-foreground flex justify-between">
+              <span>Primary Analog: <strong className="text-foreground">OIL-GLK-07</strong></span>
+              <span className="text-blue-600 dark:text-blue-400 font-semibold">WCR-1996/p19</span>
             </div>
           </div>
 
           {/* 2. MODEL-ESTIMATED RISK */}
-          <div className="rounded-xl border border-neutral-200 dark:border-[#222c40] bg-white dark:bg-[#121724] p-4 flex flex-col justify-between shadow-xs">
+          <div className="p-3.5 bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-card border-l-4 border-l-amber-500 border border-amber-500/30 rounded-xs flex flex-col justify-between shadow-xs">
             <div className="space-y-2">
-              <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-[#1d2638]">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">
+              <div className="flex items-center justify-between pb-1.5 border-b border-amber-500/20 text-xs font-mono font-bold uppercase text-amber-700 dark:text-amber-400">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-amber-500"></span>
                   2. Model-Estimated Risk
                 </span>
-                <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-mono text-[9px] font-bold">
-                  SIMILARITY LOOKAHEAD
+                <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-800 dark:text-amber-300 text-[10px] font-bold rounded-xs animate-pulse">
+                  75m LOOKAHEAD
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-neutral-800 dark:text-neutral-200 leading-relaxed font-sans">
-                Current trajectory and formation-relative depth indicate imminent entry into micro-fractured thief sandstones within approximately <strong>74.6 m MD</strong>. Excessive ECD (&gt;10.4 ppg) is <strong>68% correlated</strong> with immediate severe fluid loss.
+              <p className="text-xs sm:text-sm text-foreground leading-relaxed font-sans">
+                Current trajectory and formation-relative depth indicate imminent entry into micro-fractured thief sandstones within approximately <strong className="text-amber-700 dark:text-amber-400">74.6 m MD</strong>. Excessive ECD (&gt;10.4 ppg) is <strong className="text-rose-600 dark:text-rose-400">68% correlated</strong> with immediate severe fluid loss.
               </p>
             </div>
-            <div className="mt-3 pt-2 border-t border-neutral-100 dark:border-[#1d2638] text-[11px] font-mono text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
-              <span>Lithology Twin: <strong className="text-amber-400">0.84 Similarity</strong></span>
-              <span>Lookahead: ~3.2 hrs</span>
+            <div className="mt-3 pt-2 border-t border-amber-500/20 text-[11px] font-mono text-muted-foreground flex justify-between">
+              <span>Lithology Twin: <strong className="text-foreground">0.84 Similarity</strong></span>
+              <span className="text-amber-600 dark:text-amber-400 font-semibold">Lead time: ~3.2 hrs</span>
             </div>
           </div>
 
-          {/* 3. SUGGESTED MITIGATION (Advisory) */}
-          <div className="rounded-xl border-2 border-amber-500/60 dark:border-amber-500/50 bg-amber-50/60 dark:bg-amber-950/30 p-4 flex flex-col justify-between shadow-xs">
+          {/* 3. SUGGESTED MITIGATION */}
+          <div className="p-3.5 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-card border-l-4 border-l-emerald-600 border border-emerald-500/30 rounded-xs flex flex-col justify-between shadow-xs">
             <div className="space-y-2">
-              <div className="flex items-center justify-between pb-2 border-b border-amber-200 dark:border-amber-800/60">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">
-                  3. Suggested Mitigation
+              <div className="flex items-center justify-between pb-1.5 border-b border-emerald-500/20 text-xs font-mono font-bold uppercase text-emerald-700 dark:text-emerald-400">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                  3. Recommended Mitigation
                 </span>
-                <span className="px-1.5 py-0.2 rounded bg-amber-600 text-white font-mono text-[9px] font-bold">
-                  ENGINEERING ADVISORY
+                <span className="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-[10px] font-bold rounded-xs">
+                  ACTION PLAN
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-neutral-900 dark:text-white leading-relaxed font-medium font-sans">
-                Review historical mitigation program: <strong>Stage 35 ppb mixed-fiber LCM pill</strong> in active suction pit prior to 2,190 m MD; <strong>Cap ECD at 10.4 ppg</strong>; Standby secondary cement squeezer on deck. (Proven recovery in OIL-GLK-07 &amp; OIL-GLK-11).
+              <p className="text-xs sm:text-sm text-foreground leading-relaxed font-sans">
+                Stage <strong className="text-emerald-700 dark:text-emerald-400">35 ppb mixed-fiber LCM pill</strong> in active suction pit prior to 2,190 m MD; <strong className="text-emerald-700 dark:text-emerald-400">Cap ECD at 10.4 ppg</strong>; Standby secondary cement squeezer on deck. (Proven recovery in OIL-GLK-07 &amp; OIL-GLK-11).
               </p>
             </div>
-            <div className="mt-3 pt-2 border-t border-amber-200 dark:border-amber-800/60 text-[11px] font-mono text-amber-800 dark:text-amber-300 flex items-center justify-between">
-              <span>Non-Binding Decision Support</span>
-              <span className="font-bold">Advisory Only</span>
+            <div className="mt-3 pt-2 border-t border-emerald-500/20 text-[11px] font-mono text-muted-foreground flex justify-between">
+              <span className="text-emerald-700 dark:text-emerald-400 font-medium">Non-Binding Decision Support</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Ready to Apply</span>
             </div>
           </div>
 
         </div>
 
         {/* Provenance & Disconfirming Clean Evidence Bar */}
-        <div className="mt-4 pt-3 border-t border-amber-200/80 dark:border-amber-500/20 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+        <div className="pt-2 border-t border-border flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
           
-          {/* Provenance Composition */}
-          <div className="flex items-center gap-2 flex-wrap text-[11px] font-mono">
-            <span className="text-neutral-500 dark:text-neutral-400">Source Provenance:</span>
-            <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 font-bold">
-              STRUCTURED-HIGH: 3
-            </span>
-            <span className="px-2 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
-              OCR-HIGH: 2
-            </span>
-            <span className="px-2 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-300 dark:border-neutral-700">
-              MANUAL-REVIEW: 0
-            </span>
+          <div className="flex items-center gap-2 flex-wrap font-mono text-[11px]">
+            <span className="text-muted-foreground font-semibold">Source Provenance:</span>
+            <span className="px-2 py-0.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-bold rounded-xs">STRUCTURED-HIGH: 3</span>
+            <span className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/30 text-blue-700 dark:text-blue-400 font-bold rounded-xs">OCR-HIGH: 2</span>
+            <span className="px-2 py-0.5 bg-slate-500/15 border border-slate-500/30 text-slate-700 dark:text-slate-400 font-bold rounded-xs">MANUAL-REVIEW: 0</span>
           </div>
 
-          {/* Clean Evidence Ribbon */}
-          <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 text-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+          <div className="flex items-center gap-2 text-foreground text-xs font-sans bg-emerald-500/10 border border-emerald-500/30 p-1.5 rounded-xs">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>
-              <strong>Disconfirming Evidence:</strong> 3 offset wells (OIL-GLK-05, OIL-GLK-11) crossed with zero losses by capping ECD &lt; 10.3 ppg.
+              <strong>Disconfirming Evidence:</strong> 3 offset wells (OIL-GLK-05, OIL-GLK-11) crossed safely with zero losses by capping ECD &lt; 10.3 ppg.
             </span>
           </div>
 
         </div>
 
         {/* Action Buttons Deck */}
-        <div className="mt-4 pt-4 border-t border-amber-200/80 dark:border-amber-500/30 flex flex-wrap items-center justify-between gap-3">
+        <div className="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsEvidenceDrawerOpen(true)}
-              className="px-4 py-2 rounded-xl bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 text-xs font-bold font-mono transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
+              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
             >
-              <FileText className="w-4 h-4 text-amber-400 dark:text-amber-600" />
-              <span>Review Archival Evidence (WCR-1996/p19)</span>
+              <FileText className="w-3.5 h-3.5" />
+              <span>Review Evidence (WCR-1996/p19)</span>
             </button>
 
             <Link
               href="/replay"
-              className="px-4 py-2 rounded-xl border border-neutral-300 dark:border-[#2a374f] bg-white dark:bg-[#151c2a] hover:bg-neutral-50 dark:hover:bg-[#1a2334] text-neutral-800 dark:text-neutral-200 text-xs font-bold font-mono transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xs flex items-center gap-1.5 shadow-xs transition-colors"
             >
-              <Activity className="w-3.5 h-3.5 text-amber-500" />
+              <Activity className="w-3.5 h-3.5" />
               <span>Validate in Replay Simulator</span>
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div>
             {alertAcknowledged ? (
-              <span className="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 text-xs font-mono font-bold flex items-center gap-1.5">
-                <Check className="w-4 h-4" />
+              <span className="px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-xs flex items-center gap-1.5 shadow-xs">
+                <Check className="w-3.5 h-3.5" />
                 Advisory Acknowledged by Rig Engineer
               </span>
             ) : (
               <button
                 onClick={handleAcknowledge}
-                className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xs flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
               >
-                <Check className="w-4 h-4" />
+                <Check className="w-3.5 h-3.5" />
                 <span>Acknowledge Advisory &amp; Log to Audit</span>
               </button>
             )}
@@ -461,58 +450,63 @@ export default function OperationsPage() {
 
       </section>
 
-      {/* ─── C. GEOSPATIAL OFFSET-WELL CORRELATION (Full-Width, High-Fidelity) ─── */}
-      <section className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0b0f18] shadow-sm overflow-hidden">
+      {/* ─── C. GEOSPATIAL OFFSET CORRELATION & MAP ─── */}
+      <section className="gov-panel space-y-3">
         
         {/* Section Header */}
-        <div className="px-5 py-4 border-b border-neutral-200 dark:border-[#1a2233] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2.5">
-              <Compass className="w-4 h-4 text-amber-500" />
-              <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono uppercase tracking-wide">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-border">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="font-bold text-sm text-foreground font-sans uppercase">
                 Geospatial Offset-Well Correlation
               </h2>
-              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25 text-[10px] font-mono font-bold">
+              <span className="px-2 py-0.5 bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-400 font-bold text-[10px] rounded-xs">
                 Similarity ≠ Distance
               </span>
             </div>
-            <p className="text-[11px] text-neutral-500 font-sans pl-6.5">
-              Geleki Field · Assam-Arakan Basin · 25 km search radius from OIL-GLK-14
+            <p className="text-xs text-muted-foreground font-sans">
+              Geleki Field · 25 km search radius from active rig OIL-GLK-14
             </p>
           </div>
 
-          {/* Legend */}
-          <div className="flex items-center gap-4 text-[10px] font-mono text-neutral-500 dark:text-neutral-400 flex-wrap">
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-cyan-400 ring-1 ring-white/20" /> Active Rig</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Best Analog</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Incident Well</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Clean Pass</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-0 border-t border-dashed border-blue-400" /> 25 km Radius</span>
+          <div className="flex items-center gap-3 text-[11px] font-mono text-muted-foreground flex-wrap">
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold">● Active Rig (GLK-14)</span>
+            <span className="text-amber-600 dark:text-amber-400 font-bold">● Best Analog (GLK-07)</span>
+            <span className="text-rose-600 dark:text-rose-400 font-bold">● Incident Well</span>
+            <span className="text-blue-600 dark:text-blue-400 font-bold">● Clean Pass</span>
           </div>
         </div>
 
-        {/* ── Stats Strip ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-neutral-200 dark:border-[#1a2233] divide-x divide-neutral-200 dark:divide-[#1a2233]">
-          {[
-            { label: 'Offset Wells', value: '5', sub: 'in 25km radius', color: 'text-white' },
-            { label: 'Best Analog Similarity', value: '0.84', sub: 'OIL-GLK-07 · Exact lithology', color: 'text-amber-400' },
-            { label: 'Incident Rate', value: '4 / 5', sub: 'wells with lost circ events', color: 'text-rose-400' },
-            { label: 'Clean Passages', value: '1', sub: 'ECD-controlled wells', color: 'text-emerald-400' },
-          ].map(({ label, value, sub, color }) => (
-            <div key={label} className="px-5 py-3 space-y-0.5">
-              <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">{label}</div>
-              <div className={`text-xl font-extrabold font-mono ${color}`}>{value}</div>
-              <div className="text-[10px] text-neutral-600 font-sans">{sub}</div>
-            </div>
-          ))}
+        {/* 4 Colorful Stats Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="p-3 bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] font-mono text-blue-700 dark:text-blue-300 uppercase font-bold">OFFSET WELLS</div>
+            <div className="text-2xl font-black font-mono text-blue-700 dark:text-blue-300">5 Wells</div>
+            <div className="text-[10px] text-muted-foreground font-sans">within 25km radius</div>
+          </div>
+          <div className="p-3 bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] font-mono text-amber-700 dark:text-amber-300 uppercase font-bold">BEST ANALOG SIMILARITY</div>
+            <div className="text-2xl font-black font-mono text-amber-700 dark:text-amber-300">0.84 Match</div>
+            <div className="text-[10px] text-muted-foreground font-sans">OIL-GLK-07 (Exact lithology)</div>
+          </div>
+          <div className="p-3 bg-gradient-to-br from-rose-500/10 to-transparent border border-rose-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] font-mono text-rose-700 dark:text-rose-300 uppercase font-bold">INCIDENT RATE</div>
+            <div className="text-2xl font-black font-mono text-rose-700 dark:text-rose-300">4 / 5 Wells</div>
+            <div className="text-[10px] text-muted-foreground font-sans">historical lost circulation</div>
+          </div>
+          <div className="p-3 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 uppercase font-bold">CLEAN PASSAGES</div>
+            <div className="text-2xl font-black font-mono text-emerald-700 dark:text-emerald-300">1 Well Safe</div>
+            <div className="text-[10px] text-muted-foreground font-sans">ECD-controlled baseline</div>
+          </div>
         </div>
 
-        {/* ── Main Body: Map (left) + Depth Track + Well Intelligence Panel (right) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+        {/* Map & Analog Cards Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
           
-          {/* MAP — 8 cols */}
-          <div className="lg:col-span-8 border-r border-neutral-200 dark:border-[#1a2233]">
-            <div className="h-[500px] w-full">
+          {/* Map (8 cols) */}
+          <div className="lg:col-span-8 border border-border">
+            <div className="h-[460px] w-full">
               <WellMapInner
                 centerWellId="well-glk-14"
                 radiusKm={25}
@@ -521,270 +515,250 @@ export default function OperationsPage() {
                 sortBy="similarity"
               />
             </div>
-
-            {/* Callout below map */}
-            <div className="px-4 py-3 border-t border-neutral-200 dark:border-[#1a2233] bg-neutral-50 dark:bg-[#0c1018] flex items-center gap-3">
-              <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-              <p className="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                <strong className="text-neutral-900 dark:text-white">Key insight:</strong> OIL-GLK-02 is geographically closest at 2.1 km but has a composite similarity of only 0.42 (different fault block). OIL-GLK-07 at 3.1 km scores 0.84 similarity due to identical Upper Tipam stratigraphy — making it the engineering-relevant analog.
-              </p>
+            <div className="p-2.5 bg-secondary/50 border-t border-border text-[11px] font-sans text-muted-foreground">
+              <strong>Core Distinction:</strong> OIL-GLK-02 is geographically closest at 2.1 km but has low composite similarity (0.42) due to fault block shifting. OIL-GLK-07 at 3.1 km scores 0.84 similarity due to identical Upper Tipam stratigraphy.
             </div>
           </div>
 
-          {/* RIGHT PANEL — 4 cols: Well drill-down cards */}
-          <div className="lg:col-span-4 flex flex-col divide-y divide-neutral-200 dark:divide-[#1a2233]">
+          {/* Right Panel: Selected Well Intelligence (4 cols) */}
+          <div className="lg:col-span-4 border border-border divide-y divide-border bg-secondary/20 flex flex-col justify-between">
+            <div className="p-3 space-y-3">
+              <div className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
+                Analog Well Intelligence
+              </div>
 
-            {/* Panel header */}
-            <div className="px-4 py-3 bg-neutral-50 dark:bg-[#0c1018]">
-              <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Well Intelligence Panels</div>
-            </div>
-
-            {/* Well 1 — Best Analog */}
-            <div className="p-4 space-y-2.5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-07</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500 text-black">BEST ANALOG</span>
+              {/* Best Analog Detail */}
+              <div className="space-y-2">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-sm text-foreground font-mono">OIL-GLK-07</span>
+                      <span className="gov-tag gov-tag-amber">BEST ANALOG</span>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground font-mono">Geleki · Spud 1996 · 3.1 km</div>
                   </div>
-                  <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 1996 · 3.1 km</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-lg font-extrabold text-amber-500 font-mono">0.84</div>
-                  <div className="text-[9px] text-neutral-500">similarity</div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
-                <div className="rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] p-2">
-                  <div className="text-neutral-500 mb-0.5">Formation</div>
-                  <div className="text-neutral-900 dark:text-white font-bold text-[10px]">Upper Tipam SS</div>
-                </div>
-                <div className="rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] p-2">
-                  <div className="text-neutral-500 mb-0.5">NPT Lost</div>
-                  <div className="text-rose-600 dark:text-rose-400 font-bold">34 hrs</div>
-                </div>
-                <div className="rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 p-2 col-span-2">
-                  <div className="text-rose-600 dark:text-rose-400 mb-0.5">Historical Event</div>
-                  <div className="text-rose-800 dark:text-rose-300 font-bold text-[10px]">Total Lost Circulation @ 2,280m (35 m³/hr)</div>
-                </div>
-              </div>
-              <div className="text-[9px] text-neutral-500 font-mono flex items-center gap-1">
-                <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">OCR-HIGH</span>
-                <span>WCR-GLK-07-1996 · Page 19</span>
-              </div>
-            </div>
-
-            {/* Well 2 — Closest but low similarity */}
-            <div className="p-4 space-y-2.5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-02</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">CLOSEST</span>
+                  <div className="text-right">
+                    <div className="text-base font-bold font-mono text-[#1d70b8] dark:text-[#60a5fa]">0.84</div>
+                    <div className="text-[9px] text-muted-foreground">similarity</div>
                   </div>
-                  <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 1981 · 2.1 km</div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-extrabold text-neutral-500 font-mono">0.42</div>
-                  <div className="text-[9px] text-neutral-500">similarity</div>
-                </div>
-              </div>
-              <div className="text-[10px] font-sans text-neutral-600 dark:text-neutral-400 p-2.5 rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333]">
-                <strong className="text-neutral-700 dark:text-neutral-300">Low relevance despite proximity.</strong> Different fault block shifts formation boundary. Girujan Clay sealed interval limits direct applicability to OIL-GLK-14 trajectory.
-              </div>
-            </div>
 
-            {/* Well 3 — Clean Pass */}
-            <div className="p-4 space-y-2">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-05</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/25">CLEAN PASS</span>
+                <div className="p-2 bg-card border border-border text-xs space-y-1 font-mono">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Formation:</span>
+                    <span className="text-foreground font-bold">Upper Tipam SS</span>
                   </div>
-                  <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 2001 · 2.8 km · sim 0.72</div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">NPT Incurred:</span>
+                    <span className="text-[#d4351c] dark:text-[#f87171] font-bold">34 hrs lost</span>
+                  </div>
+                  <div className="text-[11px] text-[#942514] dark:text-[#fca5a5] pt-1 border-t border-border">
+                    Total lost circulation at 2,280m MD (35 m³/hr).
+                  </div>
                 </div>
               </div>
-              <div className="text-[10px] font-sans text-emerald-800 dark:text-emerald-300 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/15 border border-emerald-200 dark:border-emerald-900/30">
-                <CheckCircle2 className="w-3 h-3 inline mr-1" />
-                <strong>Zero incidents.</strong> ECD strictly capped &lt;10.3 ppg + pre-emptive LCM pill. This is the disconfirming evidence — proving mitigation works.
+
+              {/* Closest well detail */}
+              <div className="p-2 bg-card border border-border text-xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-foreground font-mono">OIL-GLK-02</span>
+                  <span className="gov-tag gov-tag-grey">CLOSEST (2.1 km) · SIM 0.42</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground font-sans">
+                  Different fault block shifts boundary. Sealed interval limits direct applicability.
+                </p>
+              </div>
+
+              {/* Clean pass detail */}
+              <div className="p-2 bg-card border border-border text-xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-foreground font-mono">OIL-GLK-05</span>
+                  <span className="gov-tag gov-tag-green">CLEAN PASS · SIM 0.72</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground font-sans">
+                  Zero incidents. ECD capped &lt;10.3 ppg with pre-emptive LCM pill.
+                </p>
               </div>
             </div>
 
-            {/* Bottom CTA */}
-            <div className="p-4 flex items-center gap-2 bg-neutral-50 dark:bg-[#0c1018] mt-auto">
+            <div className="p-2.5 bg-card border-t border-border flex items-center gap-2">
               <button
                 onClick={() => setIsEvidenceDrawerOpen(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-mono font-bold hover:opacity-90 transition-opacity cursor-pointer"
+                className="gov-button text-xs py-1 px-2.5 flex-1"
               >
-                <FileText className="w-3.5 h-3.5 text-amber-500 dark:text-amber-600" />
-                Inspect WCR
+                Inspect WCR Archive
               </button>
               <Link
                 href="/replay"
-                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-neutral-200 dark:border-[#2a374f] bg-white dark:bg-[#0e1520] text-neutral-700 dark:text-neutral-300 text-xs font-mono font-bold hover:bg-neutral-50 dark:hover:bg-[#131c2a] transition-colors"
+                className="gov-button-secondary text-xs py-1 px-2.5 flex-1 text-center"
               >
-                <Activity className="w-3.5 h-3.5 text-amber-500" />
-                Replay Simulator
+                Replay Run
               </Link>
             </div>
           </div>
+
         </div>
 
-        {/* ── Multi-Well Stratigraphic Correlation Panel ── */}
-        <div className="border-t border-neutral-200 dark:border-[#1a2233] p-5">
-          <MultiWellCorrelationTrack
-            currentDepthMD={currentDepth}
-          />
+        {/* ── Progressive Disclosure: Stratigraphic Correlation Track Accordion ── */}
+        <div className="pt-2 border-t border-border">
+          <button
+            onClick={() => setIsStratigraphyExpanded(!isStratigraphyExpanded)}
+            className="w-full flex items-center justify-between p-2 bg-secondary/40 border border-border text-xs font-mono font-bold text-foreground hover:bg-secondary transition-colors cursor-pointer"
+          >
+            <span>Multi-Well Stratigraphic Tie-Line Alignment (OIL-GLK-14 vs Offsets)</span>
+            {isStratigraphyExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {isStratigraphyExpanded && (
+            <div className="p-3 border border-t-0 border-border bg-card">
+              <MultiWellCorrelationTrack currentDepthMD={currentDepth} />
+            </div>
+          )}
         </div>
 
       </section>
 
-      {/* ─── D. OFFSET WELL COMPARISON TABLE (Similarity != Distance Proof) ─── */}
-      <section className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0e121a] p-5 shadow-xs space-y-4">
+      {/* ─── D. OFFSET WELL COMPARISON TABLE ─── */}
+      <section className="gov-panel space-y-3">
         
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-neutral-200 dark:border-[#1a2233]">
-          <div className="flex items-center gap-2.5">
-            <h3 className="text-base font-extrabold text-neutral-950 dark:text-white font-mono tracking-tight">
-              Offset Well Correlation
-            </h3>
-            <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-[10px] font-mono font-bold">
-              SIMILARITY ≠ DISTANCE
-            </span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border">
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-bold text-sm text-foreground font-sans uppercase">
+                Offset Well Correlation Table
+              </h3>
+              <span className="gov-tag gov-tag-blue">DUAL SIGNAL ENGINE</span>
+            </div>
+            <p className="text-xs text-muted-foreground font-sans">
+              Explicit side-by-side comparison of geographic distance vs composite petrophysical similarity.
+            </p>
           </div>
 
-          {/* Sort Switcher Tabs */}
-          <div className="flex items-center gap-1 bg-neutral-100 dark:bg-[#131926] p-1 rounded-xl border border-neutral-200 dark:border-[#1e2638] text-xs font-mono">
+          {/* Sort Switcher */}
+          <div className="flex items-center gap-1 text-xs font-mono">
+            <span className="text-muted-foreground text-[11px] mr-1">Sort:</span>
             <button
               onClick={() => setActiveTab('similarity')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+              className={`px-2 py-1 text-xs font-bold border transition-colors cursor-pointer ${
                 activeTab === 'similarity'
-                  ? 'bg-amber-600 text-white shadow-xs'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-white'
+                  ? 'bg-[#1d70b8] text-white border-[#1d70b8]'
+                  : 'bg-card text-muted-foreground border-border hover:text-foreground'
               }`}
             >
-              Sort by Composite Similarity
+              Composite Similarity
             </button>
             <button
               onClick={() => setActiveTab('distance')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all ${
+              className={`px-2 py-1 text-xs font-bold border transition-colors cursor-pointer ${
                 activeTab === 'distance'
-                  ? 'bg-amber-600 text-white shadow-xs'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-white'
+                  ? 'bg-[#1d70b8] text-white border-[#1d70b8]'
+                  : 'bg-card text-muted-foreground border-border hover:text-foreground'
               }`}
             >
-              Sort by Distance (km)
+              Map Distance (km)
             </button>
           </div>
         </div>
 
         {/* Operational Table */}
-        <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-[#1a2233]">
-          <table className="w-full text-xs font-sans border-collapse">
+        <div className="overflow-x-auto">
+          <table className="gov-table">
             <thead>
-              <tr className="bg-neutral-100 dark:bg-[#121722] border-b border-neutral-200 dark:border-[#1a2233] text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
-                <th className="p-3 text-left">WELL ID &amp; SPUD</th>
-                <th className="p-3 text-left">GEO DISTANCE</th>
-                <th className="p-3 text-left">COMPOSITE SIMILARITY</th>
-                <th className="p-3 text-left">FORMATION MATCH</th>
-                <th className="p-3 text-left">DEPTH ALIGNMENT</th>
-                <th className="p-3 text-left">HISTORICAL INCIDENT &amp; NPT</th>
-                <th className="p-3 text-left">PROVENANCE</th>
-                <th className="p-3 text-right">EVIDENCE</th>
+              <tr>
+                <th>Well ID &amp; Spud</th>
+                <th>Distance (km)</th>
+                <th>Composite Similarity</th>
+                <th>Formation Match</th>
+                <th>Depth Alignment</th>
+                <th>Historical Event &amp; NPT</th>
+                <th>Provenance</th>
+                <th className="text-right">Inspection</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-200 dark:divide-[#182030] text-neutral-800 dark:text-neutral-200 font-mono">
+            <tbody className="font-mono text-xs">
               {sortedOffsets.map((offset) => {
                 const isSelected = selectedWell.id === offset.id;
                 return (
                   <tr
                     key={offset.id}
                     onClick={() => setSelectedWell(offset)}
-                    className={`cursor-pointer transition-colors ${
-                      isSelected
-                        ? 'bg-amber-500/10 dark:bg-[#1a2233]'
-                        : 'hover:bg-neutral-50 dark:hover:bg-[#121622]'
-                    }`}
+                    className={`cursor-pointer ${isSelected ? 'gov-row-selected' : ''}`}
                   >
-                    <td className="p-3 font-bold text-neutral-950 dark:text-white">
-                      <div className="flex items-center gap-2">
+                    <td className="font-bold text-foreground">
+                      <div className="flex items-center gap-1.5">
                         <span>{offset.name}</span>
                         {offset.isBestComparison && (
-                          <span className="px-1.5 py-0.2 rounded bg-amber-500 text-neutral-950 text-[9px] font-extrabold uppercase">
-                            Best Comparison
-                          </span>
+                          <span className="gov-tag gov-tag-amber text-[9px]">BEST ANALOG</span>
                         )}
                         {offset.isGeographicallyClosest && (
-                          <span className="px-1.5 py-0.2 rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[9px] font-bold uppercase">
-                            Closest Well
-                          </span>
+                          <span className="gov-tag gov-tag-grey text-[9px]">CLOSEST</span>
                         )}
                       </div>
-                      <span className="text-[10px] text-neutral-500 font-normal">Spud: {offset.spudYear}</span>
+                      <div className="text-[10px] text-muted-foreground font-normal">Spud: {offset.spudYear}</div>
                     </td>
 
-                    <td className="p-3 text-neutral-700 dark:text-neutral-300 font-bold">
+                    <td className="font-bold text-foreground">
                       {offset.distanceKm} km
                     </td>
 
-                    <td className="p-3">
+                    <td>
                       <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-amber-600 dark:text-amber-400 text-sm">
+                        <span className="font-bold text-foreground">
                           {offset.similarityScore.toFixed(2)}
                         </span>
-                        <div className="w-16 h-1.5 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
-                          <div 
-                            className="h-full bg-amber-500 rounded-full" 
+                        <div className="w-12 h-1.5 bg-border rounded-xs overflow-hidden">
+                          <div
+                            className="h-full bg-[#1d70b8]"
                             style={{ width: `${offset.similarityScore * 100}%` }}
                           />
                         </div>
                       </div>
                     </td>
 
-                    <td className="p-3 font-sans text-neutral-700 dark:text-neutral-300 text-xs">
+                    <td className="font-sans text-xs text-foreground">
                       {offset.formationMatch}
                     </td>
 
-                    <td className="p-3 text-neutral-600 dark:text-neutral-400 text-xs">
+                    <td className="text-muted-foreground text-xs">
                       {offset.depthAlignment}
                     </td>
 
-                    <td className="p-3">
+                    <td>
                       {offset.status === 'clean' ? (
-                        <span className="text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                        <span className="text-[#00703c] dark:text-[#34d399] font-bold flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          Zero Losses (0h NPT)
+                          Zero Losses (Clean)
                         </span>
                       ) : (
-                        <div className="space-y-0.5">
-                          <span className="text-rose-600 dark:text-rose-400 font-bold block">
+                        <div>
+                          <span className="text-[#d4351c] dark:text-[#f87171] font-bold block">
                             {offset.historicalEvent}
                           </span>
-                          <span className="text-[10px] text-neutral-500">NPT: {offset.nptHours} hrs lost</span>
+                          <span className="text-[10px] text-muted-foreground">NPT: {offset.nptHours} hrs</span>
                         </div>
                       )}
                     </td>
 
-                    <td className="p-3">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    <td>
+                      <span className={`gov-tag ${
                         offset.sourceConfidence === 'STRUCTURED-HIGH'
-                          ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                          ? 'gov-tag-green'
                           : offset.sourceConfidence === 'OCR-HIGH'
-                          ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
-                          : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
+                          ? 'gov-tag-blue'
+                          : 'gov-tag-grey'
                       }`}>
                         {offset.sourceConfidence}
                       </span>
                     </td>
 
-                    <td className="p-3 text-right">
+                    <td className="text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedWell(offset);
                           setIsEvidenceDrawerOpen(true);
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-amber-600 hover:text-white text-neutral-700 dark:text-neutral-300 text-[11px] font-mono transition-colors inline-flex items-center gap-1 cursor-pointer"
+                        className="px-2 py-0.5 bg-secondary hover:bg-[#1d70b8] hover:text-white border border-border text-[11px] font-mono transition-colors inline-flex items-center gap-1 cursor-pointer"
                       >
                         <Eye className="w-3 h-3" />
                         <span>Inspect</span>
@@ -797,6 +771,8 @@ export default function OperationsPage() {
           </table>
         </div>
       </section>
+
+      {/* Archival Evidence Drawer */}
       <EvidenceInspectorDrawer
         isOpen={isEvidenceDrawerOpen}
         onClose={() => setIsEvidenceDrawerOpen(false)}

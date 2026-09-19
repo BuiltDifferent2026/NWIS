@@ -10,8 +10,8 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem('nwis-theme') as 'light' | 'dark' | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = saved || (prefersDark ? 'dark' : 'light');
+    const isDark = saved === 'dark' || (!saved && document.documentElement.classList.contains('dark'));
+    const initialTheme = isDark ? 'dark' : 'light';
     setTheme(initialTheme);
     if (initialTheme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -33,7 +33,10 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
 
   if (!mounted) {
     return (
-      <div className={`w-8 h-8 rounded-xl border border-neutral-200 bg-white ${className}`} />
+      <div className={`h-7 px-2.5 rounded-xs border border-[#d1d5db] dark:border-[#232c3f] bg-white dark:bg-[#141b2a] flex items-center gap-1 text-xs font-mono text-[#6b7280] ${className}`}>
+        <Sun className="w-3.5 h-3.5 text-amber-500" />
+        <span className="hidden sm:inline">Theme</span>
+      </div>
     );
   }
 
@@ -41,14 +44,20 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
     <button
       type="button"
       onClick={toggleTheme}
-      title={theme === 'light' ? 'Switch to Control Room Dark Theme' : 'Switch to Daylight Light Theme'}
-      className={`relative p-2 rounded-xl border border-neutral-200/80 bg-white text-neutral-600 hover:text-neutral-950 hover:bg-neutral-100 transition-all shadow-2xs ${className}`}
-      aria-label="Toggle theme"
+      title={theme === 'light' ? 'Click to switch to Control Room Dark Theme' : 'Click to switch to Daylight White Theme'}
+      className={`h-7 px-2.5 rounded-xs border border-[#d1d5db] dark:border-[#232c3f] bg-white dark:bg-[#141b2a] text-[#0b0c0c] dark:text-[#f1f5f9] hover:bg-[#f3f4f6] dark:hover:bg-[#192336] text-xs font-mono font-bold flex items-center gap-1.5 transition-colors cursor-pointer focus:outline-2 focus:outline-[#ffdd00] ${className}`}
+      aria-label="Toggle light/dark background theme"
     >
       {theme === 'light' ? (
-        <Moon className="w-4 h-4 text-neutral-700 hover:text-amber-600 transition-colors" />
+        <>
+          <Sun className="w-3.5 h-3.5 text-amber-600" />
+          <span className="text-[11px]">Light</span>
+        </>
       ) : (
-        <Sun className="w-4 h-4 text-amber-400 hover:text-amber-300 transition-colors" />
+        <>
+          <Moon className="w-3.5 h-3.5 text-sky-400" />
+          <span className="text-[11px]">Dark</span>
+        </>
       )}
     </button>
   );

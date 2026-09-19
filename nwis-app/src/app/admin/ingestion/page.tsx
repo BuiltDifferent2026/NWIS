@@ -4,31 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { Breadcrumb } from '@/components/layout/Breadcrumb';
 import { IngestionBatch } from '@/lib/data/types';
 import { getIngestionBatches } from '@/lib/data/service';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { 
   Database, 
   FileCheck, 
   ShieldCheck, 
   CheckCircle2, 
   ArrowDown, 
-  ArrowRight, 
   FileText, 
   Cpu, 
-  Layers,
-  AlertTriangle,
-  Scale,
-  Sparkles,
-  Eye,
-  Check,
-  RotateCcw,
-  Download,
-  Filter,
-  Search,
-  ExternalLink,
-  Code2,
-  BookOpen,
-  Info
+  Sparkles, 
+  Eye, 
+  RotateCcw, 
+  Code2, 
+  BookOpen 
 } from 'lucide-react';
 import { EvidenceInspectorDrawer } from '@/components/common/EvidenceInspectorDrawer';
 
@@ -59,427 +47,242 @@ export default function AdminIngestionPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-[1520px] mx-auto pb-12 animate-in fade-in duration-150">
+    <div className="space-y-4 max-w-[1400px] mx-auto pb-12 font-sans">
       
-      {/* ─── Breadcrumb ─── */}
       <Breadcrumb
         items={[
-          { label: 'Basin Console', href: '/' },
-          { label: 'Archive & Evidence' },
-          { label: 'Hybrid Ingestion Pipeline' }
+          { label: 'Governance & Institutional Memory', href: '/' },
+          { label: 'Archival Ingestion Pipeline' }
         ]}
       />
 
       {/* ─── Header ─── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-1 border-b border-neutral-200 dark:border-[#1a2333]">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
-              Hybrid Ingestion Pipeline &amp; OCR Pedigree
-            </h1>
+      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
+        
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border/80">
+          <div>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <div className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/40 text-blue-700 dark:text-blue-400 font-mono font-bold text-xs rounded-xs">
+                DATA GOVERNANCE
+              </div>
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+                Archival Ingestion Pipeline &amp; OCR Pedigree
+              </h1>
+              <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-400 font-bold text-xs rounded-xs">
+                OISD / DGMS AUDIT READY
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground font-sans mt-1">
+              Two-path ingestion converting structured real-time eRTMAC databases and 130+ years of historical scanned WCR/DDR archives into unified schemas.
+            </p>
           </div>
-          <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-3xl leading-relaxed">
-            Two-path ingestion converting structured real-time eRTMAC databases and 130+ years of historical scanned WCR/DDR archives into unified, audit-compliant drilling event schemas.
-          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleReScan}
+              disabled={isReScanning}
+              className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold font-sans rounded-xs flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors"
+            >
+              <RotateCcw className={`w-3.5 h-3.5 ${isReScanning ? 'animate-spin' : ''}`} />
+              <span>{isReScanning ? 'Scanning...' : 'Trigger Pipeline Re-Scan'}</span>
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          <Badge className="text-xs font-mono font-bold bg-amber-500/15 text-amber-900 dark:text-amber-300 border border-amber-500/30 py-1.5 px-3">
-            <ShieldCheck className="w-3.5 h-3.5 mr-1.5 inline text-amber-600 dark:text-amber-400" />
-            OISD-GDN-178 &amp; DGMS AUDIT READY
-          </Badge>
-          <button
-            type="button"
-            onClick={handleReScan}
-            disabled={isReScanning}
-            className="px-3 py-1.5 rounded-xl border border-neutral-300 dark:border-[#222d42] bg-white dark:bg-[#101420] hover:bg-neutral-50 dark:hover:bg-[#161c2c] text-neutral-800 dark:text-neutral-200 text-xs font-mono font-bold transition-colors flex items-center gap-1.5 shadow-2xs"
-          >
-            <RotateCcw className={`w-3.5 h-3.5 text-amber-600 dark:text-amber-400 ${isReScanning ? 'animate-spin' : ''}`} />
-            <span>{isReScanning ? 'Scanning...' : 'Trigger Re-Scan'}</span>
-          </button>
+        {/* 4 KPI Metrics in Rich Colorful Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 font-mono">
+          <div className="p-3 bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] text-blue-700 dark:text-blue-300 uppercase font-bold">TOTAL SCANNED ARCHIVES</div>
+            <div className="text-2xl font-black text-foreground">{totalDocs} Documents</div>
+            <div className="text-[10px] text-muted-foreground font-sans">6 Assam fields</div>
+          </div>
+          <div className="p-3 bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] text-amber-700 dark:text-amber-300 uppercase font-bold">EXTRACTED DRILLING EVENTS</div>
+            <div className="text-2xl font-black text-amber-700 dark:text-amber-400">{totalEvents} Incidents</div>
+            <div className="text-[10px] text-amber-600 dark:text-amber-400 font-sans font-medium">Losses, kicks &amp; tight holes</div>
+          </div>
+          <div className="p-3 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] text-emerald-700 dark:text-emerald-300 uppercase font-bold">STRUCTURED PRECISION</div>
+            <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400">94.2% Conf.</div>
+            <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-sans font-medium">High-confidence tier</div>
+          </div>
+          <div className="p-3 bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/30 rounded-xs space-y-0.5">
+            <div className="text-[10px] text-purple-700 dark:text-purple-300 uppercase font-bold">HUMAN AUDIT QUEUE</div>
+            <div className="text-2xl font-black text-purple-700 dark:text-purple-400">12 Pending</div>
+            <div className="text-[10px] text-muted-foreground font-sans">Awaiting superintendent</div>
+          </div>
         </div>
       </div>
 
-      {/* ─── Two-Path Pipeline Architecture Diagram ─── */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] p-5 shadow-xs space-y-5 transition-colors">
-        
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-neutral-200 dark:border-[#1a2233]">
+      {/* Two-Path Pipeline Architecture Diagram (Vibrant, Technical) */}
+      <div className="gov-panel space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-border">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
-              <Cpu className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-sm font-extrabold font-mono text-neutral-950 dark:text-white uppercase tracking-wider">
-                Two-Path Convergence Engine Architecture
-              </h2>
-              <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
-                Decoupled ingestion streams merging deterministic live telemetry with layout-aware archival computer vision
-              </span>
-            </div>
+            <Cpu className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <h2 className="font-bold text-sm text-foreground font-sans uppercase">
+              Two-Path Convergence Pipeline Architecture
+            </h2>
           </div>
-          <span className="px-2.5 py-0.5 rounded-full bg-neutral-100 dark:bg-[#161c28] text-neutral-700 dark:text-neutral-300 text-[10px] font-mono font-bold border border-neutral-200 dark:border-neutral-700">
-            CONVERGENCE RATIO: 100%
+          <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold font-mono text-xs rounded-xs">
+            ✓ Convergence Ratio: 100%
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           
-          {/* ─── Path A: Structured Data ─── */}
-          <div className="p-4 rounded-xl bg-neutral-50/80 dark:bg-[#111624] border border-neutral-200 dark:border-[#1e273b] space-y-3.5 flex flex-col justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 text-xs font-mono font-extrabold flex items-center gap-1.5">
-                  <Database className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                  PATH A: STRUCTURED DATA
-                </span>
-                <span className="text-[11px] font-mono font-semibold text-neutral-600 dark:text-neutral-400">
-                  eRTMAC DB / CSV / WITSML
-                </span>
-              </div>
-              <p className="text-[11px] text-neutral-600 dark:text-neutral-400 font-sans">
-                Deterministic real-time sensor streams and structured relational well databases.
-              </p>
+          {/* Path A */}
+          <div className="p-3 bg-gradient-to-br from-emerald-500/10 via-card to-card border-l-4 border-l-emerald-600 border border-emerald-500/30 rounded-xs space-y-2 shadow-xs">
+            <div className="flex items-center justify-between pb-1 border-b border-emerald-500/20">
+              <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold font-mono text-xs rounded-xs">
+                PATH A: STRUCTURED DATA
+              </span>
+              <span className="text-[11px] font-mono text-muted-foreground">eRTMAC DB / WITSML</span>
             </div>
             
-            <div className="space-y-2 text-xs font-mono">
-              <div className="p-3 rounded-lg bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] shadow-2xs">
-                <div className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 mb-0.5">Stage 01 · Input Ingestion</div>
-                <div className="text-neutral-900 dark:text-neutral-100 font-semibold">
-                  eRTMAC live dump, SQL tables, and WITSML 1.4/2.0 sensor feeds
-                </div>
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="p-2 bg-card border border-border rounded-xs">
+                <div className="text-[9px] text-emerald-700 dark:text-emerald-400 uppercase font-bold">Stage 01 · Ingestion</div>
+                <div className="text-foreground font-bold">SQL tables, WITSML 1.4/2.0 sensor feeds</div>
               </div>
 
-              <div className="flex justify-center text-neutral-400 dark:text-neutral-600 font-bold">
-                <ArrowDown className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <div className="text-center text-emerald-600 font-bold">↓</div>
+
+              <div className="p-2 bg-card border border-border rounded-xs">
+                <div className="text-[9px] text-emerald-700 dark:text-emerald-400 uppercase font-bold">Stage 02 · Unit Normalization</div>
+                <div className="text-foreground">Unit harmonization: ft→m, psi→ppg, lbs→kft-lb</div>
               </div>
 
-              <div className="p-3 rounded-lg bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] shadow-2xs">
-                <div className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 mb-0.5">Stage 02 · Schema Mapping &amp; Normalization</div>
-                <div className="text-neutral-900 dark:text-neutral-100 font-semibold">
-                  Unit harmonization: <code className="bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded text-emerald-700 dark:text-emerald-400 font-bold">ft → m</code>, <code className="bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded text-emerald-700 dark:text-emerald-400 font-bold">lbs → kft·lb</code>, <code className="bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded text-emerald-700 dark:text-emerald-400 font-bold">psi → ppg</code>
-                </div>
-              </div>
+              <div className="text-center text-emerald-600 font-bold">↓</div>
 
-              <div className="flex justify-center text-neutral-400 dark:text-neutral-600 font-bold">
-                <ArrowDown className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-              </div>
-
-              {/* High-Contrast Crisp Output Box */}
-              <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-500/70 dark:border-emerald-500 text-neutral-950 dark:text-emerald-100 shadow-2xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 font-extrabold text-emerald-900 dark:text-emerald-300 text-xs">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span>OUTPUT TAG: STRUCTURED-HIGH</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded bg-emerald-200/80 dark:bg-emerald-900/60 text-emerald-950 dark:text-emerald-200 text-[10px] font-extrabold">
-                    CONFIDENCE: 1.00
-                  </span>
-                </div>
-                <p className="text-[11px] text-emerald-900/80 dark:text-emerald-300/90 font-sans mt-1">
-                  100% deterministic truth. Direct mapping with zero optical ambiguity.
-                </p>
+              <div className="p-2 bg-emerald-500/10 border-l-4 border-l-emerald-600 rounded-xs text-xs">
+                <div className="font-bold text-emerald-700 dark:text-emerald-400">OUTPUT TAG: STRUCTURED-HIGH (1.00)</div>
+                <div className="text-[11px] text-muted-foreground font-sans">Deterministic sensor stream. Zero OCR ambiguity.</div>
               </div>
             </div>
           </div>
 
-          {/* ─── Path B: Unstructured Archival OCR ─── */}
-          <div className="p-4 rounded-xl bg-neutral-50/80 dark:bg-[#111624] border border-neutral-200 dark:border-[#1e273b] space-y-3.5 flex flex-col justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-md bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 text-xs font-mono font-extrabold flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  PATH B: UNSTRUCTURED ARCHIVAL OCR
-                </span>
-                <span className="text-[11px] font-mono font-semibold text-neutral-600 dark:text-neutral-400">
-                  Scanned WCRs / DDRs (1889–2020)
-                </span>
-              </div>
-              <p className="text-[11px] text-neutral-600 dark:text-neutral-400 font-sans">
-                Computer vision &amp; NLP extraction over 130+ years of typewritten physical archives.
-              </p>
+          {/* Path B */}
+          <div className="p-3 bg-gradient-to-br from-amber-500/10 via-card to-card border-l-4 border-l-amber-500 border border-amber-500/30 rounded-xs space-y-2 shadow-xs">
+            <div className="flex items-center justify-between pb-1 border-b border-amber-500/20">
+              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold font-mono text-xs rounded-xs">
+                PATH B: UNSTRUCTURED OCR
+              </span>
+              <span className="text-[11px] font-mono text-muted-foreground">WCRs &amp; DDRs (1889–2020)</span>
             </div>
 
-            <div className="space-y-2 text-xs font-mono">
-              <div className="p-3 rounded-lg bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] shadow-2xs">
-                <div className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 mb-0.5">Stage 01 · Page Layout Segmentation</div>
-                <div className="text-neutral-900 dark:text-neutral-100 font-semibold">
-                  LayoutLMv3 bounding-box detection (Table grid vs handwriting vs narrative log)
-                </div>
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="p-2 bg-card border border-border rounded-xs">
+                <div className="text-[9px] text-amber-700 dark:text-amber-400 uppercase font-bold">Stage 01 · Segmentation</div>
+                <div className="text-foreground font-bold">LayoutLMv3 bounding-box detection</div>
               </div>
 
-              <div className="flex justify-center text-neutral-400 dark:text-neutral-600 font-bold">
-                <ArrowDown className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <div className="text-center text-amber-600 font-bold">↓</div>
+
+              <div className="p-2 bg-card border border-border rounded-xs">
+                <div className="text-[9px] text-amber-700 dark:text-amber-400 uppercase font-bold">Stage 02 · Stratigraphic NLP</div>
+                <div className="text-foreground">Tesseract 5 + Assam geological lexicon</div>
               </div>
 
-              <div className="p-3 rounded-lg bg-white dark:bg-[#0c0f17] border border-neutral-200 dark:border-[#1a2333] shadow-2xs">
-                <div className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 mb-0.5">Stage 02 · Layout-Aware OCR &amp; Stratigraphic NLP</div>
-                <div className="text-neutral-900 dark:text-neutral-100 font-semibold">
-                  Tesseract 5 + Assam geological dictionary (Tipam, Barail, Kopili, Girujan)
-                </div>
-              </div>
+              <div className="text-center text-amber-600 font-bold">↓</div>
 
-              <div className="flex justify-center text-neutral-400 dark:text-neutral-600 font-bold">
-                <ArrowDown className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-              </div>
-
-              {/* High-Contrast Crisp Output Box */}
-              <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-500/70 dark:border-amber-500 text-neutral-950 dark:text-amber-100 shadow-2xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 font-extrabold text-amber-900 dark:text-amber-300 text-xs">
-                    <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                    <span>OUTPUT: 3-TIER STRATIFICATION</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-bold text-neutral-600 dark:text-neutral-400">
-                    AUTOMATED + AUDIT
-                  </span>
-                </div>
-                <div className="flex flex-wrap gap-1.5 pt-1.5 font-mono text-[10px] font-extrabold">
-                  <span className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                    OCR-HIGH (≥90%)
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/80 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
-                    OCR-MED (75–89%)
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-rose-100 dark:bg-rose-950/80 text-rose-900 dark:text-rose-300 border border-rose-300 dark:border-rose-700">
-                    MANUAL-REVIEW (&lt;75%)
-                  </span>
-                </div>
+              <div className="p-2 bg-amber-500/10 border-l-4 border-l-amber-500 rounded-xs text-xs">
+                <div className="font-bold text-amber-700 dark:text-amber-400">OUTPUT: OCR-HIGH (≥90%) / OCR-MED (75–89%)</div>
+                <div className="text-[11px] text-muted-foreground font-sans">Human-in-the-loop audit for records &lt;75%.</div>
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* ─── Common Target Schema & Governance Guarantee Banner ─── */}
-        <div className="p-4 sm:p-5 rounded-xl bg-neutral-50 dark:bg-[#070b13] text-neutral-900 dark:text-white border border-neutral-200 dark:border-[#1e273b] shadow-xs space-y-3">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                <span className="font-mono font-extrabold text-xs sm:text-sm text-neutral-950 dark:text-white uppercase tracking-wider">
-                  Common Target Schema &amp; Strict Governance Guarantee
-                </span>
-              </div>
-              <p className="text-xs text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed max-w-3xl">
-                Both structured databases and archival OCR records normalize into the identical strictly-typed schema before indexing into the vector database.
-              </p>
-            </div>
-
-            <div className="px-3 py-2 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-900 dark:text-amber-200 text-xs font-mono shrink-0">
-              <strong className="text-amber-800 dark:text-amber-300 font-bold uppercase text-[10px] block">Mandatory DGMS Safety Policy:</strong>
-              <span>Low-confidence (OCR-LOW) data is strictly quarantined from triggering high-severity lookahead alarms.</span>
-            </div>
+        {/* Target Schema Guarantee */}
+        <div className="p-3 bg-gradient-to-r from-blue-500/10 via-card to-card border border-blue-500/30 rounded-xs text-xs font-mono flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <span className="font-bold text-foreground">Common Target Schema:</span>
+            <span className="text-muted-foreground">well_id · formation · depth_md · incident_event · root_cause · mitigation · npt_hours · confidence_tier</span>
           </div>
-
-          {/* Syntax Highlighted Schema Pill Box */}
-          <div className="p-3 rounded-lg bg-white dark:bg-black/60 border border-neutral-200 dark:border-neutral-800 text-[11px] font-mono flex flex-wrap items-center gap-2 shadow-2xs">
-            <span className="text-neutral-500 dark:text-neutral-400 font-bold uppercase text-[10px]">Unified Event Model:</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-amber-800 dark:text-amber-300 border border-neutral-200 dark:border-neutral-700 font-bold">well_id</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-emerald-800 dark:text-emerald-300 border border-neutral-200 dark:border-neutral-700 font-bold">formation</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-sky-800 dark:text-sky-300 border border-neutral-200 dark:border-neutral-700 font-bold">depth_md</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-rose-800 dark:text-rose-300 border border-neutral-200 dark:border-neutral-700 font-bold">incident_event</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-amber-800 dark:text-amber-200 border border-neutral-200 dark:border-neutral-700 font-bold">root_cause</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-purple-800 dark:text-purple-300 border border-neutral-200 dark:border-neutral-700 font-bold">mitigation_applied</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-cyan-800 dark:text-cyan-300 border border-neutral-200 dark:border-neutral-700 font-bold">npt_hours</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-emerald-800 dark:text-emerald-300 border border-neutral-200 dark:border-neutral-700 font-bold">confidence_tier</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 font-bold">provenance_ref</span>
-          </div>
+          <span className="px-2 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-400 font-bold text-[10px] rounded-xs">
+            DGMS AUDIT COMPLIANT
+          </span>
         </div>
-
       </div>
 
-      {/* ─── Summary KPI Metrics ─── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <Card className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] p-4 shadow-xs space-y-1.5 transition-colors">
-          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span className="uppercase text-[10px] font-mono font-bold tracking-wider">TOTAL ARCHIVAL RECORDS</span>
-            <BookOpen className="w-4 h-4 text-neutral-400" />
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-950 dark:text-white">
-            {totalDocs} Scanned
-          </div>
-          <div className="flex items-center justify-between text-xs font-mono pt-1 text-neutral-600 dark:text-neutral-400 border-t border-neutral-100 dark:border-[#1a2333]">
-            <span>Assam Basin Archives</span>
-            <span className="text-emerald-700 dark:text-emerald-400 font-bold">6 Fields Ingested</span>
-          </div>
-        </Card>
-
-        <Card className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] p-4 shadow-xs space-y-1.5 transition-colors">
-          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span className="uppercase text-[10px] font-mono font-bold tracking-wider">EXTRACTED DRILLING EVENTS</span>
-            <AlertTriangle className="w-4 h-4 text-amber-500" />
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-amber-700 dark:text-amber-400">
-            {totalEvents} Incidents
-          </div>
-          <div className="flex items-center justify-between text-xs font-mono pt-1 text-neutral-600 dark:text-neutral-400 border-t border-neutral-100 dark:border-[#1a2333]">
-            <span>Mud losses &amp; kicks</span>
-            <span className="text-amber-700 dark:text-amber-400 font-bold">64 Severe Losses</span>
-          </div>
-        </Card>
-
-        <Card className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] p-4 shadow-xs space-y-1.5 transition-colors">
-          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span className="uppercase text-[10px] font-mono font-bold tracking-wider">STRUCTURED PRECISION</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-700 dark:text-emerald-400">
-            94.2% High Conf.
-          </div>
-          <div className="flex items-center justify-between text-xs font-mono pt-1 text-neutral-600 dark:text-neutral-400 border-t border-neutral-100 dark:border-[#1a2333]">
-            <span>Structured + OCR-High</span>
-            <span className="text-emerald-700 dark:text-emerald-400 font-bold">Verified Tiers</span>
-          </div>
-        </Card>
-
-        <Card className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] p-4 shadow-xs space-y-1.5 transition-colors">
-          <div className="flex items-center justify-between text-neutral-500 dark:text-neutral-400">
-            <span className="uppercase text-[10px] font-mono font-bold tracking-wider">HUMAN REVIEW QUEUE</span>
-            <Scale className="w-4 h-4 text-rose-500" />
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-neutral-950 dark:text-white">
-            12 Pending
-          </div>
-          <div className="flex items-center justify-between text-xs font-mono pt-1 text-neutral-600 dark:text-neutral-400 border-t border-neutral-100 dark:border-[#1a2333]">
-            <span>Awaiting Superintendent</span>
-            <span className="text-rose-700 dark:text-rose-400 font-bold">Manual Flagged</span>
-          </div>
-        </Card>
-
-      </div>
-
-      {/* ─── Batches Table & Deep-Dive Deck ─── */}
-      <Card className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0c0f17] shadow-xs overflow-hidden transition-colors">
-        
-        {/* Table Header Controls */}
-        <div className="p-4 sm:p-5 border-b border-neutral-200 dark:border-[#1a2233] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* Batches Table & Inspector Deck */}
+      <div className="gov-panel space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-border">
           <div>
-            <h2 className="text-sm sm:text-base font-extrabold text-neutral-950 dark:text-white font-mono">
+            <h2 className="font-bold text-sm text-foreground font-sans uppercase">
               Archival Ingestion Batches &amp; OCR Confidence Distribution
             </h2>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans mt-0.5">
-              Click any batch row to inspect underlying OCR character recognitions, metadata confidence tiers, and provenance trails.
+            <p className="text-xs text-muted-foreground font-sans">
+              Click any batch row to inspect OCR text extraction, normalized schema, and confidence tiers.
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-xs font-mono bg-neutral-50 dark:bg-[#121723] text-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-[#1e2638] px-3 py-1">
-              {batches.length} Vectorized Batches
-            </Badge>
-          </div>
+          <span className="gov-tag gov-tag-grey">{batches.length} Vectorized Batches</span>
         </div>
 
-        {/* High-Contrast Crisp Batches Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-xs font-mono border-collapse">
+          <table className="gov-table font-mono text-xs">
             <thead>
-              <tr className="bg-neutral-100 dark:bg-[#111624] border-b border-neutral-200 dark:border-[#1a2233] text-[11px] text-neutral-800 dark:text-neutral-300 font-extrabold">
-                <th className="p-3.5 text-left">BATCH IDENTIFIER</th>
-                <th className="p-3.5 text-left">SOURCE TYPE</th>
-                <th className="p-3.5 text-left">INGESTION DATE</th>
-                <th className="p-3.5 text-left">DOCUMENTS</th>
-                <th className="p-3.5 text-left">EVENTS</th>
-                <th className="p-3.5 text-left min-w-[220px]">CONFIDENCE BREAKDOWN</th>
-                <th className="p-3.5 text-left">STATUS</th>
-                <th className="p-3.5 text-right">ACTION</th>
+              <tr>
+                <th>Batch Name</th>
+                <th>Source Type</th>
+                <th>Ingestion Date</th>
+                <th>Documents</th>
+                <th>Events</th>
+                <th>Confidence Distribution</th>
+                <th>Status</th>
+                <th className="text-right">Inspection</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-200 dark:divide-[#182030] text-neutral-900 dark:text-neutral-100">
+            <tbody>
               {batches.map((batch) => {
                 const isSelected = selectedBatch?.id === batch.id;
                 const highCount = batch.confidenceDistribution.structuredHigh + batch.confidenceDistribution.ocrHigh;
                 const medCount = batch.confidenceDistribution.ocrMedium;
                 const lowCount = batch.confidenceDistribution.ocrLow;
-                const totalDist = Math.max(1, highCount + medCount + lowCount);
-                const highPct = (highCount / totalDist) * 100;
-                const medPct = (medCount / totalDist) * 100;
-                const lowPct = (lowCount / totalDist) * 100;
 
                 return (
                   <tr
                     key={batch.id}
                     onClick={() => setSelectedBatch(batch)}
-                    className={`cursor-pointer transition-colors ${
-                      isSelected
-                        ? 'bg-amber-500/10 dark:bg-[#151c2c] border-l-4 border-l-amber-500'
-                        : 'hover:bg-neutral-50 dark:hover:bg-[#0f1420]'
-                    }`}
+                    className={`cursor-pointer ${isSelected ? 'gov-row-selected' : ''}`}
                   >
-                    <td className="p-3.5 font-bold text-neutral-950 dark:text-white">
-                      <div className="flex items-center gap-2">
-                        <FileCheck className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                    <td className="font-bold text-foreground">
+                      <div className="flex items-center gap-1.5">
+                        <FileCheck className="w-3.5 h-3.5 text-[#1d70b8] dark:text-[#60a5fa]" />
                         <span>{batch.batchName}</span>
                       </div>
                     </td>
-
-                    <td className="p-3.5">
-                      <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-300 font-bold uppercase text-[10px] border border-neutral-200 dark:border-neutral-700">
-                        {batch.sourceType.replace('_', ' ')}
-                      </span>
+                    <td>
+                      <span className="gov-tag gov-tag-grey">{batch.sourceType.replace('_', ' ')}</span>
                     </td>
-
-                    <td className="p-3.5 text-neutral-700 dark:text-neutral-300 font-semibold">
-                      {batch.ingestionDate}
-                    </td>
-
-                    <td className="p-3.5 font-extrabold text-neutral-900 dark:text-neutral-100">
-                      {batch.totalDocuments}
-                    </td>
-
-                    <td className="p-3.5 font-extrabold text-amber-700 dark:text-amber-400">
-                      {batch.extractedEventsCount}
-                    </td>
-
-                    <td className="p-3.5">
-                      <div className="space-y-1.5">
-                        {/* Segmented Visual Progress Bar */}
-                        <div className="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden flex">
-                          <div style={{ width: `${highPct}%` }} className="h-full bg-emerald-500" title={`High: ${highCount}`} />
-                          <div style={{ width: `${medPct}%` }} className="h-full bg-amber-500" title={`Med: ${medCount}`} />
-                          <div style={{ width: `${lowPct}%` }} className="h-full bg-rose-500" title={`Low: ${lowCount}`} />
-                        </div>
-                        {/* High-Contrast Number Pills */}
-                        <div className="flex items-center gap-1.5 text-[10px] font-extrabold font-mono">
-                          <span className="px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700">
-                            {highCount} High
-                          </span>
-                          <span className="px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
-                            {medCount} Med
-                          </span>
-                          <span className="px-1.5 py-0.2 rounded bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-700">
-                            {lowCount} Low
-                          </span>
-                        </div>
+                    <td className="text-muted-foreground">{batch.ingestionDate}</td>
+                    <td className="font-bold text-foreground">{batch.totalDocuments}</td>
+                    <td className="font-bold text-[#b25900] dark:text-[#fbbf24]">{batch.extractedEventsCount}</td>
+                    <td>
+                      <div className="flex items-center gap-1 text-[10px]">
+                        <span className="gov-tag gov-tag-green">{highCount} High</span>
+                        <span className="gov-tag gov-tag-amber">{medCount} Med</span>
+                        <span className="gov-tag gov-tag-red">{lowCount} Low</span>
                       </div>
                     </td>
-
-                    <td className="p-3.5">
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 flex items-center gap-1 w-max">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                        {batch.status.toUpperCase()}
-                      </span>
+                    <td>
+                      <span className="gov-tag gov-tag-green">{batch.status.toUpperCase()}</span>
                     </td>
-
-                    <td className="p-3.5 text-right">
+                    <td className="text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedBatch(batch);
                           setIsInspectorOpen(true);
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-neutral-950 font-bold font-mono text-[11px] transition-all inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                        className="px-2 py-0.5 bg-secondary hover:bg-[#1d70b8] hover:text-white border border-border text-[11px] font-mono transition-colors cursor-pointer"
                       >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect OCR</span>
+                        <Eye className="w-3 h-3 inline mr-1" />
+                        <span>Inspect</span>
                       </button>
                     </td>
                   </tr>
@@ -489,34 +292,20 @@ export default function AdminIngestionPage() {
           </table>
         </div>
 
-        {/* ─── Active Batch Deep-Dive Deck (In-Page Inspector) ─── */}
+        {/* Selected Batch Inspector Preview */}
         {selectedBatch && (
-          <div className="p-5 border-t-2 border-neutral-200 dark:border-[#1a2333] bg-neutral-50/70 dark:bg-[#090d16] space-y-4">
-            
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-neutral-200 dark:border-[#1a2333]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 flex items-center justify-center">
-                  <BookOpen className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-extrabold text-sm font-mono text-neutral-950 dark:text-white">
-                    Active Inspection: {selectedBatch.batchName}
-                  </h3>
-                  <p className="text-xs text-neutral-600 dark:text-neutral-400 font-mono">
-                    Ingested on {selectedBatch.ingestionDate} · {selectedBatch.totalDocuments} Scanned Archives · {selectedBatch.extractedEventsCount} Calibrated Hazards
-                  </p>
-                </div>
+          <div className="p-3 bg-secondary/30 border border-border space-y-3 mt-3">
+            <div className="flex items-center justify-between pb-2 border-b border-border">
+              <div className="font-mono text-xs">
+                <strong className="text-foreground">{selectedBatch.batchName}</strong> · Ingested {selectedBatch.ingestionDate} · {selectedBatch.extractedEventsCount} calibrated events
               </div>
 
-              {/* Sub-Tabs */}
-              <div className="flex items-center gap-1 bg-neutral-200/80 dark:bg-[#121724] p-1 rounded-xl border border-neutral-300 dark:border-[#1c2438] text-xs font-mono">
+              <div className="flex items-center gap-1 text-xs font-mono">
                 <button
                   type="button"
                   onClick={() => setActiveTab('preview')}
-                  className={`px-3 py-1 rounded-lg font-bold transition-colors ${
-                    activeTab === 'preview'
-                      ? 'bg-white dark:bg-[#1c2538] text-neutral-950 dark:text-white shadow-xs'
-                      : 'text-neutral-700 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                  className={`px-2 py-0.5 border cursor-pointer ${
+                    activeTab === 'preview' ? 'bg-[#1d70b8] text-white border-[#1d70b8]' : 'bg-card text-muted-foreground border-border'
                   }`}
                 >
                   OCR Text vs Schema
@@ -524,10 +313,8 @@ export default function AdminIngestionPage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab('schema')}
-                  className={`px-3 py-1 rounded-lg font-bold transition-colors ${
-                    activeTab === 'schema'
-                      ? 'bg-white dark:bg-[#1c2538] text-neutral-950 dark:text-white shadow-xs'
-                      : 'text-neutral-700 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                  className={`px-2 py-0.5 border cursor-pointer ${
+                    activeTab === 'schema' ? 'bg-[#1d70b8] text-white border-[#1d70b8]' : 'bg-card text-muted-foreground border-border'
                   }`}
                 >
                   Engine Telemetry
@@ -535,60 +322,33 @@ export default function AdminIngestionPage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab('queue')}
-                  className={`px-3 py-1 rounded-lg font-bold transition-colors ${
-                    activeTab === 'queue'
-                      ? 'bg-white dark:bg-[#1c2538] text-neutral-950 dark:text-white shadow-xs'
-                      : 'text-neutral-700 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                  className={`px-2 py-0.5 border cursor-pointer ${
+                    activeTab === 'queue' ? 'bg-[#1d70b8] text-white border-[#1d70b8]' : 'bg-card text-muted-foreground border-border'
                   }`}
                 >
-                  Verification Queue ({selectedBatch.confidenceDistribution.manualReview || 12})
+                  Audit Queue ({selectedBatch.confidenceDistribution.manualReview || 12})
                 </button>
               </div>
             </div>
 
-            {/* TAB 1: OCR Text vs Normalized Schema */}
             {activeTab === 'preview' && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                
-                {/* Left: Raw Archival Scanned Typewriter Text */}
-                <div className="p-4 rounded-xl bg-white dark:bg-[#0e121a] border border-neutral-200 dark:border-[#1e273b] space-y-2.5">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-[#1a2333]">
-                    <span className="font-mono text-xs font-extrabold text-neutral-950 dark:text-white flex items-center gap-1.5">
-                      <FileText className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                      RAW ARCHIVAL OCR OUTPUT (300 DPI SCAN)
-                    </span>
-                    <Badge className="bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700 text-[10px] font-mono">
-                      WCR-GLK-07-p19
-                    </Badge>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-xs font-mono">
+                <div className="p-3 bg-card border border-border space-y-2">
+                  <div className="flex justify-between items-center text-[10px] text-muted-foreground uppercase font-bold">
+                    <span>Raw Typewritten OCR Output (300 DPI)</span>
+                    <span className="gov-tag gov-tag-amber">WCR-GLK-07-p19</span>
                   </div>
-
-                  <div className="p-3.5 rounded-lg bg-[#faf8f5] dark:bg-[#07090e] border border-amber-200 dark:border-[#1e273b] text-neutral-900 dark:text-neutral-200 font-mono text-xs leading-relaxed space-y-2">
-                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 italic">
-                      [OIL INDIA LIMITED · WELL COMPLETION REPORT 1996 · SECTION 4.3]
-                    </p>
-                    <p>
-                      &quot;...drilling 12-1/4 inch hole at <strong className="text-amber-900 dark:text-amber-300 bg-amber-200/60 dark:bg-amber-950/80 px-1">2280m MD</strong> in Upper Tipam Sandstone. Severe lost circulation occurred with pit drop of 18 m3. Pumped <strong className="text-amber-900 dark:text-amber-300 bg-amber-200/60 dark:bg-amber-950/80 px-1">45 bbls medium-nut-plug LCM pill (25 ppb)</strong>. Capped ECD at 10.4 ppg. Total lost time was <strong className="text-rose-900 dark:text-rose-300 bg-rose-200/60 dark:bg-rose-950/80 px-1">34 hours</strong> before circulation stabilized...&quot;
-                    </p>
-                    <div className="pt-2 text-[10px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between border-t border-neutral-200 dark:border-neutral-800">
-                      <span>OCR Engine: Tesseract 5.3 + LayoutLMv3</span>
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400">Confidence: 94.2%</span>
-                    </div>
-                  </div>
+                  <p className="text-foreground leading-relaxed text-[11px] bg-secondary/50 p-2 border border-border">
+                    &quot;...drilling 12-1/4 inch hole at 2280m MD in Upper Tipam Sandstone. Severe lost circulation occurred with pit drop of 18 m3. Pumped 45 bbls medium-nut-plug LCM pill (25 ppb). Capped ECD at 10.4 ppg. Total lost time was 34 hours...&quot;
+                  </p>
                 </div>
 
-                {/* Right: Normalized JSON Schema */}
-                <div className="p-4 rounded-xl bg-white dark:bg-[#0e121a] border border-neutral-200 dark:border-[#1e273b] space-y-2.5">
-                  <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-[#1a2333]">
-                    <span className="font-mono text-xs font-extrabold text-neutral-950 dark:text-white flex items-center gap-1.5">
-                      <Code2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                      UNIFIED CANONICAL JSON EVENT RECORD
-                    </span>
-                    <Badge className="bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 text-[10px] font-mono">
-                      VALIDATED SCHEMA
-                    </Badge>
+                <div className="p-3 bg-card border border-border space-y-2">
+                  <div className="flex justify-between items-center text-[10px] text-muted-foreground uppercase font-bold">
+                    <span>Normalized Canonical JSON Record</span>
+                    <span className="gov-tag gov-tag-green">VALIDATED</span>
                   </div>
-
-                  <pre className="p-3.5 rounded-lg bg-neutral-100 dark:bg-black border border-neutral-200 dark:border-neutral-800 text-[11px] font-mono text-neutral-900 dark:text-neutral-100 overflow-x-auto leading-relaxed">
+                  <pre className="text-[10px] text-foreground bg-secondary/50 p-2 border border-border overflow-x-auto">
 {`{
   "well_id": "OIL-GLK-07",
   "formation": "Upper Tipam Sandstone",
@@ -598,73 +358,45 @@ export default function AdminIngestionPage() {
   "mitigation_applied": "45 bbl 25 ppb medium nut-plug LCM pill",
   "ecd_cap_ppg": 10.4,
   "npt_hours": 34.0,
-  "confidence_tier": "OCR-HIGH",
-  "source_provenance": "WCR-GLK-07-1996:p19",
-  "verified_by_superintendent": true
+  "confidence_tier": "OCR-HIGH"
 }`}
                   </pre>
                 </div>
-
               </div>
             )}
 
-            {/* TAB 2: Engine Telemetry */}
             {activeTab === 'schema' && (
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-                <div className="p-3.5 rounded-xl bg-white dark:bg-[#0e121a] border border-neutral-200 dark:border-[#1e273b] space-y-1">
-                  <span className="text-neutral-500 uppercase text-[10px] font-bold block">OCR ENGINE MODEL</span>
-                  <strong className="text-neutral-950 dark:text-white text-sm block">Tesseract 5.3 + LayoutLMv3</strong>
-                  <span className="text-emerald-700 dark:text-emerald-400 text-[11px] font-bold">Word Accuracy: 95.8%</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
+                <div className="p-2.5 bg-card border border-border space-y-0.5">
+                  <div className="text-[9px] text-muted-foreground uppercase font-bold">OCR ENGINE</div>
+                  <div className="font-bold text-foreground">Tesseract 5.3 + LayoutLMv3</div>
+                  <div className="text-[10px] text-[#00703c]">Accuracy: 95.8%</div>
                 </div>
-
-                <div className="p-3.5 rounded-xl bg-white dark:bg-[#0e121a] border border-neutral-200 dark:border-[#1e273b] space-y-1">
-                  <span className="text-neutral-500 uppercase text-[10px] font-bold block">PRE-PROCESSING FILTERS</span>
-                  <strong className="text-neutral-950 dark:text-white text-sm block">Gaussian Deskew + Denoise</strong>
-                  <span className="text-neutral-600 dark:text-neutral-400 text-[11px]">300 DPI Grayscale TIFF</span>
+                <div className="p-2.5 bg-card border border-border space-y-0.5">
+                  <div className="text-[9px] text-muted-foreground uppercase font-bold">PRE-PROCESSING</div>
+                  <div className="font-bold text-foreground">Gaussian Deskew + Denoise</div>
+                  <div className="text-[10px] text-muted-foreground">300 DPI Grayscale TIFF</div>
                 </div>
-
-                <div className="p-3.5 rounded-xl bg-white dark:bg-[#0e121a] border border-neutral-200 dark:border-[#1e273b] space-y-1">
-                  <span className="text-neutral-500 uppercase text-[10px] font-bold block">DOMAIN VOCABULARY</span>
-                  <strong className="text-neutral-950 dark:text-white text-sm block">Assam Stratigraphic Lexicon</strong>
-                  <span className="text-amber-700 dark:text-amber-400 text-[11px] font-bold">4,200 Geologic Terms</span>
+                <div className="p-2.5 bg-card border border-border space-y-0.5">
+                  <div className="text-[9px] text-muted-foreground uppercase font-bold">DOMAIN VOCABULARY</div>
+                  <div className="font-bold text-foreground">Assam Stratigraphic Lexicon</div>
+                  <div className="text-[10px] text-[#b25900]">4,200 Geological Terms</div>
                 </div>
               </div>
             )}
 
-            {/* TAB 3: Verification Queue */}
             {activeTab === 'queue' && (
-              <div className="p-4 rounded-xl bg-white dark:bg-[#0e121a] border border-neutral-200 dark:border-[#1e273b] space-y-3 text-xs font-mono">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-neutral-950 dark:text-white">Flagged Low-Confidence Records Awaiting Superintendent Sign-off</span>
-                  <Badge className="bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-300">
-                    12 Items in Queue
-                  </Badge>
-                </div>
-                <div className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  <div className="py-2.5 flex items-center justify-between">
+              <div className="p-3 bg-card border border-border space-y-2 text-xs font-mono">
+                <div className="font-bold text-foreground text-xs">Flagged Low-Confidence Records Awaiting Sign-off</div>
+                <div className="space-y-1.5 divide-y divide-border">
+                  <div className="pt-1.5 flex justify-between items-center">
                     <div>
-                      <strong className="text-neutral-950 dark:text-white">OIL-GLK-02 (1988 DDR #42)</strong>
-                      <p className="text-neutral-600 dark:text-neutral-400 text-[11px] font-sans">
-                        OCR read &quot;lost 240 bbls at 2,190m&quot; (Faded carbon-copy typewriter text). Conf score: 68%.
-                      </p>
+                      <strong className="text-foreground">OIL-GLK-02 (1988 DDR #42)</strong>
+                      <p className="text-[11px] text-muted-foreground font-sans">Faded carbon-copy text: &quot;lost 240 bbls at 2,190m&quot;. Confidence: 68%.</p>
                     </div>
                     <button
                       onClick={() => setIsInspectorOpen(true)}
-                      className="px-2.5 py-1 rounded bg-amber-600 text-neutral-950 font-bold text-[11px]"
-                    >
-                      Audit Scan
-                    </button>
-                  </div>
-                  <div className="py-2.5 flex items-center justify-between">
-                    <div>
-                      <strong className="text-neutral-950 dark:text-white">OIL-DGB-112 (1974 Mud Log)</strong>
-                      <p className="text-neutral-600 dark:text-neutral-400 text-[11px] font-sans">
-                        Ambiguous formation boundary between Barail Main Sand and Kopili Shale. Conf score: 71%.
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setIsInspectorOpen(true)}
-                      className="px-2.5 py-1 rounded bg-amber-600 text-neutral-950 font-bold text-[11px]"
+                      className="gov-button text-[10px] py-1 px-2"
                     >
                       Audit Scan
                     </button>
@@ -672,30 +404,11 @@ export default function AdminIngestionPage() {
                 </div>
               </div>
             )}
-
-            {/* Action Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs font-mono">
-              <span className="text-neutral-600 dark:text-neutral-400">
-                Vector Embedding Engine: <strong className="text-neutral-900 dark:text-neutral-200">bge-large-en-v1.5 (Air-Gapped Local Embeddings)</strong>
-              </span>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsInspectorOpen(true)}
-                  className="px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-neutral-950 font-extrabold font-mono transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Launch Archival Document Inspector Drawer</span>
-                </button>
-              </div>
-            </div>
-
           </div>
         )}
+      </div>
 
-      </Card>
-
-      {/* ─── Evidence Inspector Drawer ─── */}
+      {/* Evidence Inspector Drawer */}
       <EvidenceInspectorDrawer
         isOpen={isInspectorOpen}
         onClose={() => setIsInspectorOpen(false)}
