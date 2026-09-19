@@ -25,21 +25,31 @@ interface AppState {
   isReplayActive: boolean;
   setReplayActive: (active: boolean) => void;
 
-  // UI layout state
+  // UI Layout State
   isSidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
   toggleSidebar: () => void;
+
+  // AI Copilot Modal Drawer
+  isCopilotOpen: boolean;
+  setCopilotOpen: (open: boolean) => void;
+  toggleCopilot: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  isSidebarCollapsed: false,
-  setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
-  toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
   currentRole: 'operations_manager',
   setRole: (role) => set({ currentRole: role }),
 
   activeWellId: 'well-glk-14',
   setActiveWellId: (id) => set({ activeWellId: id }),
+
+  isSidebarCollapsed: false,
+  setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
+  toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+
+  isCopilotOpen: false,
+  setCopilotOpen: (open) => set({ isCopilotOpen: open }),
+  toggleCopilot: () => set((state) => ({ isCopilotOpen: !state.isCopilotOpen })),
 
   alerts: [...MOCK_ALERTS],
   feedbackHistory: [...MOCK_FEEDBACK],

@@ -1,254 +1,117 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { 
-  ShieldCheck, 
-  HardHat, 
+  Search, 
   Bell, 
-  ExternalLink,
-  Activity,
+  ChevronDown,
   Layers,
-  GitCompare,
-  Database,
-  Scale,
-  Sparkles,
-  Info,
-  CheckCircle2,
-  X
+  Radio,
+  LogOut
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
-import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
 import { UserRole } from '@/lib/data/types';
-import { AskNwisDrawer } from '@/components/common/AskNwisDrawer';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 export const GovHeader: React.FC = () => {
-  const pathname = usePathname();
-  const { currentRole, setRole, activeWellId, setActiveWellId, alerts } = useAppStore();
-  const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
-  const [showErtmacBridgeModal, setShowErtmacBridgeModal] = useState<boolean>(false);
+  const { currentRole, setRole, activeWellId, setActiveWellId, alerts, setCopilotOpen } = useAppStore();
   
-  // Unread high-priority notifications
   const unreadAlerts = alerts.filter((a) => a.status === 'new').length;
 
-  const navItems = [
-    {
-      name: 'Operations',
-      href: '/operations',
-      icon: Layers,
-      match: (p: string) => p.startsWith('/operations') || p === '/dashboard' || p.startsWith('/wells'),
-      badge: 'LIVE'
-    },
-    {
-      name: 'Well Replay',
-      href: '/replay',
-      icon: Activity,
-      match: (p: string) => p.startsWith('/replay'),
-      badge: 'DEMO'
-    },
-    {
-      name: 'Offset Intelligence',
-      href: '/analogs',
-      icon: GitCompare,
-      match: (p: string) => p.startsWith('/analogs'),
-    },
-    {
-      name: 'Archive & Evidence',
-      href: '/admin/ingestion',
-      icon: Database,
-      match: (p: string) => p.startsWith('/admin'),
-    },
-    {
-      name: 'Governance',
-      href: '/decay-index',
-      icon: Scale,
-      match: (p: string) => p.startsWith('/decay-index'),
-    },
-    {
-      name: 'Home',
-      href: '/',
-      icon: Sparkles,
-      match: (p: string) => p === '/' || p === '/landing',
-    }
-  ];
-
   return (
-    <>
-      <header className="border-b border-neutral-200 dark:border-[#1e2536] bg-white dark:bg-[#0c0f17] sticky top-0 z-40 transition-colors shadow-xs">
+    <header className="h-16 border-b border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#11141a] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0 transition-colors z-30">
+      
+      {/* Left: Clean Search Bar with ⌘ + K that launches AI Copilot */}
+      <div className="flex-1 max-w-md">
+        <div 
+          onClick={() => setCopilotOpen(true)}
+          className="flex items-center justify-between px-3 py-2 text-xs text-neutral-400 dark:text-neutral-500 bg-neutral-50/90 dark:bg-neutral-900/90 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 border border-neutral-200/80 dark:border-neutral-800 rounded-xl transition-all cursor-pointer shadow-2xs group"
+        >
+          <div className="flex items-center gap-2.5 truncate">
+            <Search className="w-3.5 h-3.5 text-neutral-400 group-hover:text-amber-600 transition-colors shrink-0" />
+            <span className="text-neutral-600 dark:text-neutral-400 font-normal truncate">
+              Ask AI or search 1,690 offset well logs...
+            </span>
+          </div>
+          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 dark:text-neutral-500 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shrink-0">
+            ⌘ K
+          </kbd>
+        </div>
+      </div>
+
+      {/* Right: Operational Controls, AI Ask Button & Profile */}
+      <div className="flex items-center gap-2 sm:gap-3">
         
-        {/* ─── Clean Header Bar ─── */}
-        <div className="px-4 py-2.5 flex items-center justify-between gap-4">
-          
-          {/* Brand & eRTMAC Tag */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-600 to-amber-700 dark:from-amber-600 dark:to-amber-800 flex items-center justify-center text-white font-mono font-extrabold text-sm shadow-sm ring-1 ring-amber-500/30">
-              OIL
+        {/* Quick Well Selector */}
+        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/80 text-xs font-mono">
+          <Layers className="w-3.5 h-3.5 text-amber-600" />
+          <select
+            value={activeWellId}
+            onChange={(e) => setActiveWellId(e.target.value)}
+            className="bg-transparent text-neutral-800 dark:text-neutral-200 font-bold focus:outline-hidden cursor-pointer text-xs"
+          >
+            <option value="well-glk-14" className="bg-white dark:bg-neutral-900">OIL-GLK-14 (Geleki · Active)</option>
+            <option value="well-dgb-09" className="bg-white dark:bg-neutral-900">OIL-DGB-09 (Digboi · Active)</option>
+            <option value="well-khr-04" className="bg-white dark:bg-neutral-900">OIL-KHR-04 (Kharsang · Standby)</option>
+          </select>
+        </div>
+
+        {/* Live eRTMAC Stream Badge */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 text-[11px] font-mono">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-emerald-800 dark:text-emerald-300 font-bold">WITSML Live:</span>
+          <span className="text-emerald-900 dark:text-emerald-200">380ms</span>
+        </div>
+
+        {/* Notifications Bell */}
+        <Link
+          href="/alerts"
+          title="Notifications"
+          className="relative p-2 rounded-xl text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        >
+          <Bell className="w-4 h-4" />
+          {unreadAlerts > 0 && (
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#11141a]" />
+          )}
+        </Link>
+
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
+        {/* User Profile Chip & Logout */}
+        <div className="flex items-center gap-2 pl-2 ml-1 border-l border-neutral-200/80 dark:border-neutral-800">
+          <Link
+            href="/login"
+            title="Switch User Profile"
+            className="flex items-center gap-2 group cursor-pointer"
+          >
+            <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 flex items-center justify-center text-amber-900 dark:text-amber-300 font-bold text-xs shrink-0 overflow-hidden shadow-2xs font-mono group-hover:border-amber-500 transition-colors">
+              {currentRole === 'operations_manager' ? 'DD' : currentRole === 'field_engineer' ? 'PB' : 'MS'}
             </div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-base tracking-tight text-neutral-950 dark:text-white font-mono">
-                NWIS
-              </span>
-              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-[9px] font-mono font-bold uppercase tracking-wider">
-                eRTMAC
-              </span>
+            <div className="hidden xl:flex flex-col text-left">
+              <div className="text-xs font-bold text-neutral-900 dark:text-white leading-tight group-hover:text-amber-600 transition-colors">
+                {currentRole === 'operations_manager' ? 'D. Deka' : currentRole === 'field_engineer' ? 'P. Bora' : 'M. Saikia'}
+              </div>
+              <div className="text-[10px] text-neutral-400 dark:text-neutral-500 leading-tight">
+                {currentRole === 'operations_manager' ? 'Drilling Supt' : currentRole === 'field_engineer' ? 'Rig Engineer' : 'PSU Auditor'}
+              </div>
             </div>
           </Link>
 
-          {/* Right Control Group */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            
-            {/* Shift Context Badge */}
-            <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-[#141a27] border border-neutral-200 dark:border-[#1e2638] text-[11px] font-mono text-neutral-700 dark:text-neutral-300">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>Shift: <strong className="text-neutral-950 dark:text-white">Day (06:00–18:00)</strong></span>
-              <span className="text-neutral-400 dark:text-neutral-600">|</span>
-              <span className="text-neutral-500">Rig OIL-E2000-IV</span>
-            </div>
-
-            {/* Role Switcher Pill */}
-            <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-[#141a27] border border-neutral-200 dark:border-[#1e2638] rounded-xl px-2.5 py-1">
-              <HardHat className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-              <div className="flex flex-col">
-                <span className="text-[9px] font-mono uppercase text-neutral-400 leading-none">Role</span>
-                <select
-                  value={currentRole}
-                  onChange={(e) => setRole(e.target.value as UserRole)}
-                  className="bg-transparent text-xs font-bold text-neutral-900 dark:text-neutral-100 cursor-pointer focus:outline-hidden font-sans py-0.5"
-                  title="Switch User Role View"
-                >
-                  <option value="field_engineer">P. Bora (Rig Engineer)</option>
-                  <option value="operations_manager">D. Deka (Superintendent)</option>
-                  <option value="admin">M. Saikia (PSU Auditor)</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Return / Connected to eRTMAC button */}
-            <button
-              type="button"
-              onClick={() => setShowErtmacBridgeModal(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-600/40 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 dark:hover:bg-amber-900/40 text-amber-900 dark:text-amber-300 text-xs font-semibold font-mono transition-colors"
-            >
-              <ExternalLink className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-              <span>eRTMAC Bridge</span>
-            </button>
-
-            {/* Ask NWIS Copilot */}
-            <button
-              type="button"
-              onClick={() => setIsCopilotOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-              <span className="hidden sm:inline">Ask NWIS</span>
-            </button>
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
-
-            {/* Alert Bell */}
-            <Link
-              href="/alerts"
-              title={unreadAlerts > 0 ? `${unreadAlerts} active lookahead advisories` : 'No unread advisories'}
-              className="relative p-2 rounded-xl text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-[#192233] transition-colors border border-neutral-200 dark:border-[#1e2638] bg-white dark:bg-[#121723]"
-            >
-              <Bell className="w-4 h-4" />
-              {unreadAlerts > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[10px] font-mono font-bold text-white ring-2 ring-white dark:ring-[#0c0f17]">
-                  {unreadAlerts}
-                </span>
-              )}
-            </Link>
-
-          </div>
-
+          {/* Explicit Logout Button */}
+          <Link
+            href="/login"
+            title="Sign out of Console"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors ml-0.5"
+            aria-label="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </Link>
         </div>
 
-      </header>
+      </div>
 
-      {/* Slide-Out AI Copilot Drawer */}
-      <AskNwisDrawer
-        isOpen={isCopilotOpen}
-        onClose={() => setIsCopilotOpen(false)}
-      />
-
-      {/* eRTMAC Bridge & Safety Contract Modal */}
-      {showErtmacBridgeModal && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="bg-[#0f141f] border border-[#263147] rounded-2xl max-w-xl w-full p-6 text-neutral-100 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-[#1e273b] pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/40">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-white font-mono">eRTMAC System Boundary & Integration</h3>
-                  <p className="text-[11px] text-neutral-400">Strict Read-Only Integration Contract</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setShowErtmacBridgeModal(false)}
-                className="text-neutral-400 hover:text-white p-1 rounded-lg hover:bg-neutral-800"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-3 text-xs text-neutral-300">
-              <div className="p-3 rounded-xl bg-[#151c2c] border border-[#222d44] space-y-2">
-                <div className="font-mono text-amber-400 font-semibold text-[11px] uppercase tracking-wider">
-                  Operational Safety Boundary
-                </div>
-                <p className="leading-relaxed text-neutral-300">
-                  NWIS sits strictly alongside Oil India's <strong>eRTMAC</strong> (real-time monitoring system). NWIS provides the missing <strong>institutional memory layer</strong> and depth-aware offset hazard correlation.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 font-mono text-[11px]">
-                <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 space-y-1">
-                  <div className="flex items-center gap-1.5 font-bold text-emerald-400">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Inbound (Read-Only)</span>
-                  </div>
-                  <p className="text-[10px] text-emerald-200/80 font-sans">
-                    Reads live state: <code className="text-white">GET /live-state/OIL-GLK-14</code> ({INITIAL_LIVE_TELEMETRY.depthMD}m MD, formation, ROP, torque, mud wt).
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-800/60 text-rose-300 space-y-1">
-                  <div className="flex items-center gap-1.5 font-bold text-rose-400">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Outbound (Zero Control)</span>
-                  </div>
-                  <p className="text-[10px] text-rose-200/80 font-sans">
-                    Zero write commands to rig hardware or eRTMAC controls. Advisory and decision-support only.
-                  </p>
-                </div>
-              </div>
-
-              <div className="text-[11px] text-neutral-400 bg-neutral-900/60 p-3 rounded-xl border border-neutral-800 space-y-1">
-                <div className="font-mono text-white font-bold">PSU Deployment Specifications:</div>
-                <ul className="list-disc list-inside space-y-0.5 text-neutral-300 text-[11px]">
-                  <li>100% On-premise air-gapped containerized deployment.</li>
-                  <li>Local embedding models (no third-party cloud API dependencies).</li>
-                  <li>DGMS & OISD auditable decision and acknowledgement trails.</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2 pt-2 border-t border-[#1e273b]">
-              <button
-                onClick={() => setShowErtmacBridgeModal(false)}
-                className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold font-mono transition-colors"
-              >
-                Close Integration View
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    </header>
   );
 };
