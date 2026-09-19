@@ -24,6 +24,11 @@ interface AppState {
   stepSimulatedDepth: (delta: number) => void;
   isReplayActive: boolean;
   setReplayActive: (active: boolean) => void;
+
+  // AI Copilot Modal Drawer
+  isCopilotOpen: boolean;
+  setCopilotOpen: (open: boolean) => void;
+  toggleCopilot: () => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -32,6 +37,10 @@ export const useAppStore = create<AppState>((set) => ({
 
   activeWellId: 'well-glk-14',
   setActiveWellId: (id) => set({ activeWellId: id }),
+
+  isCopilotOpen: false,
+  setCopilotOpen: (open) => set({ isCopilotOpen: open }),
+  toggleCopilot: () => set((state) => ({ isCopilotOpen: !state.isCopilotOpen })),
 
   alerts: [...MOCK_ALERTS],
   feedbackHistory: [...MOCK_FEEDBACK],

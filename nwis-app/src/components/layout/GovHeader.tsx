@@ -1,167 +1,117 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { 
   Search, 
-  ShieldCheck, 
-  HardHat, 
-  Bell,
-  Sparkles
+  Bell, 
+  ChevronDown,
+  Layers,
+  Radio,
+  LogOut
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
-import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
 import { UserRole } from '@/lib/data/types';
-import { AskNwisDrawer } from '@/components/common/AskNwisDrawer';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 export const GovHeader: React.FC = () => {
-  const { currentRole, setRole, activeWellId, setActiveWellId, alerts } = useAppStore();
-  const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
+  const { currentRole, setRole, activeWellId, setActiveWellId, alerts, setCopilotOpen } = useAppStore();
   
-  // Unread high-priority notifications only
   const unreadAlerts = alerts.filter((a) => a.status === 'new').length;
 
   return (
-    <>
-      <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#11141a] sticky top-0 z-40 transition-colors">
+    <header className="h-16 border-b border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#11141a] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0 transition-colors z-30">
+      
+      {/* Left: Clean Search Bar with ⌘ + K that launches AI Copilot */}
+      <div className="flex-1 max-w-md">
+        <div 
+          onClick={() => setCopilotOpen(true)}
+          className="flex items-center justify-between px-3 py-2 text-xs text-neutral-400 dark:text-neutral-500 bg-neutral-50/90 dark:bg-neutral-900/90 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 border border-neutral-200/80 dark:border-neutral-800 rounded-xl transition-all cursor-pointer shadow-2xs group"
+        >
+          <div className="flex items-center gap-2.5 truncate">
+            <Search className="w-3.5 h-3.5 text-neutral-400 group-hover:text-amber-600 transition-colors shrink-0" />
+            <span className="text-neutral-600 dark:text-neutral-400 font-normal truncate">
+              Ask AI or search 1,690 offset well logs...
+            </span>
+          </div>
+          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 dark:text-neutral-500 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shrink-0">
+            ⌘ K
+          </kbd>
+        </div>
+      </div>
+
+      {/* Right: Operational Controls, AI Ask Button & Profile */}
+      <div className="flex items-center gap-2 sm:gap-3">
         
-        {/* ─── Clean Telemetry Ticker Ribbon ─── */}
-        <div className="bg-neutral-950 text-neutral-300 px-4 py-1.5 text-[11px] font-mono border-b border-neutral-800 flex flex-wrap items-center justify-between gap-3">
-          
-          {/* Connection Status */}
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-950/90 text-emerald-400 border border-emerald-800/80 text-[10px] font-bold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              WITSML 380ms
-            </span>
-            <span className="text-neutral-600 hidden sm:inline">•</span>
-            <span className="text-neutral-300 font-medium hidden sm:inline">
-              OIL Rig Live Stream
-            </span>
-          </div>
-
-          {/* Clean Telemetry Readouts (No visual clutter, balanced spacing) */}
-          <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto text-[11px]">
-            <div className="flex items-center gap-1.5">
-              <span className="text-neutral-500">DEPTH</span>
-              <strong className="text-white font-bold">{INITIAL_LIVE_TELEMETRY.depthMD}m</strong>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-neutral-500">ROP</span>
-              <strong className="text-amber-400 font-bold">{INITIAL_LIVE_TELEMETRY.rop} m/h</strong>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-neutral-500">TORQUE</span>
-              <strong className="text-white font-bold">{INITIAL_LIVE_TELEMETRY.torque} kft-lb</strong>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-neutral-500">MUD WT</span>
-              <strong className="text-emerald-400 font-bold">{INITIAL_LIVE_TELEMETRY.mudWeightIn} ppg</strong>
-            </div>
-          </div>
-
-          {/* OIL Sovereignty */}
-          <div className="hidden lg:flex items-center gap-1.5 text-neutral-400 text-[10px]">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Oil India Limited • eRTMAC v4.1</span>
-          </div>
+        {/* Quick Well Selector */}
+        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/80 text-xs font-mono">
+          <Layers className="w-3.5 h-3.5 text-amber-600" />
+          <select
+            value={activeWellId}
+            onChange={(e) => setActiveWellId(e.target.value)}
+            className="bg-transparent text-neutral-800 dark:text-neutral-200 font-bold focus:outline-hidden cursor-pointer text-xs"
+          >
+            <option value="well-glk-14" className="bg-white dark:bg-neutral-900">OIL-GLK-14 (Geleki · Active)</option>
+            <option value="well-dgb-09" className="bg-white dark:bg-neutral-900">OIL-DGB-09 (Digboi · Active)</option>
+            <option value="well-khr-04" className="bg-white dark:bg-neutral-900">OIL-KHR-04 (Kharsang · Standby)</option>
+          </select>
         </div>
 
-        {/* ─── Main Action Bar: Search, Rig, Role & Notifications ─── */}
-        <div className="px-4 py-2.5 flex items-center justify-between gap-4">
-          
-          {/* Left: Clean Search Trigger (Opens Ask NWIS) */}
-          <button
-            type="button"
-            onClick={() => setIsCopilotOpen(true)}
-            className="flex-1 max-w-md flex items-center justify-between px-3.5 py-1.5 text-xs text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-900/90 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 border border-neutral-200 dark:border-neutral-800 rounded-xl transition-all text-left shadow-2xs group cursor-pointer"
+        {/* Live eRTMAC Stream Badge */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 text-[11px] font-mono">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-emerald-800 dark:text-emerald-300 font-bold">WITSML Live:</span>
+          <span className="text-emerald-900 dark:text-emerald-200">380ms</span>
+        </div>
+
+        {/* Notifications Bell */}
+        <Link
+          href="/alerts"
+          title="Notifications"
+          className="relative p-2 rounded-xl text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+        >
+          <Bell className="w-4 h-4" />
+          {unreadAlerts > 0 && (
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#11141a]" />
+          )}
+        </Link>
+
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
+        {/* User Profile Chip & Logout */}
+        <div className="flex items-center gap-2 pl-2 ml-1 border-l border-neutral-200/80 dark:border-neutral-800">
+          <Link
+            href="/login"
+            title="Switch User Profile"
+            className="flex items-center gap-2 group cursor-pointer"
           >
-            <div className="flex items-center gap-2.5">
-              <Search className="w-3.5 h-3.5 text-neutral-400 group-hover:text-amber-600 transition-colors" />
-              <span className="text-neutral-600 dark:text-neutral-300 group-hover:text-neutral-950 dark:group-hover:text-white">
-                Ask NWIS Copilot or search archives...
-              </span>
+            <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 flex items-center justify-center text-amber-900 dark:text-amber-300 font-bold text-xs shrink-0 overflow-hidden shadow-2xs font-mono group-hover:border-amber-500 transition-colors">
+              {currentRole === 'operations_manager' ? 'DD' : currentRole === 'field_engineer' ? 'PB' : 'MS'}
             </div>
-            <kbd className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 dark:text-neutral-400 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md">
-              ⌘K
-            </kbd>
-          </button>
-
-          {/* Right: Uncluttered Control Group */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            
-            {/* Rig Selector */}
-            <div className="hidden sm:flex items-center gap-1.5 text-xs font-mono">
-              <span className="text-neutral-400 text-[11px]">Rig:</span>
-              <select
-                value={activeWellId}
-                onChange={(e) => setActiveWellId(e.target.value)}
-                className="border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 hover:border-neutral-300 dark:hover:border-neutral-600 rounded-lg px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-neutral-100 cursor-pointer focus:outline-hidden"
-              >
-                <option value="well-glk-14">Geleki-14 (Active)</option>
-                <option value="well-dgb-09">Digboi-09 (Active)</option>
-                <option value="well-khr-04">Kharsang-04 (Standby)</option>
-                <option value="well-pgb-01">Pengri-01 (Drilling)</option>
-              </select>
-            </div>
-
-            {/* Role Switcher Pill & Dropdown */}
-            <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-1">
-              <HardHat className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-              <div className="flex flex-col">
-                <span className="text-[9px] font-mono uppercase text-neutral-400 leading-none">Role</span>
-                <select
-                  value={currentRole}
-                  onChange={(e) => setRole(e.target.value as UserRole)}
-                  className="bg-transparent text-xs font-bold text-neutral-900 dark:text-neutral-100 cursor-pointer focus:outline-hidden font-sans py-0.5"
-                  title="Switch User Role View"
-                >
-                  <option value="operations_manager">Operations Manager</option>
-                  <option value="field_engineer">Field Engineer</option>
-                  <option value="admin">PSU Auditor</option>
-                </select>
+            <div className="hidden xl:flex flex-col text-left">
+              <div className="text-xs font-bold text-neutral-900 dark:text-white leading-tight group-hover:text-amber-600 transition-colors">
+                {currentRole === 'operations_manager' ? 'D. Deka' : currentRole === 'field_engineer' ? 'P. Bora' : 'M. Saikia'}
+              </div>
+              <div className="text-[10px] text-neutral-400 dark:text-neutral-500 leading-tight">
+                {currentRole === 'operations_manager' ? 'Drilling Supt' : currentRole === 'field_engineer' ? 'Rig Engineer' : 'PSU Auditor'}
               </div>
             </div>
+          </Link>
 
-            {/* Theme Toggle (Daylight / Dark Control Room) */}
-            <ThemeToggle />
-
-            {/* Notification Bell (Restrained & Purposeful) */}
-            <Link
-              href="/alerts"
-              title={unreadAlerts > 0 ? `${unreadAlerts} active advisories` : 'No unread advisories'}
-              className="relative p-2 rounded-xl text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors border border-neutral-200/60 dark:border-neutral-700 bg-white dark:bg-neutral-900"
-            >
-              <Bell className="w-4 h-4" />
-              {unreadAlerts > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[10px] font-mono font-bold text-white ring-2 ring-white dark:ring-neutral-900">
-                  {unreadAlerts}
-                </span>
-              )}
-            </Link>
-
-            {/* Quick Copilot Trigger Button */}
-            <button
-              type="button"
-              onClick={() => setIsCopilotOpen(true)}
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-2xs transition-colors"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Ask NWIS</span>
-            </button>
-
-          </div>
-
+          {/* Explicit Logout Button */}
+          <Link
+            href="/login"
+            title="Sign out of Console"
+            className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors ml-0.5"
+            aria-label="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </Link>
         </div>
 
-      </header>
+      </div>
 
-      {/* Slide-Out AI Copilot Drawer */}
-      <AskNwisDrawer
-        isOpen={isCopilotOpen}
-        onClose={() => setIsCopilotOpen(false)}
-      />
-    </>
+    </header>
   );
 };
