@@ -56,26 +56,26 @@ export const LandingNav: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Section Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-neutral-600 dark:text-neutral-300">
-            <a href="#features" className="hover:text-neutral-950 dark:hover:text-white transition-colors">
-              Features
-            </a>
-            <a href="#replay-demo" className="hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-1">
+          {/* Desktop Demo Module Links */}
+          <nav className="hidden lg:flex items-center gap-5 text-xs font-mono font-bold text-neutral-600 dark:text-neutral-300">
+            <Link href="/dashboard" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+              Fleet Cockpit
+            </Link>
+            <Link href="/replay" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors flex items-center gap-1">
               <span>Well Replay</span>
-              <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-bold border border-amber-200 dark:border-amber-800">
+              <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 font-bold border border-amber-200 dark:border-amber-800">
                 Demo
               </span>
-            </a>
-            <a href="#decay-index" className="hover:text-neutral-950 dark:hover:text-white transition-colors">
+            </Link>
+            <Link href="/analogs" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+              Lithology Analogs
+            </Link>
+            <Link href="/decay-index" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
               Memory Decay
-            </a>
-            <a href="#architecture" className="hover:text-neutral-950 dark:hover:text-white transition-colors">
-              PSU Architecture
-            </a>
-            <a href="#faq" className="hover:text-neutral-950 dark:hover:text-white transition-colors">
-              Technical Q&A
-            </a>
+            </Link>
+            <Link href="/admin/ingestion" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+              Ingestion Audit
+            </Link>
           </nav>
 
           {/* Action CTAs */}
