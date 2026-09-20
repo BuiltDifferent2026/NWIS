@@ -150,20 +150,16 @@ export default function AnalogsPage() {
         ]}
       />
 
-      {/* ─── Vibrant Header ─── */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/80">
+      {/* ─── Header ─── */}
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/40 text-blue-700 dark:text-blue-400 font-mono font-bold text-xs rounded-xs">
-                GEOSPATIAL ENGINE
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+              <span className="gov-tag gov-tag-grey">GEOSPATIAL ENGINE</span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                 Offset Well Geospatial &amp; Stratigraphic Correlation
               </h1>
-              <span className="px-2 py-0.5 bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-400 font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-blue">
                 SIMILARITY ≠ DISTANCE
               </span>
             </div>
@@ -173,32 +169,32 @@ export default function AnalogsPage() {
           </div>
 
           <div className="flex items-center gap-2 font-mono text-xs">
-            <span className="px-2.5 py-1 bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-bold rounded-xs">
+            <span className="gov-tag gov-tag-green">
               ✓ Multi-Vector Calibrated
             </span>
           </div>
         </div>
 
-        {/* 4-Metric Color Strip */}
+        {/* 4-Metric Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 font-mono">
-          <div className="p-2.5 bg-blue-500/10 border border-blue-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-blue-700 dark:text-blue-300 font-bold uppercase">TARGET FORMATION</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground font-bold uppercase">TARGET FORMATION</div>
             <div className="text-base font-bold text-foreground truncate">{activeCase.targetFormation.split('(')[0]}</div>
             <div className="text-[10px] text-muted-foreground font-sans">{activeCase.targetField}</div>
           </div>
-          <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-emerald-700 dark:text-emerald-300 font-bold uppercase">COMPOSITE SIMILARITY</div>
-            <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400">{activeCase.matchScore}%</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground font-bold uppercase">COMPOSITE SIMILARITY</div>
+            <div className="text-2xl font-bold text-[#1d70b8] dark:text-[#60a5fa]">{activeCase.matchScore}%</div>
             <div className="text-[10px] text-muted-foreground font-sans">5 Subsurface Vectors</div>
           </div>
-          <div className="p-2.5 bg-purple-500/10 border border-purple-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-purple-700 dark:text-purple-300 font-bold uppercase">ANALOG SEPARATION</div>
-            <div className="text-base font-bold text-purple-700 dark:text-purple-300 truncate">{activeCase.analogDistanceKm.split('•')[0]}</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground font-bold uppercase">ANALOG SEPARATION</div>
+            <div className="text-base font-bold text-foreground truncate">{activeCase.analogDistanceKm.split('•')[0]}</div>
             <div className="text-[10px] text-muted-foreground font-sans">Non-local geological twin</div>
           </div>
-          <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-amber-700 dark:text-amber-300 font-bold uppercase">VERIFIED PROTOCOLS</div>
-            <div className="text-base font-bold text-amber-700 dark:text-amber-400">4 Mitigations</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground font-bold uppercase">VERIFIED PROTOCOLS</div>
+            <div className="text-base font-bold text-foreground">4 Mitigations</div>
             <div className="text-[10px] text-muted-foreground font-sans">Proven zero loss outcome</div>
           </div>
         </div>
@@ -214,14 +210,14 @@ export default function AnalogsPage() {
               onClick={() => setSelectedCaseId(c.id)}
               className={`p-3 text-left border rounded-xs transition-all cursor-pointer font-sans ${
                 isSelected
-                  ? 'bg-gradient-to-r from-blue-600/15 via-card to-card border-2 border-blue-600 shadow-sm'
+                  ? 'bg-secondary/70 border-2 border-[#1d70b8] shadow-xs'
                   : 'bg-card border-border hover:bg-secondary/40 text-muted-foreground hover:text-foreground'
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs text-foreground">{c.targetFormation.split('(')[0].trim()}</span>
                 <span className={`text-[10px] font-mono px-2 py-0.5 font-bold rounded-xs ${
-                  isSelected ? 'bg-blue-600 text-white' : 'bg-secondary text-muted-foreground'
+                  isSelected ? 'bg-[#1d70b8] text-white' : 'bg-secondary text-muted-foreground'
                 }`}>
                   {c.matchScore}% MATCH
                 </span>
@@ -247,7 +243,7 @@ export default function AnalogsPage() {
                 </h2>
               </div>
               <div className="text-right font-mono">
-                <span className="text-xl font-black text-blue-700 dark:text-blue-400">{activeCase.matchScore}%</span>
+                <span className="text-xl font-bold text-[#1d70b8] dark:text-[#60a5fa]">{activeCase.matchScore}%</span>
                 <span className="text-[10px] text-muted-foreground block">Composite Match</span>
               </div>
             </div>
@@ -255,19 +251,19 @@ export default function AnalogsPage() {
             {/* Target vs Analog Header */}
             <div className="grid grid-cols-2 gap-2 text-xs font-mono p-3 bg-secondary/60 border border-border rounded-xs">
               <div className="space-y-0.5">
-                <span className="text-[10px] text-blue-700 dark:text-blue-400 uppercase font-bold block">Active Drilling Horizon</span>
+                <span className="text-[10px] text-muted-foreground uppercase font-bold block">Active Drilling Horizon</span>
                 <strong className="text-foreground text-sm">{activeCase.targetField}</strong>
                 <div className="text-muted-foreground text-[11px]">{activeCase.targetDepth}</div>
               </div>
               <div className="border-l border-border pl-3 space-y-0.5">
-                <span className="text-[10px] text-purple-700 dark:text-purple-400 uppercase font-bold block">Best Subsurface Analog</span>
+                <span className="text-[10px] text-muted-foreground uppercase font-bold block">Best Subsurface Analog</span>
                 <strong className="text-foreground text-sm">{activeCase.analogFormation}</strong>
                 <div className="text-muted-foreground text-[11px]">{activeCase.analogDistanceKm}</div>
               </div>
             </div>
 
             {/* Geological Rationale */}
-            <div className="p-3 bg-blue-500/10 border-l-4 border-l-blue-600 border border-blue-500/20 rounded-xs text-xs space-y-1.5 shadow-xs">
+            <div className="gov-callout gov-callout-fact text-xs space-y-1.5">
               <div className="font-bold font-mono text-[10px] uppercase text-blue-700 dark:text-blue-300">
                 Stratigraphic Correlation Rationale
               </div>
@@ -276,7 +272,7 @@ export default function AnalogsPage() {
               </p>
             </div>
 
-            {/* Vector Table with Colored Progress Bars */}
+            {/* Vector Table */}
             <div className="space-y-2">
               <div className="text-[10px] font-mono uppercase font-bold text-muted-foreground">
                 Petrophysical &amp; Geomechanical Alignment Matrix
@@ -286,7 +282,7 @@ export default function AnalogsPage() {
                   <div key={vec.label} className="p-2.5 bg-card border border-border rounded-xs space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-foreground font-sans">{vec.label}</span>
-                      <span className="font-bold text-blue-700 dark:text-blue-400">{vec.matchPercent}%</span>
+                      <span className="font-bold text-foreground">{vec.matchPercent}%</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-[11px] text-muted-foreground">
                       <div>Target: <strong className="text-foreground">{vec.targetValue}</strong></div>
@@ -294,7 +290,7 @@ export default function AnalogsPage() {
                     </div>
                     <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"
+                        className="h-full bg-[#1d70b8] rounded-full"
                         style={{ width: `${vec.matchPercent}%` }}
                       />
                     </div>
@@ -319,8 +315,8 @@ export default function AnalogsPage() {
 
             <div className="space-y-2.5 text-xs font-sans">
               {/* Mud Weight */}
-              <div className="p-3 bg-cyan-500/10 border-l-4 border-l-cyan-600 border border-cyan-500/20 rounded-xs space-y-1 shadow-xs">
-                <div className="font-bold font-mono text-[10px] uppercase text-cyan-700 dark:text-cyan-300">
+              <div className="p-3 bg-secondary/40 border border-border rounded-xs space-y-1">
+                <div className="font-bold font-mono text-[10px] uppercase text-muted-foreground">
                   Proven Mud Weight Window
                 </div>
                 <p className="text-foreground font-mono font-bold text-sm">
@@ -329,8 +325,8 @@ export default function AnalogsPage() {
               </div>
 
               {/* Pre-emptive Mitigation */}
-              <div className="p-3 bg-purple-500/10 border-l-4 border-l-purple-600 border border-purple-500/20 rounded-xs space-y-1 shadow-xs">
-                <div className="font-bold font-mono text-[10px] uppercase text-purple-700 dark:text-purple-300">
+              <div className="gov-callout gov-callout-mitigation space-y-1">
+                <div className="font-bold font-mono text-[10px] uppercase text-emerald-700 dark:text-emerald-400">
                   Pre-emptive Mitigation Program
                 </div>
                 <p className="text-foreground leading-relaxed text-xs">
@@ -339,8 +335,8 @@ export default function AnalogsPage() {
               </div>
 
               {/* Hydraulics */}
-              <div className="p-3 bg-amber-500/10 border-l-4 border-l-amber-500 border border-amber-500/20 rounded-xs space-y-1 shadow-xs">
-                <div className="font-bold font-mono text-[10px] uppercase text-amber-700 dark:text-amber-300">
+              <div className="p-3 bg-secondary/40 border border-border rounded-xs space-y-1">
+                <div className="font-bold font-mono text-[10px] uppercase text-muted-foreground">
                   Hydraulics &amp; Surge Pressure Rule
                 </div>
                 <p className="text-foreground leading-relaxed font-mono text-[11px]">
@@ -349,11 +345,11 @@ export default function AnalogsPage() {
               </div>
 
               {/* Verified Outcome */}
-              <div className="p-3 bg-emerald-500/10 border-l-4 border-l-emerald-600 border border-emerald-500/20 rounded-xs space-y-1 shadow-xs">
-                <div className="font-bold font-mono text-[10px] uppercase text-emerald-700 dark:text-emerald-300">
+              <div className="p-3 bg-secondary/40 border border-border rounded-xs space-y-1">
+                <div className="font-bold font-mono text-[10px] uppercase text-muted-foreground">
                   Verified Offset Outcome
                 </div>
-                <p className="text-foreground leading-relaxed font-semibold">
+                <p className="text-foreground leading-relaxed font-medium">
                   {activeCase.transferableLesson.verifiedOutcome}
                 </p>
               </div>
@@ -365,7 +361,7 @@ export default function AnalogsPage() {
               <div className="space-y-1">
                 {activeCase.provenanceCitations.map((cit) => (
                   <div key={cit.docRef} className="flex justify-between p-1.5 bg-secondary/50 rounded-xs text-muted-foreground">
-                    <span className="text-blue-700 dark:text-blue-300 font-bold">{cit.docRef}</span>
+                    <span className="text-foreground font-bold">{cit.docRef}</span>
                     <span className="text-foreground">{cit.well} ({cit.year})</span>
                   </div>
                 ))}
@@ -373,14 +369,14 @@ export default function AnalogsPage() {
             </div>
           </div>
 
-          <div className="p-3 bg-gradient-to-r from-emerald-500/15 via-card to-card border-2 border-emerald-500/40 rounded-xs flex items-center justify-between shadow-xs">
+          <div className="p-3 bg-secondary/40 border border-border rounded-xs flex items-center justify-between">
             <div>
               <div className="text-xs font-bold text-foreground">Ready to apply protocols?</div>
               <div className="text-[10px] text-muted-foreground">Synchronize with active rig telemetry</div>
             </div>
             <Link
               href="/operations"
-              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xs flex items-center gap-1.5 shadow-xs transition-colors"
+              className="gov-button text-xs flex items-center gap-1.5"
             >
               <span>Apply to OIL-GLK-14</span>
               <ArrowRight className="w-3.5 h-3.5" />

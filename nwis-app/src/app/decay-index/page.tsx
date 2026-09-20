@@ -124,19 +124,15 @@ export default function DecayIndexPage() {
       />
 
       {/* ─── Header ─── */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/80">
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="px-2 py-0.5 bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-400 font-mono font-bold text-xs rounded-xs">
-                ARCHIVAL PRESERVATION
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+              <span className="gov-tag gov-tag-grey">ARCHIVAL PRESERVATION</span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                 Institutional Memory Decay Index
               </h1>
-              <span className="px-2 py-0.5 bg-rose-500/15 border border-rose-500/30 text-rose-700 dark:text-rose-400 font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-red">
                 130+ YR REPOSITORY AUDIT
               </span>
             </div>
@@ -146,36 +142,36 @@ export default function DecayIndexPage() {
           </div>
 
           <div className="flex items-center gap-2 font-mono text-xs">
-            <span className="px-2.5 py-1 bg-blue-500/15 border border-blue-500/30 text-blue-700 dark:text-blue-400 font-bold rounded-xs">
+            <span className="gov-tag gov-tag-blue">
               🏛 Digboi · Geleki · Rudrasagar · Kharsang · Lakwa
             </span>
           </div>
         </div>
 
-        {/* Top Summary Metrics in 4 Rich Gradient Cards */}
+        {/* Top Summary Metrics in 4 Clean Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 font-mono">
-          <div className="p-3 bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-blue-700 dark:text-blue-300 uppercase font-bold">LEGACY WELLS AUDITED</div>
-            <div className="text-2xl font-black text-foreground">1,636</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">LEGACY WELLS AUDITED</div>
+            <div className="text-2xl font-bold text-foreground">1,636</div>
             <div className="text-[10px] text-muted-foreground font-sans">5 Major Assam Fields</div>
           </div>
 
-          <div className="p-3 bg-gradient-to-br from-rose-500/10 to-transparent border border-rose-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-rose-700 dark:text-rose-300 uppercase font-bold">PAPER ONLY (HIGH RISK)</div>
-            <div className="text-2xl font-black text-rose-700 dark:text-rose-400">{totalPhysicalWCRs}</div>
-            <div className="text-[10px] text-rose-600 dark:text-rose-400 font-sans font-medium">Zero digital backup</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">PAPER ONLY (HIGH RISK)</div>
+            <div className="text-2xl font-bold text-destructive">{totalPhysicalWCRs}</div>
+            <div className="text-[10px] text-muted-foreground font-sans">Zero digital backup</div>
           </div>
 
-          <div className="p-3 bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-amber-700 dark:text-amber-300 uppercase font-bold">UNINDEXED SCANS</div>
-            <div className="text-2xl font-black text-amber-700 dark:text-amber-400">{totalScannedPDFs}</div>
-            <div className="text-[10px] text-amber-700 dark:text-amber-400 font-sans font-medium">Needs OCR vectorization</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">UNINDEXED SCANS</div>
+            <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">{totalScannedPDFs}</div>
+            <div className="text-[10px] text-muted-foreground font-sans">Needs OCR vectorization</div>
           </div>
 
-          <div className="p-3 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-emerald-700 dark:text-emerald-300 uppercase font-bold">FULLY DIGITIZED</div>
-            <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400">{totalStructuredWCRs}</div>
-            <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-sans font-medium">Indexed in NWIS graph</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">FULLY DIGITIZED</div>
+            <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{totalStructuredWCRs}</div>
+            <div className="text-[10px] text-muted-foreground font-sans">Indexed in NWIS graph</div>
           </div>
         </div>
       </div>
@@ -197,7 +193,7 @@ export default function DecayIndexPage() {
             <select
               value={filterSeverity}
               onChange={(e) => setFilterSeverity(e.target.value)}
-              className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+              className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#1d70b8] cursor-pointer"
             >
               <option value="all">All Fields (5)</option>
               <option value="critical">Critical Decay (&ge;80)</option>

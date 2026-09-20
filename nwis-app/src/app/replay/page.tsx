@@ -298,19 +298,15 @@ export default function WellReplayPage() {
     <div className="space-y-4 max-w-[1520px] mx-auto pb-12 font-sans">
 
       {/* ─── Top Header & Scenario Selector ─── */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/80">
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="px-2 py-0.5 bg-amber-500/15 border border-amber-500/40 text-amber-700 dark:text-amber-400 font-mono font-bold text-xs rounded-xs">
-                SIMULATION BENCHMARK
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+              <span className="gov-tag gov-tag-grey">SIMULATION BENCHMARK</span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                 Historical Well Replay Simulator
               </h1>
-              <span className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/30 text-blue-700 dark:text-blue-400 font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-blue">
                 FALSIFIABLE 75m LOOKAHEAD
               </span>
             </div>
@@ -320,7 +316,7 @@ export default function WellReplayPage() {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="px-2 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-bold rounded-xs">
+            <span className="gov-tag gov-tag-green">
               ✓ 4 Scenarios Calibrated
             </span>
           </div>
@@ -337,25 +333,20 @@ export default function WellReplayPage() {
                 onClick={() => handleScenarioChange(sc.id)}
                 className={`p-3 text-left border rounded-xs transition-all cursor-pointer relative ${
                   isSelected
-                    ? 'bg-gradient-to-br from-[#ff9933]/15 via-card to-card border-2 border-[#ff9933] shadow-md ring-1 ring-[#ff9933]'
-                    : 'bg-card/70 border-border hover:border-border hover:bg-secondary/40'
+                    ? 'bg-secondary/70 border-2 border-[#1d70b8] shadow-xs'
+                    : 'bg-card border-border hover:bg-secondary/40 text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="font-mono font-bold text-xs text-foreground">{sc.name}</span>
-                  <span className={`text-[9px] font-mono px-1.5 py-0.5 font-bold rounded-xs ${
-                    sc.id === 'well-glk-07' ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400' :
-                    sc.id === 'well-glk-03' ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400' :
-                    sc.id === 'well-glk-09' ? 'bg-purple-500/20 text-purple-700 dark:text-purple-400' :
-                    'bg-blue-500/20 text-blue-700 dark:text-blue-400'
-                  }`}>
+                  <span className="gov-tag gov-tag-grey text-[9px]">
                     {sc.spudYear}
                   </span>
                 </div>
                 <div className="text-xs font-bold text-foreground truncate">{sc.eventType}</div>
                 <div className="text-[10px] text-muted-foreground mt-1 flex justify-between font-mono">
                   <span>{sc.field} · {sc.formation.split(' ')[0]}</span>
-                  <span className="text-rose-600 dark:text-rose-400 font-bold">{sc.historicalNptHours}h NPT</span>
+                  <span className="text-foreground font-bold">{sc.historicalNptHours}h NPT</span>
                 </div>
               </button>
             );
@@ -370,15 +361,15 @@ export default function WellReplayPage() {
         <div className="xl:col-span-3 flex flex-col gap-3">
 
           {/* Current Depth Readout */}
-          <div className="gov-panel space-y-3 bg-gradient-to-br from-card via-card to-secondary/30">
+          <div className="gov-panel space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] text-muted-foreground uppercase font-bold font-mono">
                 Bit Position
               </span>
               <span className={`px-2 py-0.5 text-xs font-bold font-mono rounded-xs ${
-                statusPhase === 'incident' ? 'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30 animate-pulse' :
-                statusPhase === 'warning' ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 animate-pulse' :
-                'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
+                statusPhase === 'incident' ? 'bg-destructive/15 text-destructive border border-destructive/30' :
+                statusPhase === 'warning' ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30' :
+                'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
               }`}>
                 ● {statusPhase.toUpperCase()}
               </span>
@@ -391,9 +382,9 @@ export default function WellReplayPage() {
               <div className="text-xs text-muted-foreground font-mono font-bold mt-0.5">METERS MD</div>
             </div>
 
-            {/* Linear Depth Progress with Multi-Color Bands */}
+            {/* Linear Depth Progress */}
             <div className="space-y-1.5 font-mono">
-              <div className="relative h-3 bg-secondary border border-border overflow-hidden rounded-xs">
+              <div className="relative h-2.5 bg-secondary border border-border overflow-hidden rounded-xs">
                 <div
                   className="absolute top-0 bottom-0 w-1 bg-amber-500 z-10"
                   style={{ left: `${((scenario.alertTriggerDepth - scenario.startDepth) / (scenario.maxDepth - scenario.startDepth)) * 100}%` }}
@@ -404,28 +395,28 @@ export default function WellReplayPage() {
                 />
                 <div
                   className={`h-full transition-all duration-150 ${
-                    statusPhase === 'incident' ? 'bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-600' :
-                    statusPhase === 'warning' ? 'bg-gradient-to-r from-emerald-500 to-amber-500' :
-                    'bg-emerald-500'
+                    statusPhase === 'incident' ? 'bg-destructive' :
+                    statusPhase === 'warning' ? 'bg-amber-500' :
+                    'bg-[#1d70b8]'
                   }`}
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
               <div className="flex justify-between text-[9px] text-muted-foreground font-mono">
                 <span>{scenario.startDepth}m</span>
-                <span className="text-amber-700 dark:text-amber-400 font-bold">⚡ ADV {scenario.alertTriggerDepth}m</span>
-                <span className="text-rose-600 dark:text-rose-400 font-bold">⚠ {scenario.historicalIncidentDepth}m</span>
+                <span className="text-amber-700 dark:text-amber-400 font-bold">ADV {scenario.alertTriggerDepth}m</span>
+                <span className="text-destructive font-bold">HAZ {scenario.historicalIncidentDepth}m</span>
                 <span>{scenario.maxDepth}m</span>
               </div>
             </div>
 
             {/* Distance to Incident Indicator */}
             <div className={`p-3 border rounded-xs text-center ${
-              isPastIncident ? 'bg-rose-500/10 border-rose-500/40 text-rose-700 dark:text-rose-300' :
-              isAlertFired ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-300' :
-              'bg-emerald-500/10 border-emerald-500/40 text-emerald-700 dark:text-emerald-300'
+              isPastIncident ? 'bg-secondary/60 border-border text-foreground' :
+              isAlertFired ? 'bg-amber-500/10 border-amber-500/30 text-amber-800 dark:text-amber-300' :
+              'bg-secondary/40 border-border text-foreground'
             }`}>
-              <div className="text-[10px] uppercase font-bold font-mono">
+              <div className="text-[10px] uppercase font-bold font-mono text-muted-foreground">
                 Δ to Historical Hazard
               </div>
               <div className="text-2xl font-black font-mono tabular-nums">
@@ -434,8 +425,8 @@ export default function WellReplayPage() {
                   : distanceToIncident.toFixed(1)}
                 <span className="text-xs font-normal ml-1">m</span>
               </div>
-              <div className="text-[10px] font-sans mt-0.5 font-medium">
-                {isPastIncident ? 'Past historical incident depth' : isAlertFired ? '⚡ 75m Proactive Lookahead Active' : '✓ Safe pre-hazard window'}
+              <div className="text-[10px] font-sans mt-0.5 text-muted-foreground">
+                {isPastIncident ? 'Past historical incident depth' : isAlertFired ? '⚡ 75m Proactive Lookahead Active' : 'Safe pre-hazard window'}
               </div>
             </div>
           </div>
@@ -449,9 +440,9 @@ export default function WellReplayPage() {
             <div className="space-y-1.5 font-mono text-xs">
               {[
                 { name: 'Overburden / Alluvium', depth: `${scenario.startDepth - 200}–${scenario.startDepth}m`, color: '#64748b' },
-                { name: scenario.formation.split(' ').slice(0, 2).join(' '), depth: `${scenario.startDepth}–${scenario.alertTriggerDepth}m`, color: '#2563eb' },
-                { name: '⚠ Hazard Interval', depth: `${scenario.alertTriggerDepth}–${scenario.historicalIncidentDepth}m`, color: '#f59e0b' },
-                { name: 'Lower Sub-Formation', depth: `${scenario.historicalIncidentDepth}–${scenario.maxDepth}m`, color: '#e11d48' },
+                { name: scenario.formation.split(' ').slice(0, 2).join(' '), depth: `${scenario.startDepth}–${scenario.alertTriggerDepth}m`, color: '#1d70b8' },
+                { name: '⚠ Hazard Interval', depth: `${scenario.alertTriggerDepth}–${scenario.historicalIncidentDepth}m`, color: '#d97706' },
+                { name: 'Lower Sub-Formation', depth: `${scenario.historicalIncidentDepth}–${scenario.maxDepth}m`, color: '#475569' },
               ].map((zone, i) => {
                 const zoneStart = [scenario.startDepth - 200, scenario.startDepth, scenario.alertTriggerDepth, scenario.historicalIncidentDepth][i];
                 const zoneEnd = [scenario.startDepth, scenario.alertTriggerDepth, scenario.historicalIncidentDepth, scenario.maxDepth][i];
@@ -461,7 +452,7 @@ export default function WellReplayPage() {
                     key={i}
                     className={`flex items-center gap-2 p-2 border rounded-xs transition-colors ${
                       isActive
-                        ? 'border-blue-500 bg-blue-500/10 shadow-xs'
+                        ? 'border-[#1d70b8] bg-secondary'
                         : 'border-border bg-card'
                     }`}
                   >
@@ -479,7 +470,7 @@ export default function WellReplayPage() {
 
             <div className="pt-2 border-t border-border text-[10px] text-muted-foreground font-mono flex items-center justify-between">
               <span className="truncate">{scenario.sourceDocRef}</span>
-              <span className="px-1.5 py-0.5 bg-blue-500/15 text-blue-700 dark:text-blue-400 font-bold rounded-xs">{scenario.confidence}</span>
+              <span className="gov-tag gov-tag-blue text-[9px]">{scenario.confidence}</span>
             </div>
           </div>
 
@@ -492,7 +483,7 @@ export default function WellReplayPage() {
           <div className="gov-panel space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] text-muted-foreground uppercase font-bold font-mono flex items-center gap-1.5">
-                <Radio className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 animate-pulse" />
+                <Radio className="w-3.5 h-3.5 text-[#1d70b8] animate-pulse" />
                 Live Telemetry Playback
               </span>
               <span className="text-[10px] font-mono font-bold text-foreground">
@@ -518,29 +509,29 @@ export default function WellReplayPage() {
               {/* ROP */}
               <div className="p-2 bg-secondary/40 border border-border rounded-xs space-y-1">
                 <div className="flex justify-between text-[10px]">
-                  <span className="font-bold text-blue-700 dark:text-blue-300">PENETRATION RATE (m/h)</span>
+                  <span className="font-bold text-foreground">PENETRATION RATE (m/h)</span>
                   <span className="font-bold text-foreground">{simulatedROP.toFixed(1)} m/h</span>
                 </div>
                 <div className="h-6 bg-card border border-border/80 rounded-xs overflow-hidden">
-                  <SparkBar values={ropHistory} color="#2563eb" height={24} />
+                  <SparkBar values={ropHistory} color="#1d70b8" height={24} />
                 </div>
               </div>
 
               {/* Torque */}
               <div className="p-2 bg-secondary/40 border border-border rounded-xs space-y-1">
                 <div className="flex justify-between text-[10px]">
-                  <span className="font-bold text-purple-700 dark:text-purple-300">TORQUE (kft·lb)</span>
+                  <span className="font-bold text-foreground">TORQUE (kft·lb)</span>
                   <span className="font-bold text-foreground">{simulatedTorque.toFixed(1)} kft-lb</span>
                 </div>
                 <div className="h-6 bg-card border border-border/80 rounded-xs overflow-hidden">
-                  <SparkBar values={torqueHistory} color="#7c3aed" height={24} />
+                  <SparkBar values={torqueHistory} color="#475569" height={24} />
                 </div>
               </div>
 
               {/* SPP */}
               <div className="p-2 bg-secondary/40 border border-border rounded-xs space-y-1">
                 <div className="flex justify-between text-[10px]">
-                  <span className="font-bold text-amber-700 dark:text-amber-300">STANDPIPE PRESSURE (psi)</span>
+                  <span className="font-bold text-foreground">STANDPIPE PRESSURE (psi)</span>
                   <span className="font-bold text-foreground">{Math.round(simulatedSPP)} psi</span>
                 </div>
                 <div className="h-6 bg-card border border-border/80 rounded-xs overflow-hidden">
@@ -557,15 +548,15 @@ export default function WellReplayPage() {
               </div>
               <div className="h-2 bg-border rounded-xs overflow-hidden">
                 <div
-                  className={`h-full ${pitVolume < scenario.baseFlowRate * 0.6 ? 'bg-rose-600' : 'bg-emerald-500'}`}
+                  className={`h-full ${pitVolume < scenario.baseFlowRate * 0.6 ? 'bg-destructive' : 'bg-[#1d70b8]'}`}
                   style={{ width: `${Math.min(100, (pitVolume / scenario.baseFlowRate) * 100)}%` }}
                 />
               </div>
             </div>
           </div>
 
-          {/* Playback Control Deck with Colorful Buttons */}
-          <div className="gov-panel space-y-3 bg-gradient-to-r from-card to-secondary/30">
+          {/* Playback Control Deck */}
+          <div className="gov-panel space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2 font-mono">
               <div className="flex items-center gap-1.5">
                 <button
@@ -580,7 +571,7 @@ export default function WellReplayPage() {
                 <button
                   type="button"
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 rounded-xs cursor-pointer shadow-xs transition-colors"
+                  className="gov-button text-xs flex items-center gap-1.5 cursor-pointer"
                 >
                   {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                   <span>{isPlaying ? 'Pause' : 'Play Replay'}</span>
@@ -598,14 +589,14 @@ export default function WellReplayPage() {
                 <button
                   type="button"
                   onClick={() => setCurrentDepth((p) => Math.max(scenario.startDepth, Math.round((p - 10) * 10) / 10))}
-                  className="px-2 py-1 bg-secondary hover:bg-border border border-border text-xs cursor-pointer rounded-xs"
+                  className="px-2 py-1 bg-secondary hover:bg-border border border-border text-xs cursor-pointer rounded-xs font-mono"
                 >
                   −10m
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentDepth((p) => Math.min(scenario.maxDepth, Math.round((p + 10) * 10) / 10))}
-                  className="px-2 py-1 bg-secondary hover:bg-border border border-border text-xs cursor-pointer rounded-xs"
+                  className="px-2 py-1 bg-secondary hover:bg-border border border-border text-xs cursor-pointer rounded-xs font-mono"
                 >
                   +10m
                 </button>
@@ -621,7 +612,7 @@ export default function WellReplayPage() {
                     onClick={() => setPlaybackSpeed(spd)}
                     className={`px-2 py-1 text-xs border cursor-pointer font-bold rounded-xs ${
                       playbackSpeed === spd
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                        ? 'bg-[#1d70b8] text-white border-[#1d70b8]'
                         : 'bg-card text-muted-foreground border-border hover:text-foreground'
                     }`}
                   >
@@ -639,7 +630,7 @@ export default function WellReplayPage() {
                 step="0.5"
                 value={currentDepth}
                 onChange={(e) => setCurrentDepth(parseFloat(e.target.value))}
-                className="w-full h-2 rounded-xs appearance-none cursor-pointer accent-[#ff9933] bg-border"
+                className="w-full h-2 rounded-xs appearance-none cursor-pointer accent-[#1d70b8] bg-border"
               />
             </div>
           </div>
@@ -650,7 +641,7 @@ export default function WellReplayPage() {
         <div className="xl:col-span-4 flex flex-col gap-3">
 
           {/* Status Header */}
-          <div className="p-3.5 bg-gradient-to-br from-blue-500/15 via-blue-500/5 to-card border-l-4 border-l-blue-600 border border-blue-500/30 rounded-xs space-y-2 shadow-xs">
+          <div className="gov-callout gov-callout-fact space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold font-mono uppercase text-blue-700 dark:text-blue-300">
                 Replay Horizon Evaluation
@@ -671,11 +662,11 @@ export default function WellReplayPage() {
             </p>
           </div>
 
-          {/* NPT Comparison Box with Emerald Glow */}
-          <div className="p-3.5 bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-card border-2 border-emerald-500/40 rounded-xs flex items-center gap-3 shadow-xs">
-            <div className="w-14 h-14 bg-emerald-500/20 border border-emerald-500/40 rounded-xs flex flex-col items-center justify-center font-mono shrink-0">
-              <span className="text-xl font-black text-emerald-700 dark:text-emerald-400 leading-none">{scenario.historicalNptHours}h</span>
-              <span className="text-[9px] text-emerald-800 dark:text-emerald-300 font-bold">SAVED</span>
+          {/* NPT Comparison Box */}
+          <div className="p-3 bg-secondary/40 border border-border rounded-xs flex items-center gap-3">
+            <div className="w-12 h-12 bg-secondary border border-border rounded-xs flex flex-col items-center justify-center font-mono shrink-0">
+              <span className="text-lg font-bold text-foreground leading-none">{scenario.historicalNptHours}h</span>
+              <span className="text-[8px] text-muted-foreground font-bold uppercase">SAVED</span>
             </div>
             <div className="text-xs font-sans">
               <div className="font-bold text-foreground text-sm">₹14.8 Cr Avoided Rig Loss</div>
@@ -693,7 +684,7 @@ export default function WellReplayPage() {
             </div>
 
             {/* 1. Fact */}
-            <div className="p-2.5 bg-blue-500/10 border-l-4 border-l-blue-600 border border-blue-500/20 rounded-xs text-xs space-y-1">
+            <div className="gov-callout gov-callout-fact text-xs space-y-1">
               <div className="font-bold font-mono uppercase text-blue-700 dark:text-blue-300 text-[10px]">
                 1. Observed Historical Fact ({scenario.spudYear})
               </div>
@@ -701,7 +692,7 @@ export default function WellReplayPage() {
             </div>
 
             {/* 2. Estimate */}
-            <div className="p-2.5 bg-amber-500/10 border-l-4 border-l-amber-500 border border-amber-500/20 rounded-xs text-xs space-y-1">
+            <div className="gov-callout gov-callout-risk text-xs space-y-1">
               <div className="font-bold font-mono uppercase text-amber-700 dark:text-amber-400 text-[10px]">
                 2. Model-Estimated Risk
               </div>
@@ -709,7 +700,7 @@ export default function WellReplayPage() {
             </div>
 
             {/* 3. Mitigation */}
-            <div className="p-2.5 bg-emerald-500/10 border-l-4 border-l-emerald-600 border border-emerald-500/20 rounded-xs text-xs space-y-1">
+            <div className="gov-callout gov-callout-mitigation text-xs space-y-1">
               <div className="font-bold font-mono uppercase text-emerald-700 dark:text-emerald-400 text-[10px]">
                 3. Engineering Mitigation
               </div>
@@ -717,8 +708,8 @@ export default function WellReplayPage() {
             </div>
 
             {/* Disconfirming safe evidence */}
-            <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xs text-[11px] font-sans text-foreground">
-              <strong className="text-emerald-700 dark:text-emerald-400">Disconfirming safe evidence:</strong> {scenario.cleanPassageEvidence}
+            <div className="p-2 bg-secondary/40 border border-border rounded-xs text-[11px] font-sans text-foreground">
+              <strong className="text-foreground">Disconfirming safe evidence:</strong> {scenario.cleanPassageEvidence}
             </div>
           </div>
 
@@ -727,14 +718,14 @@ export default function WellReplayPage() {
             <button
               type="button"
               onClick={() => setIsEvidenceOpen(true)}
-              className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xs flex-1 text-center cursor-pointer shadow-xs transition-colors"
+              className="gov-button-secondary text-xs flex-1 text-center cursor-pointer"
             >
               <FileText className="w-3.5 h-3.5 inline mr-1" />
               Inspect Archival Record
             </button>
             <Link
               href="/operations"
-              className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xs flex-1 text-center shadow-xs transition-colors"
+              className="gov-button text-xs flex-1 text-center"
             >
               Live Operations →
             </Link>

@@ -34,19 +34,15 @@ export default function AdminSourcesPage() {
       />
 
       {/* ─── Header ─── */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border/80">
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/40 text-blue-700 dark:text-blue-400 font-mono font-bold text-xs rounded-xs">
-                ARCHIVE REPOSITORY
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+              <span className="gov-tag gov-tag-grey">ARCHIVE REPOSITORY</span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                 Source Document &amp; Evidence Register
               </h1>
-              <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-green">
                 VERIFIABLE ARCHIVE
               </span>
             </div>
@@ -60,7 +56,7 @@ export default function AdminSourcesPage() {
             <select
               value={filterField}
               onChange={(e) => setFilterField(e.target.value)}
-              className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+              className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#1d70b8] cursor-pointer"
             >
               <option value="all">All Fields</option>
               <option value="geleki">Geleki Field</option>
@@ -102,17 +98,17 @@ export default function AdminSourcesPage() {
                   <td className="text-muted-foreground">{doc.dateRange}</td>
                   <td className="text-foreground font-bold">{doc.pageCount} pp</td>
                   <td>
-                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded-xs ${
+                    <span className={`gov-tag ${
                       doc.ingestionConfidence === 'STRUCTURED-HIGH' || doc.ingestionConfidence === 'OCR-HIGH'
-                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
+                        ? 'gov-tag-green'
                         : doc.ingestionConfidence === 'OCR-MEDIUM'
-                        ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30'
-                        : 'bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/30'
+                        ? 'gov-tag-amber'
+                        : 'gov-tag-red'
                     }`}>
                       {doc.ingestionConfidence}
                     </span>
                   </td>
-                  <td className="font-bold text-amber-700 dark:text-amber-400">{doc.extractedEventsCount}</td>
+                  <td className="font-bold text-foreground">{doc.extractedEventsCount}</td>
                   <td className="text-muted-foreground font-medium">{doc.archiveReference}</td>
                 </tr>
               ))}

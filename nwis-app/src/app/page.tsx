@@ -144,11 +144,11 @@ export default function HomePage() {
   return (
     <div className="space-y-4 max-w-[1400px] mx-auto pb-8 font-sans">
       
-      {/* ─── 0. Official Alert Flash Ticker Ribbon (महत्वपूर्ण परिचालन चेतावनी) ─── */}
-      <div className="px-3.5 py-1.5 flex items-center justify-between gap-3 text-xs border border-amber-300 dark:border-amber-900 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 dark:from-amber-950/40 dark:via-orange-950/30 dark:to-amber-950/40 text-amber-900 dark:text-amber-200 rounded-xs shadow-xs">
+      {/* ─── 0. Official Alert Flash Ticker Ribbon ─── */}
+      <div className="px-3.5 py-1.5 flex items-center justify-between gap-3 text-xs border border-amber-300 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 text-foreground rounded-xs">
         <div className="flex items-center gap-2 overflow-hidden">
-          <span className="px-1.5 py-0.2 bg-rose-600 text-white text-[10px] font-mono font-bold uppercase rounded-xs shrink-0 animate-pulse shadow-xs">
-            महत्वपूर्ण चेतावनी | CRITICAL FLASH
+          <span className="gov-tag gov-tag-amber shrink-0 font-bold">
+            महत्वपूर्ण चेतावनी | ADVISORY FLASH
           </span>
           <span className="font-mono text-xs truncate">
             <strong>OIL-GLK-14 (Geleki Field):</strong> Bit at {liveDepth}m MD approaching Tipam thief horizon (2,180m). Offset OIL-GLK-07 suffered 420 bbls lost circulation at equivalent structural depth.
@@ -156,7 +156,7 @@ export default function HomePage() {
         </div>
         <Link
           href="/operations"
-          className="text-[11px] font-bold text-blue-700 dark:text-blue-300 hover:underline shrink-0 font-mono flex items-center gap-1"
+          className="text-[11px] font-bold text-[#1d70b8] dark:text-[#60a5fa] hover:underline shrink-0 font-mono flex items-center gap-1"
         >
           <span>View Telemetry</span>
           <ArrowRight className="w-3 h-3" />
@@ -164,24 +164,24 @@ export default function HomePage() {
       </div>
 
       {/* ─── 1. National Energy Mission & SIH 2026 Executive Showcase ─── */}
-      <div className="p-4 bg-white dark:bg-[#071d36] border-t-4 border-t-[#ff9933] border-x border-b border-[#d0d7de] dark:border-[#1e3a5f] rounded-xs shadow-sm space-y-3">
+      <div className="gov-panel space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2 py-0.5 bg-[#0b3c6d] text-white text-[10px] font-mono font-bold uppercase rounded-xs shadow-xs">
+              <span className="px-2 py-0.5 bg-[#0b3c6d] text-white text-[10px] font-mono font-bold uppercase rounded-xs">
                 🇮🇳 भारत सरकार | आत्मनिर्भर ऊर्जा मिशन
               </span>
-              <span className="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-mono font-black uppercase rounded-xs shadow-xs">
+              <span className="gov-tag gov-tag-amber font-mono font-bold text-[10px]">
                 SIH 2026 Problem Statement #26121
               </span>
-              <span className="text-xs font-mono text-muted-foreground font-semibold">
+              <span className="text-xs font-mono text-muted-foreground">
                 Oil India Limited · eRTMAC Decision Companion
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[#0b3c6d] dark:text-[#93c5fd] font-sans mt-1.5">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans mt-1.5">
               निकटवर्ती कूप आसूचना प्रणाली (NWIS) — Nearby Wells Intelligence System
             </h1>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 font-sans">
+            <p className="text-xs sm:text-sm text-muted-foreground font-sans">
               AI-Powered Subsurface Offset Correlation &amp; Proactive Lookahead Decision Support for Zero Unplanned Drilling NPT across the Assam-Arakan Basin.
             </p>
           </div>
@@ -191,21 +191,21 @@ export default function HomePage() {
             <button
               type="button"
               onClick={triggerEvaluatorStep}
-              className="px-3.5 py-2 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-mono font-black text-xs rounded-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer border border-amber-400"
+              className="gov-button text-xs py-2 px-3.5 flex items-center gap-1.5 font-mono cursor-pointer"
               title="Click to simulate live WITSML depth advance and lookahead trigger"
             >
-              <Zap className={`w-4 h-4 text-slate-950 ${isSimulating ? 'animate-spin' : ''}`} />
+              <Zap className={`w-4 h-4 ${isSimulating ? 'animate-spin' : ''}`} />
               <span>Simulate Depth Advance ({liveDepth}m)</span>
             </button>
           </div>
         </div>
 
-        {/* ─── 3 One-Click Interactive Evaluator Test Scenarios (Colorful) ─── */}
+        {/* ─── 3 One-Click Interactive Evaluator Test Scenarios ─── */}
         <div className="space-y-1.5 pt-1">
           <div className="flex items-center justify-between text-[11px] font-mono">
-            <span className="font-bold text-[#0b3c6d] dark:text-[#93c5fd] uppercase flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              ⚡ 1-Click Evaluator Test Scenarios (Jury Quick Assessment Mode):
+            <span className="font-bold text-foreground uppercase flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              1-Click Evaluator Test Scenarios (Quick Assessment Mode):
             </span>
             <span className="text-muted-foreground">Select any scenario to inspect live response</span>
           </div>
@@ -214,22 +214,22 @@ export default function HomePage() {
             {/* Scenario 1 */}
             <Link
               href="/operations"
-              className="p-3 bg-gradient-to-br from-emerald-50 via-teal-50/40 to-white dark:from-emerald-950/40 dark:via-teal-950/20 dark:to-[#071d36] border-2 border-emerald-500 hover:border-emerald-600 transition-all rounded-xs flex items-start gap-3 group cursor-pointer shadow-sm hover:shadow-md"
+              className="p-3 bg-secondary/30 hover:bg-secondary/60 border border-border hover:border-foreground/30 transition-all rounded-xs flex items-start gap-3 group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-xs bg-emerald-600 text-white flex items-center justify-center shrink-0 font-mono font-black text-base shadow-sm">
+              <div className="w-8 h-8 rounded-xs bg-secondary border border-border text-foreground flex items-center justify-center shrink-0 font-mono font-bold text-sm">
                 1
               </div>
               <div className="space-y-0.5 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-emerald-800 dark:text-emerald-300 font-sans group-hover:underline">
+                  <span className="font-bold text-xs text-foreground font-sans group-hover:underline">
                     Live Lookahead Hazard Alert
                   </span>
-                  <span className="px-1.5 py-0.2 bg-emerald-600 text-white font-mono font-bold text-[9px] rounded-xs uppercase">
+                  <span className="gov-tag gov-tag-green text-[9px]">
                     LIVE COCKPIT
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
-                  Well OIL-GLK-14 @ 2,165.4m: <strong className="text-emerald-700 dark:text-emerald-400">74.6m lead warning</strong> before hitting Upper Tipam thief zone.
+                <p className="text-[11px] text-muted-foreground leading-snug">
+                  Well OIL-GLK-14 @ 2,165.4m: <strong>74.6m lead warning</strong> before hitting Upper Tipam thief zone.
                 </p>
               </div>
             </Link>
@@ -237,22 +237,22 @@ export default function HomePage() {
             {/* Scenario 2 */}
             <Link
               href="/replay"
-              className="p-3 bg-gradient-to-br from-amber-50 via-orange-50/40 to-white dark:from-amber-950/40 dark:via-orange-950/20 dark:to-[#071d36] border-2 border-amber-500 hover:border-amber-600 transition-all rounded-xs flex items-start gap-3 group cursor-pointer shadow-sm hover:shadow-md"
+              className="p-3 bg-secondary/30 hover:bg-secondary/60 border border-border hover:border-foreground/30 transition-all rounded-xs flex items-start gap-3 group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-xs bg-amber-500 text-white flex items-center justify-center shrink-0 font-mono font-black text-base shadow-sm">
+              <div className="w-8 h-8 rounded-xs bg-secondary border border-border text-foreground flex items-center justify-center shrink-0 font-mono font-bold text-sm">
                 2
               </div>
               <div className="space-y-0.5 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-amber-800 dark:text-amber-300 font-sans group-hover:underline">
+                  <span className="font-bold text-xs text-foreground font-sans group-hover:underline">
                     Historical Benchmark Simulator
                   </span>
-                  <span className="px-1.5 py-0.2 bg-amber-500 text-white font-mono font-bold text-[9px] rounded-xs uppercase">
+                  <span className="gov-tag gov-tag-amber text-[9px]">
                     VALIDATION
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
-                  Replay 1996 GLK-07 severe loss: Verifies <strong className="text-amber-700 dark:text-amber-400">34 NPT hours avoided</strong> by NWIS early alert.
+                <p className="text-[11px] text-muted-foreground leading-snug">
+                  Replay 1996 GLK-07 severe loss: Verifies <strong>34 NPT hours avoided</strong> by NWIS early alert.
                 </p>
               </div>
             </Link>
@@ -260,22 +260,22 @@ export default function HomePage() {
             {/* Scenario 3 */}
             <Link
               href="/decay-index"
-              className="p-3 bg-gradient-to-br from-blue-50 via-indigo-50/40 to-white dark:from-blue-950/40 dark:via-indigo-950/20 dark:to-[#071d36] border-2 border-blue-500 hover:border-blue-600 transition-all rounded-xs flex items-start gap-3 group cursor-pointer shadow-sm hover:shadow-md"
+              className="p-3 bg-secondary/30 hover:bg-secondary/60 border border-border hover:border-foreground/30 transition-all rounded-xs flex items-start gap-3 group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-xs bg-blue-600 text-white flex items-center justify-center shrink-0 font-mono font-black text-base shadow-sm">
+              <div className="w-8 h-8 rounded-xs bg-secondary border border-border text-foreground flex items-center justify-center shrink-0 font-mono font-bold text-sm">
                 3
               </div>
               <div className="space-y-0.5 min-w-0">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs text-blue-800 dark:text-blue-300 font-sans group-hover:underline">
+                  <span className="font-bold text-xs text-foreground font-sans group-hover:underline">
                     Institutional Memory Decay Index
                   </span>
-                  <span className="px-1.5 py-0.2 bg-blue-600 text-white font-mono font-bold text-[9px] rounded-xs uppercase">
+                  <span className="gov-tag gov-tag-blue text-[9px]">
                     DIGITIZATION
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-snug">
-                  <strong className="text-blue-700 dark:text-blue-400">88/100 Digboi Fragility:</strong> Vectorizes 130+ years of deteriorating hand-drafted drilling logs.
+                <p className="text-[11px] text-muted-foreground leading-snug">
+                  <strong>88/100 Digboi Fragility:</strong> Vectorizes 130+ years of deteriorating hand-drafted drilling logs.
                 </p>
               </div>
             </Link>
@@ -283,174 +283,174 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ─── 2. Executive Value Metrics (Vibrant 4-Color Proof Strip) ─── */}
+      {/* ─── 2. Executive Value Metrics (Clean Neutral 4-Card Strip) ─── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {/* Card 1: Green */}
-        <div className="p-3.5 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-white dark:to-[#071d36] border-l-4 border-l-emerald-600 border border-emerald-200 dark:border-emerald-900/60 rounded-xs shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono text-emerald-800 dark:text-emerald-300 font-bold uppercase">
+        {/* Card 1 */}
+        <div className="p-3.5 bg-card border border-border rounded-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground font-bold uppercase">
             <span>Basin NPT Value Saved</span>
-            <span className="px-1 py-0.2 bg-emerald-600 text-white text-[9px] font-bold rounded-xs">● VERIFIED</span>
+            <span className="gov-tag gov-tag-green text-[9px]">● VERIFIED</span>
           </div>
-          <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400 font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             ₹14.8 Cr
           </div>
-          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+          <p className="text-[11px] text-muted-foreground font-sans">
             34 NPT hrs saved per severe thief-zone loss event avoided
           </p>
         </div>
 
-        {/* Card 2: Amber/Saffron */}
-        <div className="p-3.5 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-white dark:to-[#071d36] border-l-4 border-l-[#ff9933] border border-amber-200 dark:border-amber-900/60 rounded-xs shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono text-amber-800 dark:text-amber-300 font-bold uppercase">
+        {/* Card 2 */}
+        <div className="p-3.5 bg-card border border-border rounded-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground font-bold uppercase">
             <span>Lookahead Lead Buffer</span>
-            <span className="px-1 py-0.2 bg-amber-500 text-white text-[9px] font-bold rounded-xs">● ACTIVE</span>
+            <span className="gov-tag gov-tag-amber text-[9px]">● ACTIVE</span>
           </div>
-          <div className="text-2xl font-black text-amber-700 dark:text-amber-400 font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             74.6m / 3.2 hrs
           </div>
-          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+          <p className="text-[11px] text-muted-foreground font-sans">
             Early notification window prior to intersecting Tipam loss zone
           </p>
         </div>
 
-        {/* Card 3: Royal Blue */}
-        <div className="p-3.5 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-white dark:to-[#071d36] border-l-4 border-l-blue-600 border border-blue-200 dark:border-blue-900/60 rounded-xs shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono text-blue-800 dark:text-blue-300 font-bold uppercase">
+        {/* Card 3 */}
+        <div className="p-3.5 bg-card border border-border rounded-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground font-bold uppercase">
             <span>Offset Analogy Index</span>
-            <span className="px-1 py-0.2 bg-blue-600 text-white text-[9px] font-bold rounded-xs">GLK-07 ↔ GLK-14</span>
+            <span className="gov-tag gov-tag-blue text-[9px]">GLK-07 ↔ GLK-14</span>
           </div>
-          <div className="text-2xl font-black text-blue-700 dark:text-blue-400 font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             0.87 Composite
           </div>
-          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+          <p className="text-[11px] text-muted-foreground font-sans">
             5-parameter stratigraphic correlation across Geleki fault block
           </p>
         </div>
 
-        {/* Card 4: Purple */}
-        <div className="p-3.5 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-white dark:to-[#071d36] border-l-4 border-l-purple-600 border border-purple-200 dark:border-purple-900/60 rounded-xs shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-[11px] font-mono text-purple-800 dark:text-purple-300 font-bold uppercase">
+        {/* Card 4 */}
+        <div className="p-3.5 bg-card border border-border rounded-xs space-y-1">
+          <div className="flex items-center justify-between text-[11px] font-mono text-muted-foreground font-bold uppercase">
             <span>Institutional Records</span>
-            <span className="px-1 py-0.2 bg-purple-600 text-white text-[9px] font-bold rounded-xs">1889–2026</span>
+            <span className="gov-tag gov-tag-grey text-[9px]">1889–2026</span>
           </div>
-          <div className="text-2xl font-black text-purple-700 dark:text-purple-400 font-mono">
+          <div className="text-2xl font-bold text-foreground font-mono">
             1,690+ WCRs/DDRs
           </div>
-          <p className="text-[11px] text-slate-600 dark:text-slate-300 font-sans">
+          <p className="text-[11px] text-muted-foreground font-sans">
             130+ years of typed, scanned, and physical subsurface data
           </p>
         </div>
       </div>
 
       {/* ─── 3. Live Active Rig Focus Snapshot (OIL-GLK-14 Cockpit Preview) ─── */}
-      <div className="gov-panel space-y-3 bg-white dark:bg-[#071d36] border-2 border-[#0b3c6d] dark:border-[#38bdf8] shadow-sm">
+      <div className="gov-panel space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-border">
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 animate-ping" />
-            <h2 className="text-sm font-black text-[#0b3c6d] dark:text-[#93c5fd] font-sans uppercase">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+            <h2 className="text-sm font-bold text-foreground font-sans uppercase">
               Current Live Lookahead Status: Well OIL-GLK-14 (Geleki Field · Rig #04)
             </h2>
           </div>
           <Link
             href="/operations"
-            className="text-xs font-bold text-blue-700 dark:text-blue-300 hover:underline font-mono flex items-center gap-1"
+            className="text-xs font-bold text-[#1d70b8] dark:text-[#60a5fa] hover:underline font-mono flex items-center gap-1"
           >
             <span>Open Full Interactive Cockpit</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        {/* Live Gauges Strip (Vibrant Color Coded) */}
+        {/* Live Gauges Strip (Clean Neutral) */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 font-mono text-xs">
-          {/* Gauge 1: Depth (Amber/Gold) */}
-          <div className="p-2.5 bg-gradient-to-br from-amber-500/15 via-amber-500/5 to-white dark:to-[#0c2847] border border-amber-300 dark:border-amber-800 rounded-xs shadow-2xs">
-            <div className="text-[10px] text-amber-800 dark:text-amber-300 uppercase font-bold flex items-center gap-1">
-              <Gauge className="w-3 h-3 text-amber-600" />
+          {/* Gauge 1: Depth */}
+          <div className="p-2.5 bg-secondary/30 border border-border rounded-xs">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold flex items-center gap-1">
+              <Gauge className="w-3 h-3 text-muted-foreground" />
               Bit Depth (MD)
             </div>
-            <div className="text-xl font-black text-amber-700 dark:text-amber-300 mt-0.5">{liveDepth}m</div>
-            <div className="text-[9px] text-amber-800 dark:text-amber-400 font-semibold">Target: 2,180.0m trigger</div>
+            <div className="text-xl font-bold text-foreground mt-0.5">{liveDepth}m</div>
+            <div className="text-[9px] text-muted-foreground">Target: 2,180.0m trigger</div>
           </div>
 
-          {/* Gauge 2: ROP (Sky Blue) */}
-          <div className="p-2.5 bg-gradient-to-br from-sky-500/15 via-sky-500/5 to-white dark:to-[#0c2847] border border-sky-300 dark:border-sky-800 rounded-xs shadow-2xs">
-            <div className="text-[10px] text-sky-800 dark:text-sky-300 uppercase font-bold flex items-center gap-1">
-              <Activity className="w-3 h-3 text-sky-600" />
+          {/* Gauge 2: ROP */}
+          <div className="p-2.5 bg-secondary/30 border border-border rounded-xs">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold flex items-center gap-1">
+              <Activity className="w-3 h-3 text-muted-foreground" />
               ROP
             </div>
-            <div className="text-xl font-black text-sky-700 dark:text-sky-300 mt-0.5">{live.rop} m/h</div>
-            <div className="text-[9px] text-sky-800 dark:text-sky-400 font-semibold">WOB: {live.wob} klbs</div>
+            <div className="text-xl font-bold text-foreground mt-0.5">{live.rop} m/h</div>
+            <div className="text-[9px] text-muted-foreground">WOB: {live.wob} klbs</div>
           </div>
 
-          {/* Gauge 3: Mud Weight (Teal) */}
-          <div className="p-2.5 bg-gradient-to-br from-teal-500/15 via-teal-500/5 to-white dark:to-[#0c2847] border border-teal-300 dark:border-teal-800 rounded-xs shadow-2xs">
-            <div className="text-[10px] text-teal-800 dark:text-teal-300 uppercase font-bold flex items-center gap-1">
-              <Droplets className="w-3 h-3 text-teal-600" />
+          {/* Gauge 3: Mud Weight */}
+          <div className="p-2.5 bg-secondary/30 border border-border rounded-xs">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold flex items-center gap-1">
+              <Droplets className="w-3 h-3 text-muted-foreground" />
               Mud Weight
             </div>
-            <div className="text-xl font-black text-teal-700 dark:text-teal-300 mt-0.5">{live.mudWeightIn} ppg</div>
-            <div className="text-[9px] text-teal-800 dark:text-teal-400 font-semibold">Safe: 9.4–10.4 ppg</div>
+            <div className="text-xl font-bold text-foreground mt-0.5">{live.mudWeightIn} ppg</div>
+            <div className="text-[9px] text-muted-foreground">Safe: 9.4–10.4 ppg</div>
           </div>
 
-          {/* Gauge 4: Flow Out (Emerald Green) */}
-          <div className="p-2.5 bg-gradient-to-br from-emerald-500/15 via-emerald-500/5 to-white dark:to-[#0c2847] border border-emerald-300 dark:border-emerald-800 rounded-xs shadow-2xs">
-            <div className="text-[10px] text-emerald-800 dark:text-emerald-300 uppercase font-bold flex items-center gap-1">
-              <Wind className="w-3 h-3 text-emerald-600" />
+          {/* Gauge 4: Flow Out */}
+          <div className="p-2.5 bg-secondary/30 border border-border rounded-xs">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold flex items-center gap-1">
+              <Wind className="w-3 h-3 text-muted-foreground" />
               Flow Out %
             </div>
-            <div className="text-xl font-black text-emerald-700 dark:text-emerald-300 mt-0.5">{live.flowOutPercent}%</div>
-            <div className="text-[9px] text-emerald-800 dark:text-emerald-400 font-semibold">SPP: {live.standpipePressure} psi</div>
+            <div className="text-xl font-bold text-foreground mt-0.5">{live.flowOutPercent}%</div>
+            <div className="text-[9px] text-muted-foreground">SPP: {live.standpipePressure} psi</div>
           </div>
 
-          {/* Gauge 5: Gas Units (Purple) */}
-          <div className="p-2.5 bg-gradient-to-br from-purple-500/15 via-purple-500/5 to-white dark:to-[#0c2847] border border-purple-300 dark:border-purple-800 rounded-xs shadow-2xs">
-            <div className="text-[10px] text-purple-800 dark:text-purple-300 uppercase font-bold flex items-center gap-1">
-              <Flame className="w-3 h-3 text-purple-600" />
+          {/* Gauge 5: Gas Units */}
+          <div className="p-2.5 bg-secondary/30 border border-border rounded-xs">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold flex items-center gap-1">
+              <Flame className="w-3 h-3 text-muted-foreground" />
               Gas Units
             </div>
-            <div className="text-xl font-black text-purple-700 dark:text-purple-300 mt-0.5">{live.gasUnits} ppm</div>
-            <div className="text-[9px] text-purple-800 dark:text-purple-400 font-semibold">Temp: {live.temperatureOut}°C</div>
+            <div className="text-xl font-bold text-foreground mt-0.5">{live.gasUnits} ppm</div>
+            <div className="text-[9px] text-muted-foreground">Temp: {live.temperatureOut}°C</div>
           </div>
         </div>
 
-        {/* 3-Tier Safety Advisory Quick Callout (High Contrast Callout Cards) */}
+        {/* 3-Tier Safety Advisory Quick Callout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs pt-1">
-          <div className="p-3 bg-emerald-50/80 dark:bg-emerald-950/40 border-l-4 border-l-emerald-600 border border-emerald-200 dark:border-emerald-900 rounded-xs space-y-1 shadow-2xs">
-            <div className="font-mono text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+          <div className="gov-callout gov-callout-fact space-y-1">
+            <div className="font-mono text-[10px] font-bold text-foreground uppercase flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3 text-[#1d70b8] dark:text-[#60a5fa]" />
               1. Observed Historical Fact
             </div>
-            <p className="font-sans text-[11px] text-slate-800 dark:text-slate-200 leading-snug">
+            <p className="font-sans text-[11px] text-foreground leading-snug">
               OIL-GLK-07 (1.8 km SE) suffered complete loss of 420 bbls mud at 2,280m MD (MW 10.8 ppg) in Upper Tipam.
             </p>
           </div>
 
-          <div className="p-3 bg-rose-50/80 dark:bg-rose-950/40 border-l-4 border-l-rose-600 border border-rose-200 dark:border-rose-900 rounded-xs space-y-1 shadow-2xs">
-            <div className="font-mono text-[10px] font-bold text-rose-800 dark:text-rose-300 uppercase flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3 text-rose-600" />
+          <div className="gov-callout gov-callout-risk space-y-1">
+            <div className="font-mono text-[10px] font-bold text-[#804000] dark:text-[#fcd34d] uppercase flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3 text-[#b25900] dark:text-[#f59e0b]" />
               2. Model-Estimated Risk (84%)
             </div>
-            <p className="font-sans text-[11px] text-slate-800 dark:text-slate-200 leading-snug">
+            <p className="font-sans text-[11px] text-foreground leading-snug">
               High risk of lost circulation at 2,240–2,350m MD due to microfractured sandstone thief zones.
             </p>
           </div>
 
-          <div className="p-3 bg-amber-50/80 dark:bg-amber-950/40 border-l-4 border-l-amber-600 border border-amber-200 dark:border-amber-900 rounded-xs space-y-1 shadow-2xs">
-            <div className="font-mono text-[10px] font-bold text-amber-800 dark:text-amber-300 uppercase flex items-center gap-1">
-              <Zap className="w-3 h-3 text-amber-600" />
+          <div className="gov-callout gov-callout-mitigation space-y-1">
+            <div className="font-mono text-[10px] font-bold text-[#003078] dark:text-[#93c5fd] uppercase flex items-center gap-1">
+              <Zap className="w-3 h-3 text-[#1d70b8] dark:text-[#60a5fa]" />
               3. Prescribed Mitigation
             </div>
-            <p className="font-sans text-[11px] text-slate-800 dark:text-slate-200 leading-snug">
+            <p className="font-sans text-[11px] text-foreground leading-snug">
               Pre-treat active system with 35 ppb mixed-fiber LCM pill and reduce pump rate to 1,800 lpm prior to 2,180m.
             </p>
           </div>
         </div>
       </div>
 
-      {/* ─── 4. Operational Consoles Grid (2 x 3 Vibrant Themed Cards) ─── */}
+      {/* ─── 4. Operational Consoles Grid (Clean Government Cards) ─── */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <div className="text-xs font-mono font-bold uppercase tracking-wider text-[#0b3c6d] dark:text-[#93c5fd]">
+          <div className="text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground">
             Core Operational Modules &amp; Subsurface Engines
           </div>
           <span className="text-[11px] text-muted-foreground font-mono">
@@ -464,36 +464,36 @@ export default function HomePage() {
             return (
               <div
                 key={console.title}
-                className={`gov-panel flex flex-col justify-between space-y-3 ${console.borderColor} border-t-4 transition-all hover:shadow-md group bg-white dark:bg-[#071d36]`}
+                className="gov-panel flex flex-col justify-between space-y-3 transition-all hover:border-foreground/30 group"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
-                      <div className={`w-8 h-8 rounded-xs ${console.iconBg} flex items-center justify-center shrink-0 shadow-xs`}>
-                        <Icon className="w-4 h-4 text-white" />
+                      <div className="w-8 h-8 rounded-xs bg-secondary border border-border text-foreground flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-foreground" />
                       </div>
                       <div>
-                        <h2 className="font-bold text-sm text-[#1f2328] dark:text-[#f0f2f5] font-sans group-hover:text-[#0b3c6d] dark:group-hover:text-[#93c5fd] transition-colors">
+                        <h2 className="font-bold text-sm text-foreground font-sans group-hover:text-[#1d70b8] dark:group-hover:text-[#60a5fa] transition-colors">
                           {console.title}
                         </h2>
-                        <div className="text-[10px] text-[#57606a] dark:text-[#94a3b8] font-sans">
+                        <div className="text-[10px] text-muted-foreground font-sans">
                           {console.titleHindi}
                         </div>
                       </div>
                     </div>
-                    <span className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase border rounded-xs ${console.tagColor}`}>
+                    <span className="gov-tag gov-tag-grey text-[9px]">
                       {console.tag}
                     </span>
                   </div>
 
-                  <p className="text-xs text-slate-600 dark:text-slate-300 font-sans leading-relaxed">
+                  <p className="text-xs text-muted-foreground font-sans leading-relaxed">
                     {console.description}
                   </p>
                 </div>
 
-                <div className="pt-2.5 border-t border-border/70 space-y-2">
+                <div className="pt-2.5 border-t border-border space-y-2">
                   <div className="text-xs font-mono">
-                    <div className={`font-bold truncate ${console.accentText}`}>
+                    <div className="font-bold truncate text-foreground">
                       {console.primaryMetric}
                     </div>
                     <div className="text-[11px] text-muted-foreground truncate">
@@ -503,7 +503,7 @@ export default function HomePage() {
 
                   <Link
                     href={console.href}
-                    className={`inline-flex items-center gap-1.5 text-xs font-bold ${console.accentText} hover:underline pt-1 font-mono`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1d70b8] dark:text-[#60a5fa] hover:underline pt-1 font-mono"
                   >
                     <span>Launch Module</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -516,10 +516,10 @@ export default function HomePage() {
       </div>
 
       {/* ─── 5. Basin Risk Summary Table ─── */}
-      <div className="gov-panel space-y-3 bg-white dark:bg-[#071d36] border-t-4 border-t-blue-600 shadow-sm">
+      <div className="gov-panel space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-border">
           <div>
-            <h3 className="font-bold text-sm text-[#0b3c6d] dark:text-[#93c5fd] font-sans">
+            <h3 className="font-bold text-sm text-foreground font-sans uppercase">
               Active Rig Fleet &amp; Lookahead Hazard Register
             </h3>
             <p className="text-xs text-muted-foreground font-sans">
@@ -528,7 +528,7 @@ export default function HomePage() {
           </div>
           <Link
             href="/alerts"
-            className="text-xs font-bold text-blue-700 dark:text-blue-300 hover:underline font-mono"
+            className="text-xs font-bold text-[#1d70b8] dark:text-[#60a5fa] hover:underline font-mono"
           >
             View Full Inbox ({alerts.length}) →
           </Link>
@@ -537,7 +537,7 @@ export default function HomePage() {
         <div className="overflow-x-auto">
           <table className="gov-table font-mono text-xs">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-900/50">
+              <tr>
                 <th>Target Well</th>
                 <th>Field / Formation</th>
                 <th>Current Depth</th>
@@ -548,53 +548,53 @@ export default function HomePage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="hover:bg-amber-50/50 dark:hover:bg-amber-950/20">
+              <tr>
                 <td className="font-bold text-foreground">OIL-GLK-14</td>
                 <td>Geleki · Upper Tipam</td>
-                <td className="font-bold text-amber-600 dark:text-amber-400">{liveDepth}m MD</td>
+                <td className="font-bold text-foreground">{liveDepth}m MD</td>
                 <td>Thief zone microfractures (2,240–2,350m)</td>
-                <td className="text-amber-600 dark:text-amber-400 font-bold">74.6m ahead (~3.2 hrs)</td>
+                <td className="text-foreground font-bold">74.6m ahead (~3.2 hrs)</td>
                 <td>
-                  <span className="px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950 dark:text-amber-300 font-bold rounded-xs">
+                  <span className="gov-tag gov-tag-amber">
                     ADVISORY ACTIVE
                   </span>
                 </td>
                 <td className="text-right">
-                  <Link href="/operations" className="text-blue-700 dark:text-blue-300 font-bold hover:underline">
+                  <Link href="/operations" className="text-[#1d70b8] dark:text-[#60a5fa] font-bold hover:underline">
                     Inspect Cockpit
                   </Link>
                 </td>
               </tr>
-              <tr className="hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20">
+              <tr>
                 <td className="font-bold text-foreground">OIL-DGB-09</td>
                 <td>Digboi · Digboi Sandstone</td>
                 <td>1,120.0m MD</td>
                 <td>Depleted shallow reservoir sands</td>
-                <td className="text-emerald-600 dark:text-emerald-400 font-bold">Safe trajectory</td>
+                <td className="text-muted-foreground">Safe trajectory</td>
                 <td>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300 font-bold rounded-xs">
+                  <span className="gov-tag gov-tag-green">
                     NORMAL DRILLING
                   </span>
                 </td>
                 <td className="text-right">
-                  <Link href="/dashboard" className="text-blue-700 dark:text-blue-300 font-bold hover:underline">
+                  <Link href="/dashboard" className="text-[#1d70b8] dark:text-[#60a5fa] font-bold hover:underline">
                     View Well
                   </Link>
                 </td>
               </tr>
-              <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/20">
+              <tr>
                 <td className="font-bold text-foreground">OIL-KHS-04</td>
                 <td>Kharsang · Girujan Clay</td>
                 <td>840.0m MD</td>
                 <td>Tectonic thrust-fault shear zone</td>
                 <td className="text-muted-foreground">Rig suspended</td>
                 <td>
-                  <span className="px-2 py-0.5 bg-slate-100 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300 font-bold rounded-xs">
+                  <span className="gov-tag gov-tag-grey">
                     STANDBY
                   </span>
                 </td>
                 <td className="text-right">
-                  <Link href="/decay-index" className="text-blue-700 dark:text-blue-300 font-bold hover:underline">
+                  <Link href="/decay-index" className="text-[#1d70b8] dark:text-[#60a5fa] font-bold hover:underline">
                     Decay Dossier
                   </Link>
                 </td>
@@ -605,15 +605,15 @@ export default function HomePage() {
       </div>
 
       {/* ─── 6. Regulatory & Architectural Guarantees Footer Strip ─── */}
-      <div className="p-3.5 bg-gradient-to-r from-blue-50/80 via-white to-emerald-50/80 dark:from-[#071d36] dark:via-[#092215] dark:to-[#071d36] border border-[#d0d7de] dark:border-[#1e3a5f] rounded-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] font-sans text-slate-700 dark:text-slate-300 shadow-xs">
+      <div className="p-3 bg-secondary/40 border border-border rounded-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[11px] font-sans text-muted-foreground">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+          <ShieldCheck className="w-4 h-4 text-[#00703c] dark:text-[#34d399] shrink-0" />
           <span>
             Compliant with <strong>OISD-GDN-178</strong> (Drilling Safety Management) &amp; <strong>DGMS</strong> Subsurface Evidence Archival Guidelines · <strong>GIGW 3.0 Standard</strong>.
           </span>
         </div>
-        <div className="font-mono text-[10px] text-muted-foreground font-bold">
-          Assam-Arakan Subsurface Knowledge Base · Oil India Limited R&amp;D
+        <div className="font-mono text-[10px] text-muted-foreground">
+          Assam-Arakan Subsurface Knowledge Base · Oil India Limited
         </div>
       </div>
 

@@ -57,28 +57,26 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
       />
 
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-amber-500/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-border/80">
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 mb-1 flex-wrap">
-              <span className="px-2 py-0.5 bg-rose-500/20 text-rose-700 dark:text-rose-400 font-mono font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-red">
                 {alert.riskLevel.toUpperCase()} RISK
               </span>
-              <h1 className="text-xl sm:text-2xl font-black font-mono text-foreground">
+              <h1 className="text-xl sm:text-2xl font-bold font-mono text-foreground">
                 {alert.id}
               </h1>
-              <span className="px-2 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-400 font-mono font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-blue">
                 {alert.status.replace('_', ' ').toUpperCase()}
               </span>
             </div>
             <p className="text-xs text-muted-foreground font-sans">
-              Subject Well: <strong className="text-foreground font-mono">{alert.wellId.toUpperCase()}</strong> · Trigger Depth: <strong className="text-amber-700 dark:text-amber-400 font-mono">{alert.currentDepth}m MD</strong> · Fired: <span className="font-mono">{alert.firedAt}</span>
+              Subject Well: <strong className="text-foreground font-mono">{alert.wellId.toUpperCase()}</strong> · Trigger Depth: <strong className="text-foreground font-mono">{alert.currentDepth}m MD</strong> · Fired: <span className="font-mono">{alert.firedAt}</span>
             </p>
           </div>
 
-          <div className="text-xs font-mono text-muted-foreground bg-secondary/80 p-2.5 border border-border rounded-xs">
+          <div className="text-xs font-mono text-muted-foreground bg-secondary/60 p-2.5 border border-border rounded-xs">
             <div>Corridor: <strong className="text-foreground">{alert.corridorId}</strong></div>
             <div>Companion Feed: <strong className="text-emerald-700 dark:text-emerald-400">eRTMAC Live Feed Active</strong></div>
           </div>
@@ -126,7 +124,7 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
       )}
 
       {/* Operator Action & Audit Feedback Deck */}
-      <div className="gov-panel space-y-3 bg-gradient-to-br from-card via-card to-secondary/30">
+      <div className="gov-panel space-y-3">
         <div className="pb-2 border-b border-border">
           <h3 className="font-bold text-sm text-foreground font-sans uppercase">
             Rig Engineer Decision &amp; Audit Log
@@ -137,7 +135,7 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
         </div>
 
         {actionSuccessMsg && (
-          <div className="p-2.5 bg-emerald-500/15 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-bold rounded-xs">
+          <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-mono font-bold rounded-xs">
             ✓ {actionSuccessMsg}
           </div>
         )}
@@ -151,28 +149,28 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
               value={feedbackNote}
               onChange={(e) => setFeedbackNote(e.target.value)}
               placeholder="e.g. Prepared 35 ppb LCM pill in suction pit; ECD capped at 10.3 ppg before entering Upper Tipam."
-              className="w-full bg-card border border-border p-2.5 text-xs font-mono text-foreground rounded-xs h-20 focus:outline-2 focus:outline-[#ff9933]"
+              className="w-full bg-card border border-border p-2.5 text-xs font-mono text-foreground rounded-xs h-20 focus:outline-2 focus:outline-[#1d70b8]"
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => handleAction('acknowledge')}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xs cursor-pointer shadow-xs transition-colors"
+              className="gov-button text-xs cursor-pointer"
             >
               Acknowledge Advisory
             </button>
 
             <button
               onClick={() => handleAction('mitigation_applied')}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xs cursor-pointer shadow-xs transition-colors"
+              className="gov-button text-xs cursor-pointer"
             >
               Confirm Mitigation Applied
             </button>
 
             <button
               onClick={() => handleAction('reject')}
-              className="px-4 py-2 bg-secondary hover:bg-border text-foreground font-bold text-xs border border-border rounded-xs cursor-pointer transition-colors"
+              className="gov-button-secondary text-xs cursor-pointer"
             >
               Reject / Flag Outlier
             </button>

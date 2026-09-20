@@ -57,19 +57,16 @@ export default function AdminIngestionPage() {
       />
 
       {/* ─── Header ─── */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border/80">
+      {/* ─── Header ─── */}
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="px-2 py-0.5 bg-blue-500/15 border border-blue-500/40 text-blue-700 dark:text-blue-400 font-mono font-bold text-xs rounded-xs">
-                DATA GOVERNANCE
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+              <span className="gov-tag gov-tag-grey">DATA GOVERNANCE</span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                 Archival Ingestion Pipeline &amp; OCR Pedigree
               </h1>
-              <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-400 font-bold text-xs rounded-xs">
+              <span className="gov-tag gov-tag-blue">
                 OISD / DGMS AUDIT READY
               </span>
             </div>
@@ -83,7 +80,7 @@ export default function AdminIngestionPage() {
               type="button"
               onClick={handleReScan}
               disabled={isReScanning}
-              className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold font-sans rounded-xs flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors"
+              className="gov-button text-xs font-sans flex items-center gap-1.5 cursor-pointer"
             >
               <RotateCcw className={`w-3.5 h-3.5 ${isReScanning ? 'animate-spin' : ''}`} />
               <span>{isReScanning ? 'Scanning...' : 'Trigger Pipeline Re-Scan'}</span>
@@ -91,41 +88,41 @@ export default function AdminIngestionPage() {
           </div>
         </div>
 
-        {/* 4 KPI Metrics in Rich Colorful Cards */}
+        {/* 4 KPI Metrics in Clean Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 font-mono">
-          <div className="p-3 bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-blue-700 dark:text-blue-300 uppercase font-bold">TOTAL SCANNED ARCHIVES</div>
-            <div className="text-2xl font-black text-foreground">{totalDocs} Documents</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">TOTAL SCANNED ARCHIVES</div>
+            <div className="text-2xl font-bold text-foreground">{totalDocs} Documents</div>
             <div className="text-[10px] text-muted-foreground font-sans">6 Assam fields</div>
           </div>
-          <div className="p-3 bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-amber-700 dark:text-amber-300 uppercase font-bold">EXTRACTED DRILLING EVENTS</div>
-            <div className="text-2xl font-black text-amber-700 dark:text-amber-400">{totalEvents} Incidents</div>
-            <div className="text-[10px] text-amber-600 dark:text-amber-400 font-sans font-medium">Losses, kicks &amp; tight holes</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">EXTRACTED DRILLING EVENTS</div>
+            <div className="text-2xl font-bold text-foreground">{totalEvents} Incidents</div>
+            <div className="text-[10px] text-muted-foreground font-sans">Losses, kicks &amp; tight holes</div>
           </div>
-          <div className="p-3 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-emerald-700 dark:text-emerald-300 uppercase font-bold">STRUCTURED PRECISION</div>
-            <div className="text-2xl font-black text-emerald-700 dark:text-emerald-400">94.2% Conf.</div>
-            <div className="text-[10px] text-emerald-700 dark:text-emerald-400 font-sans font-medium">High-confidence tier</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">STRUCTURED PRECISION</div>
+            <div className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">94.2% Conf.</div>
+            <div className="text-[10px] text-muted-foreground font-sans">High-confidence tier</div>
           </div>
-          <div className="p-3 bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/30 rounded-xs space-y-0.5">
-            <div className="text-[10px] text-purple-700 dark:text-purple-300 uppercase font-bold">HUMAN AUDIT QUEUE</div>
-            <div className="text-2xl font-black text-purple-700 dark:text-purple-400">12 Pending</div>
+          <div className="p-2.5 bg-secondary/40 border border-border rounded-xs space-y-0.5">
+            <div className="text-[10px] text-muted-foreground uppercase font-bold">HUMAN AUDIT QUEUE</div>
+            <div className="text-2xl font-bold text-amber-700 dark:text-amber-400">12 Pending</div>
             <div className="text-[10px] text-muted-foreground font-sans">Awaiting superintendent</div>
           </div>
         </div>
       </div>
 
-      {/* Two-Path Pipeline Architecture Diagram (Vibrant, Technical) */}
+      {/* Two-Path Pipeline Architecture Diagram */}
       <div className="gov-panel space-y-3">
         <div className="flex items-center justify-between pb-2 border-b border-border">
           <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <Cpu className="w-4 h-4 text-[#1d70b8]" />
             <h2 className="font-bold text-sm text-foreground font-sans uppercase">
               Two-Path Convergence Pipeline Architecture
             </h2>
           </div>
-          <span className="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold font-mono text-xs rounded-xs">
+          <span className="gov-tag gov-tag-green font-mono">
             ✓ Convergence Ratio: 100%
           </span>
         </div>
@@ -133,9 +130,9 @@ export default function AdminIngestionPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           
           {/* Path A */}
-          <div className="p-3 bg-gradient-to-br from-emerald-500/10 via-card to-card border-l-4 border-l-emerald-600 border border-emerald-500/30 rounded-xs space-y-2 shadow-xs">
-            <div className="flex items-center justify-between pb-1 border-b border-emerald-500/20">
-              <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold font-mono text-xs rounded-xs">
+          <div className="gov-callout gov-callout-mitigation space-y-2">
+            <div className="flex items-center justify-between pb-1 border-b border-border/80">
+              <span className="font-bold font-mono text-xs uppercase text-emerald-700 dark:text-emerald-400">
                 PATH A: STRUCTURED DATA
               </span>
               <span className="text-[11px] font-mono text-muted-foreground">eRTMAC DB / WITSML</span>
@@ -143,30 +140,30 @@ export default function AdminIngestionPage() {
             
             <div className="space-y-1.5 text-xs font-mono">
               <div className="p-2 bg-card border border-border rounded-xs">
-                <div className="text-[9px] text-emerald-700 dark:text-emerald-400 uppercase font-bold">Stage 01 · Ingestion</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-bold">Stage 01 · Ingestion</div>
                 <div className="text-foreground font-bold">SQL tables, WITSML 1.4/2.0 sensor feeds</div>
               </div>
 
-              <div className="text-center text-emerald-600 font-bold">↓</div>
+              <div className="text-center text-muted-foreground font-bold">↓</div>
 
               <div className="p-2 bg-card border border-border rounded-xs">
-                <div className="text-[9px] text-emerald-700 dark:text-emerald-400 uppercase font-bold">Stage 02 · Unit Normalization</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-bold">Stage 02 · Unit Normalization</div>
                 <div className="text-foreground">Unit harmonization: ft→m, psi→ppg, lbs→kft-lb</div>
               </div>
 
-              <div className="text-center text-emerald-600 font-bold">↓</div>
+              <div className="text-center text-muted-foreground font-bold">↓</div>
 
-              <div className="p-2 bg-emerald-500/10 border-l-4 border-l-emerald-600 rounded-xs text-xs">
-                <div className="font-bold text-emerald-700 dark:text-emerald-400">OUTPUT TAG: STRUCTURED-HIGH (1.00)</div>
+              <div className="p-2 bg-secondary/60 border border-border rounded-xs text-xs">
+                <div className="font-bold text-foreground">OUTPUT TAG: STRUCTURED-HIGH (1.00)</div>
                 <div className="text-[11px] text-muted-foreground font-sans">Deterministic sensor stream. Zero OCR ambiguity.</div>
               </div>
             </div>
           </div>
 
           {/* Path B */}
-          <div className="p-3 bg-gradient-to-br from-amber-500/10 via-card to-card border-l-4 border-l-amber-500 border border-amber-500/30 rounded-xs space-y-2 shadow-xs">
-            <div className="flex items-center justify-between pb-1 border-b border-amber-500/20">
-              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold font-mono text-xs rounded-xs">
+          <div className="gov-callout gov-callout-risk space-y-2">
+            <div className="flex items-center justify-between pb-1 border-b border-border/80">
+              <span className="font-bold font-mono text-xs uppercase text-amber-700 dark:text-amber-400">
                 PATH B: UNSTRUCTURED OCR
               </span>
               <span className="text-[11px] font-mono text-muted-foreground">WCRs &amp; DDRs (1889–2020)</span>
@@ -174,21 +171,21 @@ export default function AdminIngestionPage() {
 
             <div className="space-y-1.5 text-xs font-mono">
               <div className="p-2 bg-card border border-border rounded-xs">
-                <div className="text-[9px] text-amber-700 dark:text-amber-400 uppercase font-bold">Stage 01 · Segmentation</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-bold">Stage 01 · Segmentation</div>
                 <div className="text-foreground font-bold">LayoutLMv3 bounding-box detection</div>
               </div>
 
-              <div className="text-center text-amber-600 font-bold">↓</div>
+              <div className="text-center text-muted-foreground font-bold">↓</div>
 
               <div className="p-2 bg-card border border-border rounded-xs">
-                <div className="text-[9px] text-amber-700 dark:text-amber-400 uppercase font-bold">Stage 02 · Stratigraphic NLP</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-bold">Stage 02 · Stratigraphic NLP</div>
                 <div className="text-foreground">Tesseract 5 + Assam geological lexicon</div>
               </div>
 
-              <div className="text-center text-amber-600 font-bold">↓</div>
+              <div className="text-center text-muted-foreground font-bold">↓</div>
 
-              <div className="p-2 bg-amber-500/10 border-l-4 border-l-amber-500 rounded-xs text-xs">
-                <div className="font-bold text-amber-700 dark:text-amber-400">OUTPUT: OCR-HIGH (≥90%) / OCR-MED (75–89%)</div>
+              <div className="p-2 bg-secondary/60 border border-border rounded-xs text-xs">
+                <div className="font-bold text-foreground">OUTPUT: OCR-HIGH (≥90%) / OCR-MED (75–89%)</div>
                 <div className="text-[11px] text-muted-foreground font-sans">Human-in-the-loop audit for records &lt;75%.</div>
               </div>
             </div>
@@ -197,13 +194,13 @@ export default function AdminIngestionPage() {
         </div>
 
         {/* Target Schema Guarantee */}
-        <div className="p-3 bg-gradient-to-r from-blue-500/10 via-card to-card border border-blue-500/30 rounded-xs text-xs font-mono flex flex-wrap items-center justify-between gap-2">
+        <div className="p-2.5 bg-secondary/40 border border-border rounded-xs text-xs font-mono flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span className="font-bold text-foreground">Common Target Schema:</span>
             <span className="text-muted-foreground">well_id · formation · depth_md · incident_event · root_cause · mitigation · npt_hours · confidence_tier</span>
           </div>
-          <span className="px-2 py-0.5 bg-blue-500/20 text-blue-700 dark:text-blue-400 font-bold text-[10px] rounded-xs">
+          <span className="gov-tag gov-tag-blue text-[10px]">
             DGMS AUDIT COMPLIANT
           </span>
         </div>

@@ -31,19 +31,15 @@ export default function AlertsListPage() {
       />
 
       {/* ─── Header ─── */}
-      <div className="bg-gradient-to-r from-card via-card to-card border-2 border-[#138808]/40 shadow-sm p-4 rounded-sm space-y-3 relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff9933] via-white dark:via-slate-200 to-[#138808]" />
-        
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border/80">
+      <div className="gov-panel space-y-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="px-2 py-0.5 bg-rose-500/15 border border-rose-500/40 text-rose-700 dark:text-rose-400 font-mono font-bold text-xs rounded-xs">
-                OISD HAZARD AUDIT
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-foreground font-sans">
+              <span className="gov-tag gov-tag-grey">OISD HAZARD AUDIT</span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground font-sans">
                 Hazard Advisories Inbox
               </h1>
-              <span className="px-2.5 py-0.5 bg-rose-500/20 text-rose-700 dark:text-rose-400 font-bold text-xs rounded-xs animate-pulse">
+              <span className="gov-tag gov-tag-red">
                 {alerts.length} ADVISORIES ACTIVE
               </span>
             </div>
@@ -53,13 +49,13 @@ export default function AlertsListPage() {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="px-2.5 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-400 font-bold rounded-xs">
+            <span className="gov-tag gov-tag-amber">
               ⚡ 75m Early Warning Active
             </span>
           </div>
         </div>
 
-        {/* Filter Strip with Rich Inputs */}
+        {/* Filter Strip */}
         <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono pt-1">
           <span className="font-bold text-foreground uppercase text-[11px]">Filter Advisories:</span>
 
@@ -72,7 +68,7 @@ export default function AlertsListPage() {
                 id="risk-filter"
                 value={riskFilter}
                 onChange={(e) => setRiskFilter(e.target.value)}
-                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#1d70b8] cursor-pointer"
               >
                 <option value="all">All Levels</option>
                 <option value="high">High Risk</option>
@@ -89,7 +85,7 @@ export default function AlertsListPage() {
                 id="status-filter"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#1d70b8] cursor-pointer"
               >
                 <option value="all">All Statuses</option>
                 <option value="new">New (Unacknowledged)</option>
@@ -107,7 +103,7 @@ export default function AlertsListPage() {
                 id="well-filter"
                 value={wellFilter}
                 onChange={(e) => setWellFilter(e.target.value)}
-                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ff9933] cursor-pointer"
+                className="border border-border bg-card text-foreground px-2.5 py-1 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#1d70b8] cursor-pointer"
               >
                 <option value="all">All Active Wells</option>
                 <option value="well-glk-14">OIL-GLK-14 (Geleki)</option>

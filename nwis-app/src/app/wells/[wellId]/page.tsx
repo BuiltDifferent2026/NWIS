@@ -100,7 +100,7 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
             </div>
             <div className="p-2 bg-secondary border border-border">
               <span className="text-[10px] text-muted-foreground uppercase font-bold block">Formation</span>
-              <span className="text-sm font-bold text-[#b25900] dark:text-[#fbbf24]">{well.currentFormation || 'Tipam Sandstone'}</span>
+              <span className="text-sm font-bold text-foreground">{well.currentFormation || 'Tipam Sandstone'}</span>
             </div>
             <div className="p-2 bg-secondary border border-border">
               <span className="text-[10px] text-muted-foreground uppercase font-bold block">Trajectory</span>
@@ -129,7 +129,7 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
               <select
                 value={radiusKm}
                 onChange={(e) => setRadiusKm(Number(e.target.value))}
-                className="border border-border bg-card text-foreground px-2 py-0.5 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#ffdd00]"
+                className="border border-border bg-card text-foreground px-2 py-0.5 text-xs font-mono rounded-xs focus:outline-2 focus:outline-[#1d70b8]"
               >
                 <option value={10}>10 km</option>
                 <option value={25}>25 km</option>
