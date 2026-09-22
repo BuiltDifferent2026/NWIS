@@ -147,7 +147,7 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
             </div>
           </div>
 
-          <div className="flex-1 min-h-[460px] rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
+          <div className="flex-1 min-h-[560px] rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
             <WellMapInner
               selectedField={well.field}
               searchQuery=""

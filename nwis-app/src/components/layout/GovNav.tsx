@@ -19,7 +19,9 @@ import {
   ChevronRight,
   Sparkles,
   HardHat,
-  Radio
+  Radio,
+  MapPin,
+  Target
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
 import { UserRole } from '@/lib/data/types';
@@ -66,6 +68,14 @@ export const GovNav: React.FC = () => {
                 badge: 'LIVE'
               },
               {
+                name: 'Geospatial Well Map',
+                shortName: 'Well Map',
+                href: '/map',
+                icon: MapPin,
+                description: 'Custom coordinates & offset radius',
+                badge: 'GEO'
+              },
+              {
                 name: 'Historical Replay',
                 shortName: 'Replay',
                 href: '/replay',
@@ -93,6 +103,14 @@ export const GovNav: React.FC = () => {
           {
             title: 'Institutional Memory',
             items: [
+              {
+                name: 'Geological Prediction Gap',
+                shortName: 'Prediction Gap',
+                href: '/prediction-gap',
+                icon: Target,
+                description: 'GTO vs actual depth deltas',
+                badge: 'GTO'
+              },
               {
                 name: 'Memory Decay Index',
                 shortName: 'Decay Index',
@@ -125,6 +143,14 @@ export const GovNav: React.FC = () => {
                 badge: 'OCR-HIGH'
               },
               {
+                name: 'Geological Prediction Gap',
+                shortName: 'Prediction Gap',
+                href: '/prediction-gap',
+                icon: Target,
+                description: 'Seismic velocity drift audit',
+                badge: '±58m'
+              },
+              {
                 name: 'Source Document Archive',
                 shortName: 'Sources',
                 href: '/admin/sources',
@@ -150,6 +176,13 @@ export const GovNav: React.FC = () => {
                 href: '/operations',
                 icon: Layers,
                 description: 'Active drilling intelligence'
+              },
+              {
+                name: 'Geospatial Well Map',
+                shortName: 'Well Map',
+                href: '/map',
+                icon: MapPin,
+                description: 'Offset radius & coordinate pins'
               },
               {
                 name: 'Well Replay Validator',
@@ -184,6 +217,14 @@ export const GovNav: React.FC = () => {
                 badge: 'LIVE'
               },
               {
+                name: 'Geospatial Well Map',
+                shortName: 'Well Map',
+                href: '/map',
+                icon: MapPin,
+                description: 'Custom coordinates & offset radius',
+                badge: 'GEO'
+              },
+              {
                 name: 'Historical Well Replay',
                 shortName: 'Replay',
                 href: '/replay',
@@ -211,6 +252,14 @@ export const GovNav: React.FC = () => {
           {
             title: 'Institutional Memory & Governance',
             items: [
+              {
+                name: 'Geological Prediction Gap',
+                shortName: 'Prediction Gap',
+                href: '/prediction-gap',
+                icon: Target,
+                description: 'GTO vs Actual drift index',
+                badge: '±58.4m'
+              },
               {
                 name: 'Memory Decay Index',
                 shortName: 'Decay Index',

@@ -25,7 +25,9 @@ import {
   Gauge,
   Thermometer,
   Wind,
-  Droplets
+  Droplets,
+  MapPin,
+  Zap
 } from 'lucide-react';
 import { useAppStore } from '@/store/app-store';
 import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
@@ -33,20 +35,7 @@ import { DepthTrack } from '@/components/common/DepthTrack';
 import { MultiWellCorrelationTrack } from '@/components/common/MultiWellCorrelationTrack';
 import { EvidenceInspectorDrawer } from '@/components/common/EvidenceInspectorDrawer';
 import { StatusTag } from '@/components/common/StatusTag';
-
-// Dynamically import Leaflet Map to avoid SSR issues
-const WellMapInner = dynamic(
-  () => import('@/components/map/WellMapInner').then((mod) => mod.WellMapInner),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-[460px] w-full rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-neutral-100 dark:bg-[#0c1017] flex flex-col items-center justify-center text-neutral-500 font-mono text-xs gap-2">
-        <Radio className="w-5 h-5 text-amber-500 animate-pulse" />
-        <span>Initializing Assam Basin Geospatial Correlation Engine...</span>
-      </div>
-    )
-  }
-);
+import { MitigationPlaybookCard } from '@/components/playbook/MitigationPlaybookCard';
 
 // High-fidelity offset wells data for OIL-GLK-14 active workspace
 const GELEKI_OFFSET_WELLS = [
@@ -423,7 +412,7 @@ export default function OperationsPage() {
 
         {/* Action Buttons Deck */}
         <div className="mt-4 pt-4 border-t border-amber-200/80 dark:border-amber-500/30 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={() => setIsEvidenceDrawerOpen(true)}
               className="px-4 py-2 rounded-xl bg-neutral-900 dark:bg-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-white dark:text-neutral-950 text-xs font-bold font-mono transition-colors shadow-xs flex items-center gap-2 cursor-pointer"
@@ -431,6 +420,14 @@ export default function OperationsPage() {
               <FileText className="w-4 h-4 text-amber-400 dark:text-amber-600" />
               <span>Review Archival Evidence (WCR-1996/p19)</span>
             </button>
+
+            <a
+              href="#mitigation-playbook"
+              className="px-4 py-2 rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50/80 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 text-xs font-bold font-mono transition-colors flex items-center gap-1.5"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>Execute Mitigation Playbook</span>
+            </a>
 
             <Link
               href="/replay"
@@ -461,141 +458,114 @@ export default function OperationsPage() {
 
       </section>
 
-      {/* ─── C. GEOSPATIAL OFFSET-WELL CORRELATION (Full-Width, High-Fidelity) ─── */}
+      {/* ─── B2. SEQUENTIAL MITIGATION PLAYBOOK (REAL OIL INDIA RECORD EXTRACTION) ─── */}
+      <div id="mitigation-playbook" className="scroll-mt-4">
+        <MitigationPlaybookCard initialPlaybookId="playbook-glk-mudloss-1" />
+      </div>
+
+      {/* ─── C. OFFSET ANALOGS & STRATIGRAPHIC CORRELATION ─── */}
       <section className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0b0f18] shadow-sm overflow-hidden">
         
-        {/* Section Header */}
-        <div className="px-5 py-4 border-b border-neutral-200 dark:border-[#1a2233] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        {/* Banner with direct link to the new dedicated Geospatial Map Tab */}
+        <div className="px-5 py-4 border-b border-neutral-200 dark:border-[#1a2233] bg-gradient-to-r from-amber-500/10 via-sky-500/5 to-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <Compass className="w-4 h-4 text-amber-500" />
               <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono uppercase tracking-wide">
-                Geospatial Offset-Well Correlation
+                Offset Analogs & Stratigraphic Correlation
               </h2>
-              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25 text-[10px] font-mono font-bold">
-                Similarity ≠ Distance
+              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/25 text-[10px] font-mono font-bold">
+                eRTMAC Calibration
               </span>
             </div>
-            <p className="text-[11px] text-neutral-500 font-sans pl-6.5">
-              Geleki Field · Assam-Arakan Basin · 25 km search radius from OIL-GLK-14
+            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pl-6">
+              Geleki Field · 25 km proximity search radius · Stratigraphic correlation calibrated to active bit depth {currentDepth}m MD.
             </p>
           </div>
 
-          {/* Legend */}
-          <div className="flex items-center gap-4 text-[10px] font-mono text-neutral-500 dark:text-neutral-400 flex-wrap">
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-cyan-400 ring-1 ring-white/20" /> Active Rig</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Best Analog</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Incident Well</span>
-            <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Clean Pass</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-0 border-t border-dashed border-blue-400" /> 25 km Radius</span>
-          </div>
+          <Link
+            href="/map"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-neutral-950 font-bold font-mono text-xs shadow-xs transition-all shrink-0"
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            <span>Open Dedicated Well Map</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
-        {/* ── Stats Strip ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-neutral-200 dark:border-[#1a2233] divide-x divide-neutral-200 dark:divide-[#1a2233]">
-          {[
-            { label: 'Offset Wells', value: '5', sub: 'in 25km radius', color: 'text-white' },
-            { label: 'Best Analog Similarity', value: '0.84', sub: 'OIL-GLK-07 · Exact lithology', color: 'text-amber-400' },
-            { label: 'Incident Rate', value: '4 / 5', sub: 'wells with lost circ events', color: 'text-rose-400' },
-            { label: 'Clean Passages', value: '1', sub: 'ECD-controlled wells', color: 'text-emerald-400' },
-          ].map(({ label, value, sub, color }) => (
-            <div key={label} className="px-5 py-3 space-y-0.5">
-              <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">{label}</div>
-              <div className={`text-xl font-extrabold font-mono ${color}`}>{value}</div>
-              <div className="text-[10px] text-neutral-600 font-sans">{sub}</div>
-            </div>
-          ))}
+        {/* Callout insight strip */}
+        <div className="px-5 py-3 border-b border-neutral-200 dark:border-[#1a2233] bg-neutral-50 dark:bg-[#0c1018] flex items-center gap-3">
+          <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+          <p className="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            <strong className="text-neutral-900 dark:text-white">Key insight:</strong> OIL-GLK-02 is geographically closest at 2.1 km but has a composite similarity of only 0.42 (different fault block). OIL-GLK-07 at 3.1 km scores 0.84 similarity due to identical Upper Tipam stratigraphy — making it the engineering-relevant analog.
+          </p>
         </div>
 
-        {/* ── Main Body: Map (left) + Depth Track + Well Intelligence Panel (right) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+        {/* ── 3-Column Comparative Analog Drill-Down Strip ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 border-b border-neutral-200 dark:border-[#1a2233] divide-y md:divide-y-0 md:divide-x divide-neutral-200 dark:divide-[#1a2233]">
           
-          {/* MAP — 8 cols */}
-          <div className="lg:col-span-8 border-r border-neutral-200 dark:border-[#1a2233]">
-            <div className="h-[500px] w-full">
-              <WellMapInner
-                centerWellId="well-glk-14"
-                radiusKm={25}
-                searchQuery=""
-                selectedField="Geleki"
-                sortBy="similarity"
-              />
+          {/* Well 1 — Best Analog */}
+          <div className="p-4 space-y-2.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-07</span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500 text-black">BEST ANALOG</span>
+                </div>
+                <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 1996 · 3.1 km</div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-extrabold text-amber-500 font-mono">0.84</div>
+                <div className="text-[9px] text-neutral-500">similarity</div>
+              </div>
             </div>
-
-            {/* Callout below map */}
-            <div className="px-4 py-3 border-t border-neutral-200 dark:border-[#1a2233] bg-neutral-50 dark:bg-[#0c1018] flex items-center gap-3">
-              <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-              <p className="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                <strong className="text-neutral-900 dark:text-white">Key insight:</strong> OIL-GLK-02 is geographically closest at 2.1 km but has a composite similarity of only 0.42 (different fault block). OIL-GLK-07 at 3.1 km scores 0.84 similarity due to identical Upper Tipam stratigraphy — making it the engineering-relevant analog.
-              </p>
+            <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
+              <div className="rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] p-2">
+                <div className="text-neutral-500 mb-0.5">Formation</div>
+                <div className="text-neutral-900 dark:text-white font-bold text-[10px]">Upper Tipam SS</div>
+              </div>
+              <div className="rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] p-2">
+                <div className="text-neutral-500 mb-0.5">NPT Lost</div>
+                <div className="text-rose-600 dark:text-rose-400 font-bold">34 hrs</div>
+              </div>
+              <div className="rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 p-2 col-span-2">
+                <div className="text-rose-600 dark:text-rose-400 mb-0.5">Historical Event</div>
+                <div className="text-rose-800 dark:text-rose-300 font-bold text-[10px]">Total Lost Circulation @ 2,280m (35 m³/hr)</div>
+              </div>
+            </div>
+            <div className="text-[9px] text-neutral-500 font-mono flex items-center justify-between pt-1">
+              <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">OCR-HIGH</span>
+              <span>WCR-GLK-07-1996 · Page 19</span>
             </div>
           </div>
 
-          {/* RIGHT PANEL — 4 cols: Well drill-down cards */}
-          <div className="lg:col-span-4 flex flex-col divide-y divide-neutral-200 dark:divide-[#1a2233]">
-
-            {/* Panel header */}
-            <div className="px-4 py-3 bg-neutral-50 dark:bg-[#0c1018]">
-              <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Well Intelligence Panels</div>
-            </div>
-
-            {/* Well 1 — Best Analog */}
-            <div className="p-4 space-y-2.5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-07</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500 text-black">BEST ANALOG</span>
-                  </div>
-                  <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 1996 · 3.1 km</div>
+          {/* Well 2 — Closest but low similarity */}
+          <div className="p-4 space-y-2.5">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-02</span>
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">CLOSEST</span>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-extrabold text-amber-500 font-mono">0.84</div>
-                  <div className="text-[9px] text-neutral-500">similarity</div>
-                </div>
+                <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 1981 · 2.1 km</div>
               </div>
-              <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono">
-                <div className="rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] p-2">
-                  <div className="text-neutral-500 mb-0.5">Formation</div>
-                  <div className="text-neutral-900 dark:text-white font-bold text-[10px]">Upper Tipam SS</div>
-                </div>
-                <div className="rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] p-2">
-                  <div className="text-neutral-500 mb-0.5">NPT Lost</div>
-                  <div className="text-rose-600 dark:text-rose-400 font-bold">34 hrs</div>
-                </div>
-                <div className="rounded-lg bg-rose-50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 p-2 col-span-2">
-                  <div className="text-rose-600 dark:text-rose-400 mb-0.5">Historical Event</div>
-                  <div className="text-rose-800 dark:text-rose-300 font-bold text-[10px]">Total Lost Circulation @ 2,280m (35 m³/hr)</div>
-                </div>
-              </div>
-              <div className="text-[9px] text-neutral-500 font-mono flex items-center gap-1">
-                <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">OCR-HIGH</span>
-                <span>WCR-GLK-07-1996 · Page 19</span>
+              <div className="text-right">
+                <div className="text-lg font-extrabold text-neutral-500 font-mono">0.42</div>
+                <div className="text-[9px] text-neutral-500">similarity</div>
               </div>
             </div>
-
-            {/* Well 2 — Closest but low similarity */}
-            <div className="p-4 space-y-2.5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-neutral-950 dark:text-white font-mono">OIL-GLK-02</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">CLOSEST</span>
-                  </div>
-                  <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 1981 · 2.1 km</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-lg font-extrabold text-neutral-500 font-mono">0.42</div>
-                  <div className="text-[9px] text-neutral-500">similarity</div>
-                </div>
-              </div>
-              <div className="text-[10px] font-sans text-neutral-600 dark:text-neutral-400 p-2.5 rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333]">
-                <strong className="text-neutral-700 dark:text-neutral-300">Low relevance despite proximity.</strong> Different fault block shifts formation boundary. Girujan Clay sealed interval limits direct applicability to OIL-GLK-14 trajectory.
-              </div>
+            <div className="text-[10px] font-sans text-neutral-600 dark:text-neutral-400 p-2.5 rounded-lg bg-neutral-50 dark:bg-[#0e1520] border border-neutral-200 dark:border-[#1a2333] leading-relaxed">
+              <strong className="text-neutral-700 dark:text-neutral-300">Low relevance despite proximity.</strong> Different fault block shifts formation boundary. Girujan Clay sealed interval limits direct applicability to OIL-GLK-14 trajectory.
             </div>
+            <div className="text-[9px] text-neutral-500 font-mono flex items-center justify-between pt-2">
+              <span className="px-1.5 py-0.5 rounded bg-neutral-500/10 text-neutral-400 border border-neutral-500/20">OCR-MEDIUM</span>
+              <span>DDR-GLK-02-1981 · Page 15</span>
+            </div>
+          </div>
 
-            {/* Well 3 — Clean Pass */}
-            <div className="p-4 space-y-2">
+          {/* Well 3 — Clean Pass */}
+          <div className="p-4 space-y-2.5 flex flex-col justify-between">
+            <div className="space-y-2">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="flex items-center gap-2">
@@ -605,14 +575,14 @@ export default function OperationsPage() {
                   <div className="text-[10px] text-neutral-500 font-mono mt-0.5">Geleki · Spud 2001 · 2.8 km · sim 0.72</div>
                 </div>
               </div>
-              <div className="text-[10px] font-sans text-emerald-800 dark:text-emerald-300 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/15 border border-emerald-200 dark:border-emerald-900/30">
-                <CheckCircle2 className="w-3 h-3 inline mr-1" />
+              <div className="text-[10px] font-sans text-emerald-800 dark:text-emerald-300 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/15 border border-emerald-200 dark:border-emerald-900/30 leading-relaxed">
+                <CheckCircle2 className="w-3 h-3 inline mr-1 text-emerald-500" />
                 <strong>Zero incidents.</strong> ECD strictly capped &lt;10.3 ppg + pre-emptive LCM pill. This is the disconfirming evidence — proving mitigation works.
               </div>
             </div>
 
-            {/* Bottom CTA */}
-            <div className="p-4 flex items-center gap-2 bg-neutral-50 dark:bg-[#0c1018] mt-auto">
+            {/* CTAs */}
+            <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => setIsEvidenceDrawerOpen(true)}
                 className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-mono font-bold hover:opacity-90 transition-opacity cursor-pointer"
