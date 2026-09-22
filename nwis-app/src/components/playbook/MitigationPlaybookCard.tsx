@@ -298,6 +298,7 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
             <button
               type="button"
               disabled={activeStepIndex === 0}
+              suppressHydrationWarning
               onClick={() => setActiveStepIndex(Math.max(0, activeStepIndex - 1))}
               className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 disabled:opacity-40 cursor-pointer font-bold"
             >
@@ -311,6 +312,7 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
             <button
               type="button"
               disabled={activeStepIndex === playbook.steps.length - 1}
+              suppressHydrationWarning
               onClick={() => setActiveStepIndex(Math.min(playbook.steps.length - 1, activeStepIndex + 1))}
               className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 disabled:opacity-40 cursor-pointer font-bold"
             >
