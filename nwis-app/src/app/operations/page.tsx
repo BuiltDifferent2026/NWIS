@@ -27,7 +27,8 @@ import {
   Wind,
   Droplets,
   MapPin,
-  Zap
+  Zap,
+  ArrowUpDown
 } from 'lucide-react';
 import { useAppStore } from '@/store/app-store';
 import { INITIAL_LIVE_TELEMETRY } from '@/data/live-state';
@@ -501,8 +502,9 @@ export default function OperationsPage() {
           </p>
         </div>
 
-        {/* ── 3-Column Comparative Analog Drill-Down Strip ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 border-b border-neutral-200 dark:border-[#1a2233] divide-y md:divide-y-0 md:divide-x divide-neutral-200 dark:divide-[#1a2233]">
+        {/* ── 3-Column Comparative Analog Drill-Down Strip with Scroll Option ── */}
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-800">
+          <div className="grid grid-cols-1 md:grid-cols-3 min-w-[760px] md:min-w-0 border-b border-neutral-200 dark:border-[#1a2233] divide-y md:divide-y-0 md:divide-x divide-neutral-200 dark:divide-[#1a2233]">
           
           {/* Well 1 — Best Analog */}
           <div className="p-4 space-y-2.5">
@@ -600,6 +602,7 @@ export default function OperationsPage() {
             </div>
           </div>
         </div>
+        </div>
 
         {/* ── Multi-Well Stratigraphic Correlation Panel ── */}
         <div className="border-t border-neutral-200 dark:border-[#1a2233] p-5">
@@ -614,12 +617,16 @@ export default function OperationsPage() {
       <section className="rounded-2xl border border-neutral-200 dark:border-[#1e273b] bg-white dark:bg-[#0e121a] p-5 shadow-xs space-y-4">
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-neutral-200 dark:border-[#1a2233]">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <h3 className="text-base font-extrabold text-neutral-950 dark:text-white font-mono tracking-tight">
               Offset Well Correlation
             </h3>
             <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-[10px] font-mono font-bold">
               SIMILARITY ≠ DISTANCE
+            </span>
+            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 text-[10px] font-mono font-bold flex items-center gap-1">
+              <ArrowUpDown className="w-3 h-3 text-amber-500" />
+              Scroll Viewport ({sortedOffsets.length} Analogs)
             </span>
           </div>
 
@@ -648,11 +655,11 @@ export default function OperationsPage() {
           </div>
         </div>
 
-        {/* Operational Table */}
-        <div className="overflow-x-auto rounded-xl border border-neutral-200 dark:border-[#1a2233]">
+        {/* Operational Table with Scroll Option */}
+        <div className="max-h-[380px] overflow-y-auto overflow-x-auto rounded-xl border border-neutral-200 dark:border-[#1a2233] relative scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scroll-smooth shadow-2xs">
           <table className="w-full text-xs font-sans border-collapse">
-            <thead>
-              <tr className="bg-neutral-100 dark:bg-[#121722] border-b border-neutral-200 dark:border-[#1a2233] text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
+            <thead className="sticky top-0 z-20 bg-neutral-100 dark:bg-[#121722] border-b border-neutral-200 dark:border-[#1a2233] backdrop-blur-md shadow-xs">
+              <tr className="text-[11px] font-mono text-neutral-600 dark:text-neutral-400">
                 <th className="p-3 text-left">WELL ID &amp; SPUD</th>
                 <th className="p-3 text-left">GEO DISTANCE</th>
                 <th className="p-3 text-left">COMPOSITE SIMILARITY</th>

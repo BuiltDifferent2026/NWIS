@@ -30,7 +30,8 @@ import {
   Radio, 
   X,
   SlidersHorizontal,
-  Share2
+  Share2,
+  ArrowUpDown
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -368,10 +369,10 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
   };
 
   return (
-    <div className="relative flex flex-col xl:flex-row h-full w-full gap-4 min-h-[580px]">
+    <div className="relative flex flex-col xl:flex-row h-full w-full gap-4 min-h-[580px] xl:h-[640px]">
       
       {/* ─── Map Viewport (Matches Page Theme) ─── */}
-      <div className={`flex-1 relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-[#090c12] min-h-[480px] shadow-xs ${
+      <div className={`flex-1 relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-[#090c12] min-h-[480px] xl:h-full shadow-xs ${
         isPickingLocation ? 'cursor-crosshair ring-2 ring-amber-500' : ''
       }`}>
         
@@ -640,7 +641,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
       </div>
 
       {/* ─── DEDICATED SIDEBAR PANEL WITH TABS (Matches Page Theme) ─── */}
-      <div className="w-full lg:w-[410px] flex flex-col rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0c1017] p-4 shadow-sm dark:shadow-xl overflow-hidden shrink-0 transition-colors">
+      <div className="w-full xl:w-[420px] flex flex-col h-[600px] xl:h-full max-h-[640px] min-h-0 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0c1017] p-4 shadow-sm dark:shadow-xl overflow-hidden shrink-0 transition-colors">
         
         {/* ── Tab Switcher Header ── */}
         <div className="flex items-center rounded-xl bg-neutral-100 dark:bg-neutral-900/90 p-1 border border-neutral-200 dark:border-neutral-800 mb-3.5">
@@ -769,9 +770,9 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           </div>
         </div>
 
-        {/* ════════ TAB 1: CUSTOM COORDINATES & PINS WORKBENCH ════════ */}
+        {/* ════════ TAB 1: CUSTOM COORDINATES (Theme-Matched) ════════ */}
         {sidebarTab === 'coordinates' && (
-          <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 pr-1.5 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scroll-smooth">
             
             {/* Add Custom Coordinate Form (Theme-Matched) */}
             <form onSubmit={handleAddPin} className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-950/70 space-y-3 transition-colors">
@@ -1026,14 +1027,20 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           </div>
         )}
 
-        {/* ════════ TAB 2: OFFSET ANALOGS (Theme-Matched) ════════ */}
+        {/* ════════ TAB 2: OFFSET ANALOGS (Theme-Matched with Scroll Option) ════════ */}
         {sidebarTab === 'offsets' && (
-          <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
-            <div className="text-[11px] text-neutral-500 dark:text-slate-400 pb-1">
-              {sortBy === 'distance'
-                ? `Ranked by geographic distance from ${centerWell.name}`
-                : `Ranked by multi-vector stratigraphic similarity to ${centerWell.name}`}
+          <div className="flex-1 min-h-0 flex flex-col">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-neutral-200 dark:border-neutral-800/80 text-[11px] font-mono">
+              <span className="text-neutral-500 dark:text-slate-400">
+                {sortBy === 'distance' ? 'By Distance' : 'By Stratigraphic Similarity'}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                <ArrowUpDown className="w-3 h-3" />
+                Scroll Viewport ({sortedWells.length} Wells)
+              </span>
             </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1.5 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scroll-smooth">
 
             {sortedWells.map(({ well, distanceKm, similarity, inRadius }) => {
               const isCenter = well.id === centerWell.id;
@@ -1119,6 +1126,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                 </div>
               );
             })}
+            </div>
           </div>
         )}
 
