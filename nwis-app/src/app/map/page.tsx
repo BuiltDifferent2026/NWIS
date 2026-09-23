@@ -208,49 +208,6 @@ export default function GeospatialMapPage() {
           />
         </div>
       </section>
-
-      {/* ─── Bottom Subsurface Insight & Governance Strip ─── */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        <div className="p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0e121a] shadow-xs space-y-2">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-neutral-900 dark:text-white">
-            <Compass className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Similarity ≠ Distance Calibration</span>
-          </div>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
-            In the Assam-Arakan folded belt, fault blocks cause drastic stratigraphy shifts over short distances. The engine weighs matrix permeability, pore pressure, and lithology above pure physical distance.
-          </p>
-        </div>
-
-        <div className="p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0e121a] shadow-xs space-y-2">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-neutral-900 dark:text-white">
-            <MapPin className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-            <span>Custom Coordinate Workbench</span>
-          </div>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
-            Use the &quot;Pick on Map&quot; tool or field presets to plot proposed relief well trajectories, sidetracks, or seismic anomalies. One-click copy coordinates to clipboard in DD and DMS formats.
-          </p>
-        </div>
-
-        <div className="p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0e121a] shadow-xs space-y-2">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-neutral-900 dark:text-white">
-            <CheckCircle2 className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-            <span>Operational Rig Link</span>
-          </div>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
-            Coordinates and offset insights calibrated here feed directly into the eRTMAC active well dashboard to safeguard the active drillstring.
-          </p>
-          <Link
-            href="/operations"
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-amber-700 dark:text-amber-400 hover:underline pt-1"
-          >
-            <span>Return to Active Well Operations</span>
-            <ArrowRight className="w-3 h-3" />
-          </Link>
-        </div>
-
-      </section>
-
     </div>
   );
 }

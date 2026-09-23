@@ -248,53 +248,7 @@ export default function AdminIngestionPage() {
               </div>
             </div>
           </div>
-
         </div>
-
-        {/* ─── Common Target Schema & Governance Guarantee Banner ─── */}
-        <div className="p-4 sm:p-5 rounded-xl bg-neutral-50 dark:bg-[#070b13] text-neutral-900 dark:text-white border border-neutral-200 dark:border-[#1e273b] shadow-xs space-y-3">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                <span className="font-mono font-extrabold text-xs sm:text-sm text-neutral-950 dark:text-white uppercase tracking-wider">
-                  Common Target Schema &amp; Strict Governance Guarantee
-                </span>
-              </div>
-              <p className="text-xs text-neutral-600 dark:text-neutral-300 font-sans leading-relaxed max-w-3xl">
-                Both structured databases and archival OCR records normalize into the identical strictly-typed schema before indexing into the vector database.
-              </p>
-            </div>
-
-            <div className="px-3 py-2 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-900 dark:text-amber-200 text-xs font-mono shrink-0">
-              <strong className="text-amber-800 dark:text-amber-300 font-bold uppercase text-[10px] block">Mandatory DGMS Safety Policy:</strong>
-              <span>Low-confidence (OCR-LOW) data is strictly quarantined from triggering high-severity lookahead alarms.</span>
-            </div>
-          </div>
-
-          {/* Syntax Highlighted Schema Pill Box */}
-          <div className="p-3 rounded-lg bg-white dark:bg-black/60 border border-neutral-200 dark:border-neutral-800 text-[11px] font-mono flex flex-wrap items-center gap-2 shadow-2xs">
-            <span className="text-neutral-500 dark:text-neutral-400 font-bold uppercase text-[10px]">Unified Event Model:</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-amber-800 dark:text-amber-300 border border-neutral-200 dark:border-neutral-700 font-bold">well_id</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-emerald-800 dark:text-emerald-300 border border-neutral-200 dark:border-neutral-700 font-bold">formation</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-sky-800 dark:text-sky-300 border border-neutral-200 dark:border-neutral-700 font-bold">depth_md</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-rose-800 dark:text-rose-300 border border-neutral-200 dark:border-neutral-700 font-bold">incident_event</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-amber-800 dark:text-amber-200 border border-neutral-200 dark:border-neutral-700 font-bold">root_cause</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-purple-800 dark:text-purple-300 border border-neutral-200 dark:border-neutral-700 font-bold">mitigation_applied</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-cyan-800 dark:text-cyan-300 border border-neutral-200 dark:border-neutral-700 font-bold">npt_hours</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-emerald-800 dark:text-emerald-300 border border-neutral-200 dark:border-neutral-700 font-bold">confidence_tier</span>
-            <span className="text-neutral-400 dark:text-neutral-500">•</span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 font-bold">provenance_ref</span>
-          </div>
-        </div>
-
       </div>
 
       {/* ─── Summary KPI Metrics ─── */}

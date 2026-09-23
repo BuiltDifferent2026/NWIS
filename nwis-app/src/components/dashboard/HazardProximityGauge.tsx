@@ -53,11 +53,6 @@ export const HazardProximityGauge: React.FC<HazardProximityGaugeProps> = ({
             </span>
           </div>
         </div>
-
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-[10px] font-mono font-semibold">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
-          ACTIVE STREAM
-        </div>
       </div>
 
       {/* Main Telemetry Readout */}

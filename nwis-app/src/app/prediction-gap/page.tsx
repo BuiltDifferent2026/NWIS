@@ -79,12 +79,6 @@ export default function PredictionGapPage() {
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
               Geological Prediction Gap Index (GTO vs Actual)
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold">
-              REAL OIL INDIA RECORD (NDU)
-            </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">
-              ILLUSTRATIVE FIRST-PASS
-            </span>
           </div>
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-4xl leading-relaxed font-sans">
             Directly computed delta between prognosed pre-drill target depth (GTO) and actual confirmed drill-cutting sample &amp; wireline log tops across the Naga Thrust Belt. Turns qualitative seismic uncertainty into an engineering-quantified metric.
@@ -114,10 +108,6 @@ export default function PredictionGapPage() {
               Seismic imaging in the Naga Thrust Belt exhibits severe velocity pull-downs due to imbricate fault stacking, making pre-drill depth models weakest exactly where geological risk is highest. NWIS turns this literature assertion into a <strong>directly computed, real-data-backed metric</strong> using confirmed Prognosed(GTO) vs Actual(W.log) records from genuine OIL India archives.
             </p>
           </div>
-        </div>
-        <div className="text-right shrink-0">
-          <span className="text-[10px] font-mono text-neutral-500 block uppercase font-bold">CALIBRATED ON</span>
-          <span className="text-xs font-extrabold font-mono text-neutral-950 dark:text-white">Genuine OIL WCR Logs</span>
         </div>
       </div>
 

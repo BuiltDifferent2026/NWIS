@@ -158,28 +158,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-[#090b0f] text-neutral-900 dark:text-neutral-100 transition-colors">
-      
-      {/* ─── Top Architectural Announcement Bar ─── */}
-      <div className="bg-neutral-900 text-neutral-300 text-[11px] font-mono py-1.5 px-4 border-b border-neutral-800">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold tracking-wide uppercase">
-              SIH 2026 • SIH26121
-            </span>
-            <span className="text-neutral-400 hidden sm:inline">•</span>
-            <span>Oil India Limited — Nearby Wells Intelligence System (eRTMAC-NWIS)</span>
-          </div>
-          <div className="hidden md:flex items-center gap-4 text-neutral-400">
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              PSU Data Sovereign
-            </span>
-            <span>•</span>
-            <span>Assam-Arakan Basin Archives (1889–2026)</span>
-          </div>
-        </div>
-      </div>
-
       {/* ─── Modern Top Navigation Header with 3-Bar Strata Logo ─── */}
       <header className="sticky top-0 z-40 border-b border-neutral-200 dark:border-neutral-800 bg-white/95 dark:bg-[#0a0c10]/95 backdrop-blur-md transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">

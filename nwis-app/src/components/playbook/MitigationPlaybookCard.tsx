@@ -84,12 +84,6 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
               <h3 className="text-base sm:text-lg font-extrabold font-mono text-neutral-950 dark:text-white tracking-tight">
                 Sequential Mitigation Playbook Extraction
               </h3>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold">
-                REAL OIL INDIA RECORD
-              </span>
-              <span className="px-2 py-0.5 rounded bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">
-                ACTION → PARAMETER → OUTCOME
-              </span>
             </div>
             <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
               Directly extracted from OIL India WCR dedicated Mud Loss tables and shift narrative. Structures raw textual procedures into an ordered operational execution pipeline.

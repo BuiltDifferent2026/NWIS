@@ -475,9 +475,6 @@ export default function OperationsPage() {
               <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono uppercase tracking-wide">
                 Offset Analogs & Stratigraphic Correlation
               </h2>
-              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/25 text-[10px] font-mono font-bold">
-                eRTMAC Calibration
-              </span>
             </div>
             <p className="text-[11px] text-neutral-500 dark:text-neutral-400 font-sans pl-6">
               Geleki Field · 25 km proximity search radius · Stratigraphic correlation calibrated to active bit depth {currentDepth}m MD.
@@ -621,13 +618,6 @@ export default function OperationsPage() {
             <h3 className="text-base font-extrabold text-neutral-950 dark:text-white font-mono tracking-tight">
               Offset Well Correlation
             </h3>
-            <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 text-[10px] font-mono font-bold">
-              SIMILARITY ≠ DISTANCE
-            </span>
-            <span className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 text-[10px] font-mono font-bold flex items-center gap-1">
-              <ArrowUpDown className="w-3 h-3 text-amber-500" />
-              Scroll Viewport ({sortedOffsets.length} Analogs)
-            </span>
           </div>
 
           {/* Sort Switcher Tabs */}

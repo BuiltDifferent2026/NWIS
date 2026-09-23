@@ -178,9 +178,6 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
               <h3 className="text-sm font-extrabold text-neutral-950 dark:text-white font-mono uppercase tracking-wide">
                 Multi-Well Stratigraphic Correlation Panel
               </h3>
-              <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[9px] font-mono font-bold">
-                GELEKI FAULT BLOCK
-              </Badge>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
               Structural &amp; Lithological Tie-Lines · Active Well OIL-GLK-14 vs. Key Analog Offset Wells

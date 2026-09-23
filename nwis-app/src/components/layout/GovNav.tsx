@@ -513,14 +513,6 @@ export const GovNav: React.FC = () => {
               </select>
             </div>
 
-            {/* Active Rig Quick Jump */}
-            <Link
-              href="/operations"
-              className="flex items-center justify-center w-full text-xs font-bold py-2 px-3 rounded-xl bg-gradient-to-r from-amber-700 via-amber-600 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white shadow-xs transition-all font-mono"
-            >
-              Rig Cockpit: GLK-14 (2,165m)
-            </Link>
-
             {/* Sign Out Action */}
             <Link
               href="/login"
