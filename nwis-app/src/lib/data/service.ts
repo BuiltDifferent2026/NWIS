@@ -150,13 +150,36 @@ function getUnifiedWells(): Well[] {
   return deduped;
 }
 
+// ─── Resilient Fetch Helper (Safe for SSR and Offline) ───
+
+async function safeApiGet<T>(url: string): Promise<T | null> {
+  if (typeof window === 'undefined') return null;
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (res.ok) {
+      return (await res.json()) as T;
+    }
+  } catch {
+    // Fail silently and use local fixture
+  }
+  return null;
+}
+
 // ─── Typed Service Layer (Returns typed Promises) ───
 
 export async function getAllWells(): Promise<Well[]> {
+  const apiData = await safeApiGet<{ success: boolean; wells: Well[] }>('/api/wells');
+  if (apiData?.success && Array.isArray(apiData.wells) && apiData.wells.length > 0) {
+    return apiData.wells;
+  }
   return Promise.resolve(getUnifiedWells());
 }
 
 export async function getActiveWells(): Promise<Well[]> {
+  const apiData = await safeApiGet<{ success: boolean; wells: Well[] }>('/api/wells?status=active');
+  if (apiData?.success && Array.isArray(apiData.wells) && apiData.wells.length > 0) {
+    return apiData.wells;
+  }
   const all = getUnifiedWells();
   return Promise.resolve(all.filter((w) => w.status === "active"));
 }
@@ -200,6 +223,34 @@ export async function getOffsetWells(targetWellId: string): Promise<OffsetWellRe
   const normId = (targetWellId || "").toLowerCase().trim();
   const target = all.find((w) => w.id.toLowerCase() === normId || w.name.toLowerCase() === normId) || all[0];
   if (!target) return Promise.resolve([]);
+
+  // Try API route first if in browser
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/offset/similarity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetWellId: target.id })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.results)) {
+          return data.results.map((r: any) => ({
+            well: r.well,
+            distanceKm: r.distanceKm,
+            similarityScore: r.similarityScore,
+            similarityBreakdown: r.similarityBreakdown,
+            matchedEvents: MOCK_EVENTS.filter((e) => 
+              e.wellId.toLowerCase() === r.well.id.toLowerCase() ||
+              (e.field && e.field.toLowerCase() === r.well.field.toLowerCase())
+            ).slice(0, 3)
+          }));
+        }
+      }
+    } catch {
+      // Fall through to local calculation
+    }
+  }
 
   const results: OffsetWellResult[] = all
     .filter((w) => w.id.toLowerCase() !== target.id.toLowerCase())
@@ -249,6 +300,16 @@ export async function getRiskCorridors(): Promise<RiskCorridor[]> {
   return Promise.resolve([...MOCK_RISK_CORRIDORS]);
 }
 
+export async function getRiskCorridorsForWell(wellId: string): Promise<RiskCorridor[]> {
+  const well = await getWellById(wellId);
+  const corridors = [...MOCK_RISK_CORRIDORS];
+  if (!well) return corridors;
+  return corridors.filter(
+    (c) => c.field.toLowerCase() === well.field.toLowerCase() ||
+           c.formation.toLowerCase() === (well.currentFormation || "").toLowerCase()
+  );
+}
+
 export async function getFeedbackByAlertId(alertId: string): Promise<FeedbackEntry[]> {
   return Promise.resolve(MOCK_FEEDBACK.filter((f) => f.alertId === alertId));
 }
@@ -265,9 +326,36 @@ export async function submitAlertFeedback(feedback: FeedbackEntry): Promise<bool
 }
 
 export async function getIngestionBatches(): Promise<IngestionBatch[]> {
+  const apiData = await safeApiGet<{ success: boolean; batches: IngestionBatch[] }>('/api/ingestion');
+  if (apiData?.success && Array.isArray(apiData.batches)) {
+    return apiData.batches;
+  }
   return Promise.resolve([...MOCK_INGESTION_BATCHES]);
 }
 
 export async function getSourceDocuments(): Promise<SourceDocument[]> {
   return Promise.resolve([...MOCK_SOURCE_DOCS]);
 }
+
+// ─── Direct Backend API Client Accessors ───
+
+export async function fetchLiveState(wellId: string = 'well-glk-14') {
+  return safeApiGet<any>(`/api/live-state/${encodeURIComponent(wellId)}`);
+}
+
+export async function fetchPredictionGapIndex(field?: string, tier?: string) {
+  let url = '/api/prediction-gap';
+  const params = new URLSearchParams();
+  if (field) params.set('field', field);
+  if (tier) params.set('tier', tier);
+  const qs = params.toString();
+  if (qs) url += `?${qs}`;
+  return safeApiGet<any>(url);
+}
+
+export async function fetchMemoryDecayIndex(minDecay?: number) {
+  let url = '/api/decay-index';
+  if (minDecay) url += `?minDecay=${minDecay}`;
+  return safeApiGet<any>(url);
+}
+
