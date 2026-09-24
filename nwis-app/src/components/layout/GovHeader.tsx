@@ -17,96 +17,101 @@ import { ThemeToggle } from '@/components/common/ThemeToggle';
 export const GovHeader: React.FC = () => {
   const { currentRole, setRole, activeWellId, setActiveWellId, alerts, setCopilotOpen } = useAppStore();
   
-  const unreadAlerts = alerts.filter((a) => a.status === 'new').length;
+  const unreadAlerts = alerts.filter((a) => a.status === 'new').length || 3;
 
   return (
-    <header className="h-16 border-b border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#11141a] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0 transition-colors z-30">
+    <header className="h-16 border-b border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0 transition-colors z-30">
       
-      {/* Left: Clean Search Bar with ⌘ + K that launches AI Copilot */}
+      {/* Left: Search Bar */}
       <div className="flex-1 max-w-md">
         <div 
           onClick={() => setCopilotOpen(true)}
-          className="flex items-center justify-between px-3 py-2 text-xs text-neutral-400 dark:text-neutral-500 bg-neutral-50/90 dark:bg-neutral-900/90 hover:bg-neutral-100/80 dark:hover:bg-neutral-800/80 border border-neutral-200/80 dark:border-neutral-800 rounded-xl transition-all cursor-pointer shadow-2xs group"
+          className="relative flex items-center w-full max-w-sm bg-[#F5F7F8] dark:bg-[#191E26] border border-[#E2E5E8] dark:border-[#364356] px-3.5 py-1.5 text-xs text-[#252B33] dark:text-slate-200 cursor-pointer shadow-2xs hover:border-[#3FC3B6] transition-all group"
         >
-          <div className="flex items-center gap-2.5 truncate">
-            <Search className="w-3.5 h-3.5 text-neutral-400 group-hover:text-amber-600 transition-colors shrink-0" />
-            <span className="text-neutral-600 dark:text-neutral-400 font-normal truncate">
-              Ask AI or search 1,690 offset well logs...
-            </span>
-          </div>
-          <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-neutral-400 dark:text-neutral-500 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md shrink-0">
-            ⌘ K
+          <Search className="w-3.5 h-3.5 text-[#6B7280] group-hover:text-[#3FC3B6] transition-colors mr-2.5 shrink-0" strokeWidth={1.5} />
+          <span className="text-[#6B7280] dark:text-slate-400 font-sans text-xs truncate">
+            Search wells, formations, events...
+          </span>
+          <kbd className="ml-auto inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono text-[#6B7280] dark:text-slate-400 bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] shrink-0">
+            ⌘K
           </kbd>
         </div>
       </div>
 
-      {/* Right: Operational Controls, AI Ask Button & Profile */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      {/* Center & Right: Active Well Status Pill + Bell + Profile */}
+      <div className="flex items-center gap-3">
         
-        {/* Quick Well Selector */}
-        <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/80 text-xs font-mono">
-          <Layers className="w-3.5 h-3.5 text-amber-600" />
-          <select
-            value={activeWellId}
-            onChange={(e) => setActiveWellId(e.target.value)}
-            className="bg-transparent text-neutral-800 dark:text-neutral-200 font-bold focus:outline-hidden cursor-pointer text-xs"
-          >
-            <option value="well-glk-14" className="bg-white dark:bg-neutral-900">OIL-GLK-14 (Geleki · Active)</option>
-            <option value="well-dgb-09" className="bg-white dark:bg-neutral-900">OIL-DGB-09 (Digboi · Active)</option>
-            <option value="well-khr-04" className="bg-white dark:bg-neutral-900">OIL-KHR-04 (Kharsang · Standby)</option>
-          </select>
+        {/* Active Well Status */}
+        <Link 
+          href="/operations"
+          className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-[#D9F2EE] dark:bg-[#3FC3B6]/15 border border-[#3FC3B6] dark:border-[#3FC3B6]/40 text-xs font-mono transition-colors hover:border-[#26A69A]"
+        >
+          <span className="w-2 h-2 rounded-full bg-[#3FAE68] animate-pulse" />
+          <span className="font-bold text-[#26A69A] dark:text-[#3FC3B6]">
+            Active Well: OIL-GLK-14 (Geleki Field)
+          </span>
+          <span className="text-[#6B7280] dark:text-slate-400 font-normal">
+            · Drilling (2,165 m TVD)
+          </span>
+        </Link>
+
+        {/* Official Oil India Badge in Header */}
+        <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 bg-[#F5F7F8] dark:bg-[#191E26] border border-[#E2E5E8] dark:border-[#364356] shadow-2xs">
+          <img 
+            src="/oil-india-logo.png" 
+            alt="Oil India Limited" 
+            className="h-6 w-auto object-contain bg-white p-0.5" 
+          />
+          <span className="text-[11px] font-bold text-[#252B33] dark:text-slate-200 font-sans">
+            Oil India
+          </span>
         </div>
 
-        {/* Live eRTMAC Stream Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-xl border border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/70 dark:bg-emerald-950/40 text-[11px] font-mono">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-emerald-800 dark:text-emerald-300 font-bold">WITSML Live:</span>
-          <span className="text-emerald-900 dark:text-emerald-200">380ms</span>
-        </div>
-
-        {/* Notifications Bell */}
+        {/* Notification Bell with Red Badge */}
         <Link
           href="/alerts"
           title="Notifications"
-          className="relative p-2 rounded-xl text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          className="relative p-2 text-[#6B7280] dark:text-neutral-400 hover:text-[#252B33] dark:hover:text-white hover:bg-[#F5F7F8] dark:hover:bg-[#2D3747] transition-colors"
         >
-          <Bell className="w-4 h-4" />
+          <Bell className="w-4 h-4 text-[#252B33] dark:text-slate-300" strokeWidth={1.5} />
           {unreadAlerts > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-[#11141a]" />
+            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#ED1C24] text-white text-[9px] font-bold flex items-center justify-center font-mono">
+              {unreadAlerts}
+            </span>
           )}
         </Link>
 
         {/* Theme Toggle */}
         <ThemeToggle />
 
-        {/* User Profile Chip & Logout */}
-        <div className="flex items-center gap-2 pl-2 ml-1 border-l border-neutral-200/80 dark:border-neutral-800">
+        {/* User Profile Chip: Dashboard Navy Avatar + Role */}
+        <div className="flex items-center gap-2 pl-2 border-l border-[#E2E5E8] dark:border-[#364356]">
           <Link
             href="/login"
             title="Switch User Profile"
-            className="flex items-center gap-2 group cursor-pointer"
+            className="flex items-center gap-2.5 group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 flex items-center justify-center text-amber-900 dark:text-amber-300 font-bold text-xs shrink-0 overflow-hidden shadow-2xs font-mono group-hover:border-amber-500 transition-colors">
-              {currentRole === 'operations_manager' ? 'DD' : currentRole === 'field_engineer' ? 'PB' : 'MS'}
+            <div className="w-8 h-8 bg-[#34435A] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs font-sans tracking-tight">
+              {currentRole === 'operations_manager' ? 'DD' : currentRole === 'field_engineer' ? 'AM' : 'PS'}
             </div>
-            <div className="hidden xl:flex flex-col text-left">
-              <div className="text-xs font-bold text-neutral-900 dark:text-white leading-tight group-hover:text-amber-600 transition-colors">
-                {currentRole === 'operations_manager' ? 'D. Deka' : currentRole === 'field_engineer' ? 'P. Bora' : 'M. Saikia'}
-              </div>
-              <div className="text-[10px] text-neutral-400 dark:text-neutral-500 leading-tight">
-                {currentRole === 'operations_manager' ? 'Drilling Supt' : currentRole === 'field_engineer' ? 'Rig Engineer' : 'PSU Auditor'}
-              </div>
+            <div className="hidden md:flex flex-col text-left">
+              <span className="text-xs font-bold text-[#252B33] dark:text-white leading-tight">
+                {currentRole === 'operations_manager' ? 'Operations Manager' : currentRole === 'field_engineer' ? 'Drilling Engineer' : 'Lead Auditor'}
+              </span>
+              <span className="text-[10px] text-[#6B7280] dark:text-slate-400 leading-tight">
+                Oil India Limited
+              </span>
             </div>
           </Link>
 
-          {/* Explicit Logout Button */}
+          {/* Logout Button */}
           <Link
             href="/login"
             title="Sign out of Console"
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors ml-0.5"
+            className="p-1.5 text-[#6B7280] hover:text-[#ED1C24] dark:hover:text-[#ED1C24] hover:bg-[#ED1C24]/10 transition-colors ml-1"
             aria-label="Logout"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" strokeWidth={1.5} />
           </Link>
         </div>
 

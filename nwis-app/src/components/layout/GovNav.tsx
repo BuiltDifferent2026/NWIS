@@ -3,41 +3,39 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Layers, 
-  Activity, 
-  Bell, 
-  Database, 
-  FileText, 
-  LogOut, 
-  GitCompare, 
-  TrendingDown, 
-  Scale, 
-  ShieldCheck,
+import {
+  LayoutDashboard,
+  MapPin,
+  SlidersVertical,
+  AlertTriangle,
+  Database,
+  FileText,
+  BarChart3,
+  Settings,
+  Activity,
+  Compass,
+  Cpu,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
+  Search,
   HardHat,
-  Radio,
-  MapPin,
-  Target
+  LogOut
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
 import { UserRole } from '@/lib/data/types';
 
 export const GovNav: React.FC = () => {
   const pathname = usePathname();
-  const { 
-    currentRole, 
-    setRole, 
-    alerts, 
-    isSidebarCollapsed, 
-    toggleSidebar, 
-    toggleCopilot 
+  const {
+    currentRole,
+    setRole,
+    alerts,
+    isSidebarCollapsed,
+    toggleSidebar,
+    toggleCopilot
   } = useAppStore();
 
-  const openAlertsCount = alerts.filter((a) => a.status === 'new').length || 1;
+  const openAlertsCount = alerts.filter((a) => a.status === 'new').length || 3;
 
   // Keyboard shortcut: Ctrl+B or Cmd+B to toggle sidebar
   useEffect(() => {
@@ -51,483 +49,320 @@ export const GovNav: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleSidebar]);
 
-  // Dynamic Role-Based Access: Navigation sections tailored by user role
-  const getNavSections = () => {
-    switch (currentRole) {
-      case 'field_engineer':
-        return [
-          {
-            title: 'Rig Floor Operations',
-            items: [
-              {
-                name: 'Active Well (OIL-GLK-14)',
-                shortName: 'Operations',
-                href: '/operations',
-                icon: Layers,
-                description: 'eRTMAC live-state & 75m alert',
-                badge: 'LIVE'
-              },
-              {
-                name: 'Geospatial Well Map',
-                shortName: 'Well Map',
-                href: '/map',
-                icon: MapPin,
-                description: 'Custom coordinates & offset radius',
-                badge: 'GEO'
-              },
-              {
-                name: 'Historical Replay',
-                shortName: 'Replay',
-                href: '/replay',
-                icon: Activity,
-                description: 'Pre-spud lookahead benchmark',
-                badge: 'DEMO'
-              },
-              {
-                name: 'Hazard Advisories',
-                shortName: 'Advisories',
-                href: '/alerts',
-                icon: Bell,
-                description: 'Corridor hazard queue',
-                badgeCount: openAlertsCount
-              },
-              {
-                name: 'Offset Intelligence',
-                shortName: 'Analogs',
-                href: '/analogs',
-                icon: GitCompare,
-                description: 'Distance ≠ Similarity engine'
-              }
-            ]
-          },
-          {
-            title: 'Institutional Memory',
-            items: [
-              {
-                name: 'Geological Prediction Gap',
-                shortName: 'Prediction Gap',
-                href: '/prediction-gap',
-                icon: Target,
-                description: 'GTO vs actual depth deltas',
-                badge: 'GTO'
-              },
-              {
-                name: 'Memory Decay Index',
-                shortName: 'Decay Index',
-                href: '/decay-index',
-                icon: TrendingDown,
-                description: 'Field knowledge risk ranking'
-              },
-              {
-                name: 'Fleet Register',
-                shortName: 'Fleet',
-                href: '/dashboard',
-                icon: LayoutDashboard,
-                description: 'Basin wide well list'
-              }
-            ]
-          }
-        ];
-
-      case 'admin':
-        return [
-          {
-            title: 'Governance & Auditing',
-            items: [
-              {
-                name: 'Hybrid Ingestion Pipeline',
-                shortName: 'Ingestion',
-                href: '/admin/ingestion',
-                icon: Database,
-                description: 'OCR & schema routing audit',
-                badge: 'OCR-HIGH'
-              },
-              {
-                name: 'Geological Prediction Gap',
-                shortName: 'Prediction Gap',
-                href: '/prediction-gap',
-                icon: Target,
-                description: 'Seismic velocity drift audit',
-                badge: '±58m'
-              },
-              {
-                name: 'Source Document Archive',
-                shortName: 'Sources',
-                href: '/admin/sources',
-                icon: FileText,
-                description: '130+ yr WCR & DDR register'
-              },
-              {
-                name: 'Memory Decay Index',
-                shortName: 'Decay Index',
-                href: '/decay-index',
-                icon: TrendingDown,
-                description: 'Prioritized digitization backlog',
-                badge: '88 RISK'
-              }
-            ]
-          },
-          {
-            title: 'Operations & Verification',
-            items: [
-              {
-                name: 'Active Well Workspace',
-                shortName: 'Cockpit',
-                href: '/operations',
-                icon: Layers,
-                description: 'Active drilling intelligence'
-              },
-              {
-                name: 'Geospatial Well Map',
-                shortName: 'Well Map',
-                href: '/map',
-                icon: MapPin,
-                description: 'Offset radius & coordinate pins'
-              },
-              {
-                name: 'Well Replay Validator',
-                shortName: 'Replay',
-                href: '/replay',
-                icon: Activity,
-                description: 'Incident verification suite'
-              },
-              {
-                name: 'Fleet Overview',
-                shortName: 'Fleet',
-                href: '/dashboard',
-                icon: LayoutDashboard,
-                description: 'Assam basin monitoring'
-              }
-            ]
-          }
-        ];
-
-      case 'operations_manager':
-      default:
-        return [
-          {
-            title: 'Active Drilling Intelligence',
-            items: [
-              {
-                name: 'Active Well (OIL-GLK-14)',
-                shortName: 'Live Well',
-                href: '/operations',
-                icon: Layers,
-                description: 'eRTMAC live-state & lookahead',
-                badge: 'LIVE'
-              },
-              {
-                name: 'Geospatial Well Map',
-                shortName: 'Well Map',
-                href: '/map',
-                icon: MapPin,
-                description: 'Custom coordinates & offset radius',
-                badge: 'GEO'
-              },
-              {
-                name: 'Historical Well Replay',
-                shortName: 'Replay',
-                href: '/replay',
-                icon: Activity,
-                description: 'Falsifiable lookahead simulator',
-                badge: 'DEMO'
-              },
-              {
-                name: 'Offset Intelligence',
-                shortName: 'Analogs',
-                href: '/analogs',
-                icon: GitCompare,
-                description: 'Cross-formation correlation'
-              },
-              {
-                name: 'Hazard Advisories',
-                shortName: 'Advisories',
-                href: '/alerts',
-                icon: Bell,
-                description: 'Active lookahead notices',
-                badgeCount: openAlertsCount
-              }
-            ]
-          },
-          {
-            title: 'Institutional Memory & Governance',
-            items: [
-              {
-                name: 'Geological Prediction Gap',
-                shortName: 'Prediction Gap',
-                href: '/prediction-gap',
-                icon: Target,
-                description: 'GTO vs Actual drift index',
-                badge: '±58.4m'
-              },
-              {
-                name: 'Memory Decay Index',
-                shortName: 'Decay Index',
-                href: '/decay-index',
-                icon: TrendingDown,
-                description: 'Knowledge loss risk by field',
-                badge: 'DIGBOI 88%'
-              },
-              {
-                name: 'Ingestion Pipeline Status',
-                shortName: 'Ingestion',
-                href: '/admin/ingestion',
-                icon: Database,
-                description: 'Scanned OCR to structured schema'
-              },
-              {
-                name: 'Source Document Register',
-                shortName: 'Archives',
-                href: '/admin/sources',
-                icon: FileText,
-                description: 'WCR & DDR archival repository'
-              },
-              {
-                name: 'Fleet Well Register',
-                shortName: 'Fleet',
-                href: '/dashboard',
-                icon: LayoutDashboard,
-                description: 'Assam basin wells overview'
-              }
-            ]
-          }
-        ];
+  // Primary navigation strictly matching Oil India NWIS specification
+  const primaryNavItems = [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: LayoutDashboard,
+      description: 'Fleet & basin register'
+    },
+    {
+      name: 'Nearby Wells',
+      href: '/operations',
+      icon: MapPin,
+      description: 'Active well & offset proximity',
+      activeMatch: ['/operations', '/wells']
+    },
+    {
+      name: 'Well Correlation',
+      href: '/analogs',
+      icon: SlidersVertical,
+      description: 'Stratigraphic formation alignment'
+    },
+    {
+      name: 'Risk Alerts',
+      href: '/alerts',
+      icon: AlertTriangle,
+      description: 'Active lookahead hazard warnings',
+      badgeCount: openAlertsCount
+    },
+    {
+      name: 'Well Knowledge Base',
+      href: '/decay-index',
+      icon: Database,
+      description: 'Memory decay & institutional knowledge'
+    },
+    {
+      name: 'Reports & Documents',
+      href: '/admin/sources',
+      icon: FileText,
+      description: 'WCR & DDR archival repository'
+    },
+    {
+      name: 'Analytics',
+      href: '/prediction-gap',
+      icon: BarChart3,
+      description: 'Geological prediction gap index'
+    },
+    {
+      name: 'Settings',
+      href: '/login',
+      icon: Settings,
+      description: 'Console persona & system configuration'
     }
+  ];
+
+  // Secondary Engineering Modules for deep verification
+  const engineeringModules = [
+    {
+      name: 'Geospatial Map',
+      href: '/map',
+      icon: Compass,
+      description: 'Custom coordinates & offset radius'
+    },
+    {
+      name: 'Well Replay Validator',
+      href: '/replay',
+      icon: Activity,
+      description: 'Deterministic lookahead simulator'
+    },
+    {
+      name: 'Ingestion Pipeline',
+      href: '/admin/ingestion',
+      icon: Cpu,
+      description: 'Scanned OCR to structured schema'
+    }
+  ];
+
+  const isItemActive = (item: typeof primaryNavItems[0]) => {
+    if (item.activeMatch) {
+      return item.activeMatch.some(p => pathname.startsWith(p));
+    }
+    return item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
   };
 
-  const navSections = getNavSections();
-
   return (
-    <aside 
-      className={`border-r border-neutral-200/80 dark:border-neutral-800 bg-white dark:bg-[#11141a] shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out hidden md:flex select-none h-full overflow-y-auto ${
-        isSidebarCollapsed ? 'w-[72px] p-2' : 'w-64 p-3.5'
+    <aside
+      className={`border-r border-[#222222] bg-[#34435A] text-[#D9F2EE] shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out hidden md:flex select-none h-full overflow-y-auto ${
+        isSidebarCollapsed ? 'w-[72px] p-2' : 'w-64 p-3'
       }`}
       aria-label="Operational Navigation"
     >
-      <div className="space-y-3.5">
+      <div className="space-y-3">
 
-        {/* ─── Top Brand Header with 3-Bar Strata Logo ─── */}
-        <div className="flex items-center justify-between px-1 pt-1 pb-1">
+        {/* ─── Top Brand Header with Oil India Logo ─── */}
+        <div className="flex items-center justify-between px-1 pt-1 pb-2 border-b border-[#222222]">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-neutral-950 dark:bg-neutral-900 flex items-center justify-center border border-neutral-800 shadow-xs group-hover:border-amber-600 transition-colors shrink-0">
-              <div className="relative flex flex-col gap-0.5 items-center">
-                <span className="w-3.5 h-0.5 rounded-xs bg-amber-500" />
-                <span className="w-3.5 h-0.5 rounded-xs bg-amber-600" />
-                <span className="w-3.5 h-0.5 rounded-xs bg-amber-700" />
-              </div>
+            <div className="w-9 h-9 bg-white flex items-center justify-center p-0.5 border border-[#222222] shadow-2xs group-hover:border-[#3FC3B6] transition-colors shrink-0">
+              <img 
+                src="/oil-india-logo.png" 
+                alt="Oil India Limited Logo" 
+                className="w-full h-full object-contain" 
+              />
             </div>
             {!isSidebarCollapsed && (
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-base tracking-tight text-neutral-950 dark:text-white font-mono">
+                  <span className="font-extrabold text-base tracking-tight text-white font-sans">
                     NWIS
                   </span>
-                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 bg-[#26A69A] text-white border border-[#3FC3B6]">
                     eRTMAC
                   </span>
                 </div>
-                <span className="text-[10px] text-neutral-500 dark:text-neutral-400 tracking-wide font-medium truncate">
-                  Oil India Limited
+                <span className="text-[11px] text-[#D9F2EE] tracking-tight font-medium truncate leading-tight">
+                  Nearby Wells Intelligence System
+                </span>
+                <span className="text-[9px] text-[#D9F2EE]/70 italic leading-tight truncate">
+                  For Safer Wells. Smarter Decisions.
                 </span>
               </div>
             )}
           </Link>
-          
-          <button 
-            type="button" 
+
+          <button
+            type="button"
             onClick={toggleSidebar}
             title={isSidebarCollapsed ? "Expand Sidebar (Ctrl+B)" : "Collapse Sidebar (Ctrl+B)"}
-            className="p-1 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="p-1 text-[#D9F2EE] hover:text-white hover:bg-[#26A69A]/30 transition-colors"
           >
-            {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            {isSidebarCollapsed ? <ChevronRight className="w-4 h-4" strokeWidth={1.5} /> : <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />}
           </button>
         </div>
 
-        {/* ─── Prominent AI Copilot Button ─── */}
+        {/* ─── Clean Search Command Bar (No generic AI sparkles) ─── */}
         {isSidebarCollapsed ? (
           <button
             type="button"
             onClick={toggleCopilot}
-            title="Ask NWIS Copilot (⌘K / Super + K)"
-            className="flex items-center justify-center w-11 h-11 mx-auto rounded-xl bg-gradient-to-r from-amber-500/15 to-orange-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 hover:border-amber-500 transition-all cursor-pointer shadow-2xs"
+            title="Search Intelligence (⌘K)"
+            className="flex items-center justify-center w-11 h-11 mx-auto bg-[#222222]/40 border border-[#222222] text-[#D9F2EE] hover:text-white hover:border-[#3FC3B6] transition-all cursor-pointer shadow-2xs"
           >
-            <Sparkles className="w-4 h-4" />
+            <Search className="w-4 h-4 text-[#3FC3B6]" strokeWidth={1.5} />
           </button>
         ) : (
           <button
             type="button"
             onClick={toggleCopilot}
-            className="flex items-center justify-between w-full px-3 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-amber-600/10 to-transparent border border-amber-500/30 hover:border-amber-500/60 text-xs font-mono font-bold text-amber-900 dark:text-amber-300 transition-all cursor-pointer group shadow-2xs"
+            className="flex items-center justify-between w-full px-3 py-2 bg-[#222222]/40 border border-[#222222] hover:border-[#3FC3B6] text-xs font-sans font-medium text-[#D9F2EE] hover:text-white transition-all cursor-pointer group shadow-2xs"
           >
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 group-hover:rotate-12 transition-transform" />
-              <span>Ask NWIS Copilot</span>
+              <Search className="w-4 h-4 text-[#3FC3B6] group-hover:text-white transition-colors shrink-0" strokeWidth={1.5} />
+              <span className="text-xs">Search Intelligence</span>
             </div>
-            <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-500/30 font-mono">
+            <kbd className="text-[10px] px-1.5 py-0.5 bg-[#222222] text-[#D9F2EE] border border-[#34435A] font-mono">
               ⌘K
             </kbd>
           </button>
         )}
 
-        {/* ─── Active Target Well Indicator Card ─── */}
-        {!isSidebarCollapsed ? (
-          <Link
-            href="/operations"
-            className="block p-2.5 rounded-xl bg-neutral-50/90 dark:bg-[#0c0f16] border border-neutral-200/80 dark:border-neutral-800 space-y-1 hover:border-amber-500/50 transition-colors group"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 dark:text-neutral-400">
-                eRTMAC Target Well
-              </span>
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 text-[9px] font-mono font-bold border border-emerald-500/30">
-                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                STREAM LIVE
-              </span>
+        {/* ─── Primary Navigation Menu ─── */}
+        <nav aria-label="Primary Navigation">
+          <ul className="space-y-0.5">
+            {primaryNavItems.map((item) => {
+              const Icon = item.icon;
+              const active = isItemActive(item);
+
+              if (isSidebarCollapsed) {
+                return (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      title={`${item.name} · ${item.description}`}
+                      className={`flex items-center justify-center w-11 h-11 mx-auto transition-all group ${
+                        active
+                          ? 'bg-[#26A69A] text-white font-bold border-l-4 border-l-[#ED1C24] border-y border-r border-[#3FC3B6] shadow-xs'
+                          : 'text-[#D9F2EE] hover:text-white hover:bg-[#222222]/50 font-medium'
+                      }`}
+                    >
+                      <Icon className={`w-[18px] h-[18px] ${active ? 'text-white' : 'text-[#D9F2EE] group-hover:text-white'}`} strokeWidth={1.5} />
+                    </Link>
+                  </li>
+                );
+              }
+
+              return (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className={`flex items-center justify-between px-3 py-2 text-xs transition-all ${
+                      active
+                        ? 'bg-[#26A69A] text-white font-bold border-l-4 border-l-[#ED1C24] border-y border-r border-[#3FC3B6] shadow-xs'
+                        : 'text-[#D9F2EE] hover:text-white hover:bg-[#222222]/50 font-medium'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 truncate">
+                      <Icon className={`w-[18px] h-[18px] shrink-0 ${active ? 'text-white' : 'text-[#D9F2EE]'}`} strokeWidth={1.5} />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+
+                    {item.badgeCount !== undefined && (
+                      <span className="px-2 py-0.5 bg-[#ED1C24] text-white text-[10px] font-mono font-extrabold shadow-2xs">
+                        {item.badgeCount}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* ─── Secondary Engineering Modules Section ─── */}
+        {!isSidebarCollapsed && (
+          <div className="pt-2 border-t border-[#222222] space-y-1">
+            <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#D9F2EE]/70 px-3 py-1">
+              Engineering Tools
             </div>
-            <div className="flex items-center justify-between">
-              <span className="font-extrabold text-xs text-neutral-950 dark:text-white font-mono group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
-                OIL-GLK-14
-              </span>
-              <span className="text-xs font-mono font-extrabold text-amber-600 dark:text-amber-400">
-                2,165.4m
-              </span>
-            </div>
-          </Link>
-        ) : (
-          <Link
-            href="/operations"
-            title="eRTMAC Target: OIL-GLK-14 (2,165.4m)"
-            className="p-1.5 rounded-xl bg-neutral-50 dark:bg-[#0c0f16] border border-neutral-200/80 dark:border-neutral-800 flex flex-col items-center justify-center gap-0.5 hover:border-amber-500/50 transition-colors"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-mono text-[9px] font-extrabold text-neutral-900 dark:text-white">GLK-14</span>
-          </Link>
+            <ul className="space-y-0.5">
+              {engineeringModules.map((item) => {
+                const Icon = item.icon;
+                const active = pathname.startsWith(item.href);
+
+                return (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className={`flex items-center gap-3 px-3 py-1.5 text-xs transition-all ${
+                        active
+                          ? 'bg-[#26A69A] text-white font-bold border-l-4 border-l-[#ED1C24] border-y border-r border-[#3FC3B6]'
+                          : 'text-[#D9F2EE] hover:text-white hover:bg-[#222222]/50'
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-[#D9F2EE]'}`} strokeWidth={1.5} />
+                      <span className="truncate">{item.name}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
-
-        {/* ─── Dynamic Role-Based Navigation Sections ─── */}
-        <div className="space-y-3 pt-1">
-          {navSections.map((section, idx) => (
-            <div key={section.title} className="space-y-1">
-              {!isSidebarCollapsed ? (
-                <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 px-2.5 py-0.5">
-                  {section.title}
-                </div>
-              ) : (
-                idx > 0 && <div className="border-t border-neutral-200 dark:border-neutral-800 my-2 mx-1" />
-              )}
-
-              <ul className="space-y-0.5">
-                {section.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-
-                  if (isSidebarCollapsed) {
-                    return (
-                      <li key={item.name}>
-                        <Link
-                          href={item.href}
-                          title={`${item.name}${item.description ? ` · ${item.description}` : ''}`}
-                          className={`flex items-center justify-center w-11 h-11 mx-auto rounded-xl transition-all group ${
-                            isActive
-                              ? 'bg-amber-50/80 dark:bg-amber-950/40 text-amber-950 dark:text-amber-200 font-bold border border-amber-200/70 dark:border-amber-800/60 shadow-2xs'
-                              : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 font-medium'
-                          }`}
-                        >
-                          <Icon className={`w-4 h-4 ${isActive ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-400 dark:text-neutral-500'}`} />
-                        </Link>
-                      </li>
-                    );
-                  }
-
-                  return (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all ${
-                          isActive
-                            ? 'bg-amber-50/80 dark:bg-amber-950/40 text-amber-950 dark:text-amber-200 font-bold border border-amber-200/70 dark:border-amber-800/60 shadow-2xs'
-                            : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100/80 dark:hover:bg-neutral-800/60 font-medium'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5 truncate">
-                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-400 dark:text-neutral-500'}`} />
-                          <span className="truncate">{item.name}</span>
-                        </div>
-
-                        <div className="flex items-center gap-1.5 shrink-0 ml-1">
-                          {item.badgeCount !== undefined && (
-                            <span className="px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-mono font-bold">
-                              {item.badgeCount}
-                            </span>
-                          )}
-
-                          {item.badge && (
-                            <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold ${
-                              item.badge === 'LIVE'
-                                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
-                                : 'bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30'
-                            }`}>
-                              {item.badge}
-                            </span>
-                          )}
-                        </div>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </div>
 
       </div>
 
-      {/* ─── Bottom Area: Dynamic Evaluator Role Selector + Sign Out ─── */}
-      <div className="pt-3 border-t border-neutral-200/80 dark:border-neutral-800 space-y-2">
-        
+      {/* ─── Bottom Area: Oil India Branding, eRTMAC Integration, Persona & Sign Out ─── */}
+      <div className="pt-3 border-t border-[#222222] space-y-2">
+
         {!isSidebarCollapsed && (
           <>
-            {/* Dynamic Role Switcher Box */}
-            <div className="p-2.5 rounded-xl border border-neutral-200/80 dark:border-neutral-800 bg-neutral-50/90 dark:bg-[#0c0f16]">
-              <div className="flex items-center justify-between mb-1.5">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md bg-amber-500/20 text-amber-700 dark:text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/30">
-                    <HardHat className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase font-mono font-bold">
-                    Console Persona
+            {/* Integrated with eRTMAC Banner */}
+            <div className="flex items-center justify-between px-2.5 py-1.5 bg-[#222222]/40 border border-[#222222] text-[10px] font-mono text-[#D9F2EE]">
+              <span>Integrated with</span>
+              <span className="text-white font-bold flex items-center gap-1">
+                <span className="text-[#3FC3B6]">⇆</span> eRTMAC
+              </span>
+            </div>
+
+            {/* Official Oil India Limited Emblem Branding */}
+            <div className="flex items-center gap-2.5 px-2 py-2 bg-[#222222]/40 border border-[#222222]">
+              <div className="w-8 h-8 bg-white p-0.5 flex items-center justify-center shrink-0 border border-white/20 shadow-2xs">
+                <img 
+                  src="/oil-india-logo.png" 
+                  alt="Oil India Limited" 
+                  className="w-full h-full object-contain" 
+                />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-bold text-white tracking-tight leading-tight">
+                  Oil India Limited
+                </span>
+                <span className="text-[9px] text-[#D9F2EE]/70 italic leading-tight">
+                  Conquering Newer Horizons
+                </span>
+              </div>
+            </div>
+
+            {/* Dynamic Console Persona Switcher */}
+            <div className="p-2 border border-[#222222] bg-[#222222]/40">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-1.5">
+                  <HardHat className="w-3.5 h-3.5 text-[#3FC3B6]" strokeWidth={1.5} />
+                  <span className="text-[10px] text-[#D9F2EE] uppercase font-mono font-bold">
+                    Role Persona
                   </span>
                 </div>
-                <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-400 font-mono">
+                <span className="text-[9px] font-bold text-[#3FAE68] font-mono">
                   ACTIVE
                 </span>
               </div>
               <select
                 value={currentRole}
                 onChange={(e) => setRole(e.target.value as UserRole)}
-                className="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-xs font-bold text-neutral-900 dark:text-white rounded-lg px-2 py-1.5 cursor-pointer focus:outline-hidden"
+                className="w-full bg-[#222222] border border-[#34435A] text-xs font-sans text-white px-2 py-1 cursor-pointer focus:outline-hidden focus:border-[#3FC3B6]"
               >
-                <option value="operations_manager">Operations Manager</option>
-                <option value="field_engineer">Lead Rig Engineer</option>
-                <option value="admin">PSU Auditor</option>
+                <option value="operations_manager">Operations Manager (DD)</option>
+                <option value="field_engineer">Drilling Engineer (AM)</option>
+                <option value="admin">Lead Auditor (PS)</option>
               </select>
             </div>
 
             {/* Sign Out Action */}
             <Link
               href="/login"
-              className="flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-medium text-neutral-500 hover:text-rose-600 dark:text-neutral-400 dark:hover:text-rose-400 hover:bg-rose-50/80 dark:hover:bg-rose-950/30 transition-all group"
+              className="flex items-center justify-between px-2.5 py-1.5 text-xs font-medium text-[#D9F2EE] hover:text-[#ED1C24] hover:bg-[#ED1C24]/10 transition-all group"
               title="Sign out and return to login"
             >
               <div className="flex items-center gap-2">
-                <LogOut className="w-3.5 h-3.5 text-neutral-400 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors" />
+                <LogOut className="w-3.5 h-3.5 text-[#D9F2EE] group-hover:text-[#ED1C24] transition-colors" strokeWidth={1.5} />
                 <span>Sign Out</span>
               </div>
-              <span className="text-[10px] font-mono text-neutral-400 group-hover:text-rose-600 dark:group-hover:text-rose-400">Exit</span>
+              <span className="text-[10px] font-mono text-[#D9F2EE]/60 group-hover:text-[#ED1C24]">Exit</span>
             </Link>
 
             {/* Copyright */}
-            <div className="text-[10px] text-neutral-400 dark:text-neutral-500 text-center font-mono pt-0.5">
+            <div className="text-[9px] text-[#D9F2EE]/60 text-center font-mono pt-0.5">
               © 2026 Oil India Limited
             </div>
           </>
@@ -535,12 +370,15 @@ export const GovNav: React.FC = () => {
 
         {isSidebarCollapsed && (
           <div className="flex flex-col items-center gap-2">
+            <div className="w-8 h-8 p-0.5 bg-white border border-[#222222] shrink-0">
+              <img src="/oil-india-logo.png" alt="OIL" className="w-full h-full object-contain" />
+            </div>
             <Link
               href="/login"
               title="Sign Out"
-              className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+              className="p-2 text-[#D9F2EE] hover:text-[#ED1C24] hover:bg-[#ED1C24]/10 transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4" strokeWidth={1.5} />
             </Link>
           </div>
         )}

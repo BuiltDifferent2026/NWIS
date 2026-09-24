@@ -35,22 +35,22 @@ export default function AlertsListPage() {
       </div>
 
       {/* Filter Strip */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-xs">
+      <div className="rounded-none border border-[#E2E5E8] bg-white p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-2xs">
         <div className="flex items-center gap-2">
-          <span className="font-extrabold text-neutral-950 dark:text-white uppercase">Filter Advisories:</span>
+          <span className="font-extrabold text-[#252B33] dark:text-white uppercase">Filter Advisories:</span>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           {/* Risk Level Filter */}
           <div className="flex items-center gap-1.5">
-            <label htmlFor="risk-filter" className="text-neutral-500 dark:text-neutral-400 uppercase text-[11px]">
+            <label htmlFor="risk-filter" className="text-[#6B7280] dark:text-neutral-400 uppercase text-[11px]">
               Risk Level:
             </label>
             <select
               id="risk-filter"
               value={riskFilter}
               onChange={(e) => setRiskFilter(e.target.value)}
-              className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
+              className="rounded-none border border-[#E2E5E8] bg-[#F5F7F8] px-2.5 py-1 text-xs font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
               <option value="all">All Levels</option>
               <option value="high">High Risk Only</option>
@@ -61,14 +61,14 @@ export default function AlertsListPage() {
 
           {/* Status Filter */}
           <div className="flex items-center gap-1.5">
-            <label htmlFor="status-filter" className="text-neutral-500 dark:text-neutral-400 uppercase text-[11px]">
+            <label htmlFor="status-filter" className="text-[#6B7280] dark:text-neutral-400 uppercase text-[11px]">
               Status:
             </label>
             <select
               id="status-filter"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
+              className="rounded-none border border-[#E2E5E8] bg-[#F5F7F8] px-2.5 py-1 text-xs font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
               <option value="all">All Statuses</option>
               <option value="new">New (Unacknowledged)</option>
@@ -80,14 +80,14 @@ export default function AlertsListPage() {
 
           {/* Well Filter */}
           <div className="flex items-center gap-1.5">
-            <label htmlFor="well-filter" className="text-neutral-500 dark:text-neutral-400 uppercase text-[11px]">
+            <label htmlFor="well-filter" className="text-[#6B7280] dark:text-neutral-400 uppercase text-[11px]">
               Well:
             </label>
             <select
               id="well-filter"
               value={wellFilter}
               onChange={(e) => setWellFilter(e.target.value)}
-              className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-2.5 py-1 text-xs font-bold text-neutral-900 dark:text-white focus:outline-hidden"
+              className="rounded-none border border-[#E2E5E8] bg-[#F5F7F8] px-2.5 py-1 text-xs font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
               <option value="all">All Active Wells</option>
               <option value="well-glk-14">OIL-GLK-14 (Geleki)</option>
@@ -98,12 +98,12 @@ export default function AlertsListPage() {
       </div>
 
       {/* Alerts Table Card */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] overflow-hidden shadow-xs">
-        <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between text-xs">
-          <span className="font-extrabold text-neutral-950 dark:text-white">
+      <div className="rounded-none border border-[#E2E5E8] bg-white overflow-hidden shadow-2xs">
+        <div className="p-4 border-b border-[#E2E5E8] flex items-center justify-between text-xs">
+          <span className="font-extrabold text-[#252B33] dark:text-white">
             Advisory Register ({filteredAlerts.length} Entries)
           </span>
-          <span className="text-neutral-500 dark:text-neutral-400 font-mono">
+          <span className="text-[#6B7280] dark:text-neutral-400 font-mono">
             eRTMAC Proactive Corridor Watcher Feed
           </span>
         </div>
@@ -125,7 +125,7 @@ export default function AlertsListPage() {
             <tbody>
               {filteredAlerts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-8 text-neutral-500 dark:text-neutral-400 italic">
+                  <td colSpan={8} className="text-center py-8 text-[#6B7280] italic">
                     No advisories match the selected filters.
                   </td>
                 </tr>
@@ -135,15 +135,15 @@ export default function AlertsListPage() {
                     <td className="font-mono font-bold text-xs">
                       <Link
                         href={`/alerts/${alert.id}`}
-                        className="text-amber-700 dark:text-amber-400 hover:underline"
+                        className="text-[#26A69A] hover:underline"
                       >
                         {alert.id}
                       </Link>
                     </td>
-                    <td className="font-mono text-xs font-bold uppercase text-neutral-900 dark:text-white">
+                    <td className="font-mono text-xs font-bold uppercase text-[#252B33] dark:text-white">
                       {alert.wellId.replace('well-', 'OIL-').toUpperCase()}
                     </td>
-                    <td className="font-mono text-xs font-bold text-neutral-900 dark:text-neutral-200">
+                    <td className="font-mono text-xs font-bold text-[#252B33] dark:text-neutral-200">
                       {alert.currentDepth}m MD
                     </td>
                     <td>
@@ -152,16 +152,16 @@ export default function AlertsListPage() {
                     <td>
                       <StatusTag label={alert.status.replace('_', ' ').toUpperCase()} />
                     </td>
-                    <td className="font-mono text-xs text-neutral-500 dark:text-neutral-400">
+                    <td className="font-mono text-xs text-[#6B7280]">
                       {alert.firedAt}
                     </td>
-                    <td className="text-xs max-w-xs text-neutral-700 dark:text-neutral-300">
+                    <td className="text-xs max-w-xs text-[#252B33] dark:text-neutral-300">
                       {alert.fact.slice(0, 75)}...
                     </td>
                     <td className="text-right">
                       <Link
                         href={`/alerts/${alert.id}`}
-                        className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline font-mono"
+                        className="text-xs font-bold text-[#26A69A] hover:text-[#3FC3B6] hover:underline font-mono"
                       >
                         Review Protocol →
                       </Link>

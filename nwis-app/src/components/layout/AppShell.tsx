@@ -36,11 +36,11 @@ export function AppShell({ children }: AppShellProps) {
 
   // Enterprise console layout: Left sidebar (full height) + Right column (Top bar + content)
   return (
-    <div className="h-screen w-full flex bg-neutral-100/70 dark:bg-[#090b0f] text-neutral-900 dark:text-neutral-100 antialiased transition-colors overflow-hidden">
+    <div className="h-screen w-full flex bg-[#F5F7F8] dark:bg-[#191E26] text-[#252B33] dark:text-white antialiased transition-colors overflow-hidden">
       {/* Skip to main content link (Accessibility requirement) */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-amber-400 focus:text-neutral-950 focus:p-2 focus:font-bold"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-[#3FC3B6] focus:text-[#252B33] focus:p-2 focus:font-bold"
       >
         Skip to main content
       </a>
@@ -53,16 +53,16 @@ export function AppShell({ children }: AppShellProps) {
         <GovHeader />
         <main
           id="main-content"
-          className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-7 bg-neutral-100/70 dark:bg-[#090b0f] transition-colors"
+          className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-7 bg-[#F5F7F8] dark:bg-[#191E26] transition-colors"
         >
           {children}
         </main>
       </div>
 
       {/* Global AI Copilot Modal Drawer */}
-      <AskNwisDrawer 
-        isOpen={isCopilotOpen} 
-        onClose={() => setCopilotOpen(false)} 
+      <AskNwisDrawer
+        isOpen={isCopilotOpen}
+        onClose={() => setCopilotOpen(false)}
       />
     </div>
   );

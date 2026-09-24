@@ -33,7 +33,7 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
 
   if (!mounted) {
     return (
-      <div className={`w-8 h-8 rounded-xl border border-neutral-200 bg-white ${className}`} />
+      <div className={`w-8 h-8 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] ${className}`} />
     );
   }
 
@@ -42,13 +42,13 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = '' }
       type="button"
       onClick={toggleTheme}
       title={theme === 'light' ? 'Switch to Control Room Dark Theme' : 'Switch to Daylight Light Theme'}
-      className={`relative p-2 rounded-xl border border-neutral-200/80 bg-white text-neutral-600 hover:text-neutral-950 hover:bg-neutral-100 transition-all shadow-2xs ${className}`}
+      className={`relative p-2 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white hover:bg-[#F5F7F8] dark:hover:bg-[#2D3747] transition-all shadow-2xs ${className}`}
       aria-label="Toggle theme"
     >
       {theme === 'light' ? (
-        <Moon className="w-4 h-4 text-neutral-700 hover:text-amber-600 transition-colors" />
+        <Moon className="w-4 h-4 text-[#34435A] hover:text-[#3FC3B6] transition-colors" />
       ) : (
-        <Sun className="w-4 h-4 text-amber-400 hover:text-amber-300 transition-colors" />
+        <Sun className="w-4 h-4 text-[#3FC3B6] hover:text-[#26A69A] transition-colors" />
       )}
     </button>
   );

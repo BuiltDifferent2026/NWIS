@@ -204,7 +204,7 @@ function ArcGauge({
     return `M ${from.x} ${from.y} A ${radius} ${radius} 0 ${large} 1 ${to.x} ${to.y}`;
   };
 
-  const fillColor = warning ? '#EF4444' : colorClass === 'amber' ? '#F59E0B' : colorClass === 'emerald' ? '#10B981' : '#38BDF8';
+  const fillColor = warning ? '#ED1C24' : colorClass === 'amber' ? '#F2B84B' : colorClass === 'emerald' ? '#26A69A' : '#3FC3B6';
 
   return (
     <div className="flex flex-col items-center">
@@ -214,7 +214,7 @@ function ArcGauge({
           d={arcPath(-120, 120, r)}
           fill="none"
           stroke="currentColor"
-          className="text-neutral-200 dark:text-[#1e2a3a]"
+          className="text-[#E2E5E8] dark:text-[#364356]"
           strokeWidth={6}
           strokeLinecap="round"
         />
@@ -232,7 +232,7 @@ function ArcGauge({
           x={cx} 
           y={cy + 4} 
           textAnchor="middle" 
-          className="fill-neutral-950 dark:fill-white font-bold font-mono text-[11px]"
+          className="fill-[#252B33] dark:fill-white font-bold font-mono text-[11px]"
         >
           {value.toFixed(1)}
         </text>
@@ -240,12 +240,12 @@ function ArcGauge({
           x={cx} 
           y={cy + 16} 
           textAnchor="middle" 
-          className="fill-neutral-500 dark:fill-neutral-400 font-mono text-[8px]"
+          className="fill-[#6B7280] dark:fill-[#94A3B8] font-mono text-[8px]"
         >
           {unit}
         </text>
       </svg>
-      <span className="text-[9px] font-mono uppercase tracking-widest text-neutral-500 dark:text-neutral-400 mt-0.5">{label}</span>
+      <span className="text-[9px] font-mono uppercase tracking-widest text-[#6B7280] dark:text-[#94A3B8] mt-0.5">{label}</span>
     </div>
   );
 }
@@ -279,17 +279,25 @@ export default function WellReplayPage() {
   const distanceToIncident = Math.max(0, Math.round((scenario.historicalIncidentDepth - currentDepth) * 10) / 10);
   const progressPct = ((currentDepth - scenario.startDepth) / (scenario.maxDepth - scenario.startDepth)) * 100;
 
-  // Simulated telemetry — realistic noise + state transitions
-  const noise = (base: number, pct = 0.04) => base * (1 + (Math.random() - 0.5) * 2 * pct);
-  const simulatedROP = isPastIncident ? noise(scenario.hazardROP, 0.12) : isAlertFired ? noise((scenario.baseROP + scenario.hazardROP) / 2, 0.08) : noise(scenario.baseROP, 0.05);
-  const simulatedTorque = isPastIncident ? noise(scenario.hazardTorque, 0.1) : isAlertFired ? noise((scenario.baseTorque + scenario.hazardTorque) / 2, 0.06) : noise(scenario.baseTorque, 0.04);
-  const simulatedMW = isAlertFired ? noise(scenario.hazardMudWeight, 0.02) : noise(scenario.baseMudWeight, 0.01);
-  const simulatedSPP = isPastIncident ? noise(scenario.baseSPP * 0.65, 0.08) : isAlertFired ? noise(scenario.baseSPP * 0.92, 0.04) : noise(scenario.baseSPP, 0.03);
-  const simulatedFlowRate = isPastIncident ? noise(scenario.baseFlowRate * 0.55, 0.1) : noise(scenario.baseFlowRate, 0.02);
-  const simulatedWOB = isPastIncident ? noise(8.2, 0.15) : noise(16.8, 0.06);
-  const simulatedRPM = isPastIncident ? noise(48, 0.1) : noise(120, 0.03);
-  const simulatedECD = noise(simulatedMW * 1.018, 0.01);
-  const pitVolume = isPastIncident ? noise(scenario.baseFlowRate * 0.38, 0.12) : noise(scenario.baseFlowRate * 0.98, 0.02);
+  // Simulated telemetry — deterministic pseudo-random based on depth to ensure SSR & client produce identical numbers
+  const pseudoRandom = (seed: number) => {
+    const x = Math.sin(seed * 12.9898) * 43758.5453;
+    return x - Math.floor(x);
+  };
+  const noise = (base: number, seedOffset: number, pct = 0.04) => {
+    const pr = pseudoRandom(currentDepth + seedOffset);
+    return base * (1 + (pr - 0.5) * 2 * pct);
+  };
+
+  const simulatedROP = isPastIncident ? noise(scenario.hazardROP, 1.1, 0.12) : isAlertFired ? noise((scenario.baseROP + scenario.hazardROP) / 2, 1.1, 0.08) : noise(scenario.baseROP, 1.1, 0.05);
+  const simulatedTorque = isPastIncident ? noise(scenario.hazardTorque, 2.3, 0.1) : isAlertFired ? noise((scenario.baseTorque + scenario.hazardTorque) / 2, 2.3, 0.06) : noise(scenario.baseTorque, 2.3, 0.04);
+  const simulatedMW = isAlertFired ? noise(scenario.hazardMudWeight, 3.7, 0.02) : noise(scenario.baseMudWeight, 3.7, 0.01);
+  const simulatedSPP = isPastIncident ? noise(scenario.baseSPP * 0.65, 4.2, 0.08) : isAlertFired ? noise(scenario.baseSPP * 0.92, 4.2, 0.04) : noise(scenario.baseSPP, 4.2, 0.03);
+  const simulatedFlowRate = isPastIncident ? noise(scenario.baseFlowRate * 0.55, 5.5, 0.1) : noise(scenario.baseFlowRate, 5.5, 0.02);
+  const simulatedWOB = isPastIncident ? noise(8.2, 6.1, 0.15) : noise(16.8, 6.1, 0.06);
+  const simulatedRPM = isPastIncident ? noise(48, 7.8, 0.1) : noise(120, 7.8, 0.03);
+  const simulatedECD = noise(simulatedMW * 1.018, 8.4, 0.01);
+  const pitVolume = isPastIncident ? noise(scenario.baseFlowRate * 0.38, 9.9, 0.12) : noise(scenario.baseFlowRate * 0.98, 9.9, 0.02);
 
   // Timer loop
   useEffect(() => {
@@ -316,46 +324,46 @@ export default function WellReplayPage() {
   const statusPhase: 'safe' | 'warning' | 'incident' = isPastIncident ? 'incident' : isAlertFired ? 'warning' : 'safe';
 
   const phaseColors = {
-    safe:     { border: 'border-emerald-300 dark:border-[#1a2a1a]', dot: 'bg-emerald-500', label: 'SAFE ZONE', labelColor: 'text-emerald-700 dark:text-emerald-400', bg: 'bg-emerald-50/70 dark:bg-[#0c1219]' },
-    warning:  { border: 'border-amber-400 dark:border-amber-500/60', dot: 'bg-amber-500', label: 'ADVISORY ACTIVE', labelColor: 'text-amber-800 dark:text-amber-400', bg: 'bg-amber-50/80 dark:bg-amber-950/15' },
-    incident: { border: 'border-rose-400 dark:border-rose-500/70', dot: 'bg-rose-500', label: 'INCIDENT HORIZON', labelColor: 'text-rose-700 dark:text-rose-400', bg: 'bg-rose-50/80 dark:bg-rose-950/15' },
+    safe:     { border: 'border-[#3FAE68]', dot: 'bg-[#3FAE68]', label: 'SAFE ZONE', labelColor: 'text-[#3FAE68]', bg: 'bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15' },
+    warning:  { border: 'border-[#F2B84B]', dot: 'bg-[#F2B84B]', label: 'ADVISORY ACTIVE', labelColor: 'text-[#C68A1B] dark:text-[#F2B84B]', bg: 'bg-[#FEF9EE] dark:bg-[#F2B84B]/15' },
+    incident: { border: 'border-[#ED1C24]', dot: 'bg-[#ED1C24]', label: 'INCIDENT HORIZON', labelColor: 'text-[#ED1C24]', bg: 'bg-[#FDF2F2] dark:bg-[#ED1C24]/15' },
   };
   const phase = phaseColors[statusPhase];
 
   return (
-    <div className="space-y-4 max-w-[1600px] mx-auto pb-12 font-mono animate-in fade-in duration-150">
+    <div className="space-y-4 max-w-[1600px] mx-auto pb-12 font-mono animate-in fade-in duration-150 text-[#252B33] dark:text-white">
 
       {/* ════════════════════════════════════════════════════════
           TOP HEADER — Console Title + Scenario Selector
       ════════════════════════════════════════════════════════ */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div>
-          <h1 className="text-xl font-extrabold tracking-tight text-neutral-950 dark:text-white">
+          <h1 className="text-xl font-black tracking-tight text-[#252B33] dark:text-white">
             Historical Well Replay Simulator
           </h1>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+          <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
             Proactive advisory lookahead — 75m MD before historical hazard depth
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           {/* Scenario selector */}
-          <label className="text-xs font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-wider shrink-0 font-bold">
+          <label className="text-xs font-mono text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider shrink-0 font-bold">
             Scenario:
           </label>
           <div className="relative">
             <select
               value={selectedScenarioId}
               onChange={(e) => handleScenarioChange(e.target.value)}
-              className="appearance-none bg-white dark:bg-[#111823] border border-neutral-300 dark:border-[#1e2a3a] text-neutral-900 dark:text-neutral-200 text-xs font-mono px-3 py-1.5 pr-7 rounded-xl focus:outline-hidden focus:border-amber-500 cursor-pointer shadow-2xs"
+              className="appearance-none bg-white dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] text-[#252B33] dark:text-white text-xs font-mono px-3 py-1.5 pr-7 rounded-none focus:outline-hidden focus:border-[#3FC3B6] cursor-pointer shadow-2xs font-bold"
             >
               {REPLAY_SCENARIOS.map((sc) => (
-                <option key={sc.id} value={sc.id}>
+                <option key={sc.id} value={sc.id} className="dark:bg-[#1E2532] dark:text-white">
                   {sc.name} — {sc.eventType}
                 </option>
               ))}
             </select>
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400 pointer-events-none" />
+            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6B7280] dark:text-[#94A3B8] pointer-events-none" />
           </div>
         </div>
       </div>
@@ -369,91 +377,87 @@ export default function WellReplayPage() {
         <div className="xl:col-span-3 flex flex-col gap-4">
 
           {/* Bit Depth + Progress */}
-          <div className="rounded-2xl border border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] p-4 space-y-3 shadow-xs transition-colors">
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 space-y-3 shadow-2xs transition-colors">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold">
+              <span className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-widest font-bold">
                 Current Bit Depth
               </span>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                statusPhase === 'incident' ? 'bg-rose-50 dark:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800' :
-                statusPhase === 'warning' ? 'bg-amber-50 dark:bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800' :
-                'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
-              }`}>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-none border ${phase.border} ${phase.bg} ${phase.labelColor}`}>
                 {phase.label}
               </span>
             </div>
 
             <div className="text-center py-2">
-              <div className="text-4xl font-extrabold text-neutral-950 dark:text-white tabular-nums tracking-tight">
+              <div className="text-4xl font-black text-[#252B33] dark:text-white tabular-nums tracking-tight">
                 {currentDepth.toFixed(1)}
               </div>
-              <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 font-bold">m MD</div>
+              <div className="text-xs text-[#6B7280] dark:text-[#94A3B8] mt-1 font-bold">m MD</div>
             </div>
 
             {/* Depth progress track */}
             <div className="space-y-1.5">
-              <div className="relative h-2.5 rounded-full bg-neutral-200 dark:bg-[#141c27] overflow-hidden border border-neutral-300 dark:border-neutral-700/50">
+              <div className="relative h-2.5 rounded-none bg-[#E2E5E8] dark:bg-[#191E26] overflow-hidden border border-[#E2E5E8] dark:border-[#364356]">
                 {/* Alert zone marker */}
                 <div
-                  className="absolute top-0 bottom-0 w-0.5 bg-amber-500"
+                  className="absolute top-0 bottom-0 w-0.5 bg-[#F2B84B] z-10"
                   style={{ left: `${((scenario.alertTriggerDepth - scenario.startDepth) / (scenario.maxDepth - scenario.startDepth)) * 100}%` }}
                 />
                 {/* Incident zone marker */}
                 <div
-                  className="absolute top-0 bottom-0 w-0.5 bg-rose-500"
+                  className="absolute top-0 bottom-0 w-0.5 bg-[#ED1C24] z-10"
                   style={{ left: `${((scenario.historicalIncidentDepth - scenario.startDepth) / (scenario.maxDepth - scenario.startDepth)) * 100}%` }}
                 />
                 {/* Progress */}
                 <div
-                  className={`h-full rounded-full transition-all duration-200 ${
-                    statusPhase === 'incident' ? 'bg-rose-500' :
-                    statusPhase === 'warning' ? 'bg-amber-500' : 'bg-emerald-500'
+                  className={`h-full rounded-none transition-all duration-200 ${
+                    statusPhase === 'incident' ? 'bg-[#ED1C24]' :
+                    statusPhase === 'warning' ? 'bg-[#F2B84B]' : 'bg-[#26A69A]'
                   }`}
                   style={{ width: `${progressPct}%` }}
                 />
               </div>
-              <div className="flex justify-between text-[9px] font-mono text-neutral-500 dark:text-neutral-400 font-bold">
+              <div className="flex justify-between text-[9px] font-mono text-[#6B7280] dark:text-[#94A3B8] font-bold">
                 <span>{scenario.startDepth}m</span>
-                <span className="text-amber-700 dark:text-amber-400">ADV {scenario.alertTriggerDepth}m</span>
-                <span className="text-rose-700 dark:text-rose-400">{scenario.historicalIncidentDepth}m</span>
+                <span className="text-[#26A69A] dark:text-[#3FC3B6]">ADV {scenario.alertTriggerDepth}m</span>
+                <span className="text-[#ED1C24]">{scenario.historicalIncidentDepth}m</span>
                 <span>TD {scenario.maxDepth}m</span>
               </div>
             </div>
 
             {/* Distance to incident */}
-            <div className={`rounded-xl p-3 text-center border ${
-              isPastIncident ? 'border-rose-300 dark:border-rose-500/30 bg-rose-50/80 dark:bg-rose-950/20' :
-              isAlertFired  ? 'border-amber-300 dark:border-amber-500/30 bg-amber-50/80 dark:bg-amber-950/15' :
-              'border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520]'
+            <div className={`rounded-none p-3 text-center border ${
+              isPastIncident ? 'border-[#ED1C24] bg-[#FDF2F2] dark:bg-[#ED1C24]/15' :
+              isAlertFired  ? 'border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15' :
+              'border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532]'
             }`}>
-              <div className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-1 font-bold">
+              <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider mb-1 font-bold">
                 Δ to Incident Depth
               </div>
-              <div className={`text-2xl font-extrabold tabular-nums ${
-                isPastIncident ? 'text-rose-600 dark:text-rose-400' :
-                isAlertFired  ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-300'
+              <div className={`text-2xl font-black tabular-nums ${
+                isPastIncident ? 'text-[#ED1C24]' :
+                isAlertFired  ? 'text-[#26A69A] dark:text-[#3FC3B6]' : 'text-[#252B33] dark:text-white'
               }`}>
                 {isPastIncident
                   ? `+${(currentDepth - scenario.historicalIncidentDepth).toFixed(1)}`
                   : distanceToIncident.toFixed(1)}
-                <span className="text-sm font-normal text-neutral-500 dark:text-neutral-400 ml-1">m</span>
+                <span className="text-sm font-normal text-[#6B7280] dark:text-[#94A3B8] ml-1">m</span>
               </div>
-              <div className="text-[10px] text-neutral-600 dark:text-neutral-400 mt-0.5 font-bold">
+              <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] mt-0.5 font-bold">
                 {isPastIncident ? 'Past incident horizon' : isAlertFired ? 'LOOKAHEAD BUFFER ACTIVE' : 'Formation safe corridor'}
               </div>
             </div>
           </div>
 
           {/* Formation / Lithology Column */}
-          <div className="rounded-2xl border border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] p-4 space-y-3 flex-1 shadow-xs transition-colors">
-            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold">Formation Log</div>
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 space-y-3 flex-1 shadow-2xs transition-colors">
+            <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-widest font-bold">Formation Log</div>
 
             <div className="space-y-2">
               {/* Simulated formation zones */}
               {[
-                { name: 'Alluvium / Overburden', depth: `${scenario.startDepth - 200}–${scenario.startDepth}m`, color: '#8B7355', opacity: 0.8 },
-                { name: scenario.formation.split(' ').slice(0, 2).join(' '), depth: `${scenario.startDepth}–${scenario.alertTriggerDepth}m`, color: '#F59E0B', opacity: 0.9 },
-                { name: '⚠ Hazard Zone', depth: `${scenario.alertTriggerDepth}–${scenario.historicalIncidentDepth}m`, color: '#EF4444', opacity: 0.95 },
+                { name: 'Alluvium / Overburden', depth: `${scenario.startDepth - 200}–${scenario.startDepth}m`, color: '#34435A', opacity: 0.7 },
+                { name: scenario.formation.split(' ').slice(0, 2).join(' '), depth: `${scenario.startDepth}–${scenario.alertTriggerDepth}m`, color: '#26A69A', opacity: 0.9 },
+                { name: '⚠ Hazard Zone', depth: `${scenario.alertTriggerDepth}–${scenario.historicalIncidentDepth}m`, color: '#ED1C24', opacity: 0.95 },
                 { name: 'Sub-formation', depth: `${scenario.historicalIncidentDepth}–${scenario.maxDepth}m`, color: '#6B7280', opacity: 0.7 },
               ].map((zone, i) => {
                 const zoneStart = [scenario.startDepth - 200, scenario.startDepth, scenario.alertTriggerDepth, scenario.historicalIncidentDepth][i];
@@ -463,24 +467,24 @@ export default function WellReplayPage() {
                 return (
                   <div
                     key={i}
-                    className={`flex items-center gap-2.5 p-2 rounded-xl border transition-all ${
+                    className={`flex items-center gap-2.5 p-2 rounded-none border transition-all ${
                       isActive
-                        ? 'border-amber-400 dark:border-amber-500/40 bg-amber-50 dark:bg-amber-950/20 shadow-xs'
+                        ? 'border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15 shadow-2xs'
                         : isPast
-                        ? 'border-neutral-200 dark:border-[#151e2a] bg-neutral-100/60 dark:bg-[#0d1320] opacity-70'
-                        : 'border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520]'
+                        ? 'border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] opacity-70'
+                        : 'border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532]'
                     }`}
                   >
                     <div
-                      className="w-3 h-10 rounded-xs shrink-0"
+                      className="w-3 h-10 rounded-none shrink-0"
                       style={{ backgroundColor: zone.color, opacity: zone.opacity }}
                     />
                     <div>
-                      <div className={`text-[11px] font-bold ${isActive ? 'text-amber-800 dark:text-amber-300' : 'text-neutral-800 dark:text-neutral-300'}`}>
-                        {isActive && <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 mr-1 animate-pulse" />}
+                      <div className={`text-[11px] font-bold ${isActive ? 'text-[#26A69A] dark:text-[#3FC3B6]' : 'text-[#252B33] dark:text-white'}`}>
+                        {isActive && <span className="inline-block w-1.5 h-1.5 rounded-none bg-[#ED1C24] mr-1 animate-pulse" />}
                         {zone.name}
                       </div>
-                      <div className="text-[9px] text-neutral-500 dark:text-neutral-400 mt-0.5 font-mono">{zone.depth}</div>
+                      <div className="text-[9px] text-[#6B7280] dark:text-[#94A3B8] mt-0.5 font-mono">{zone.depth}</div>
                     </div>
                   </div>
                 );
@@ -488,12 +492,12 @@ export default function WellReplayPage() {
             </div>
 
             {/* Provenance tag */}
-            <div className="pt-2 border-t border-neutral-200 dark:border-[#1a2333] text-[10px] text-neutral-500 dark:text-neutral-400 flex items-center justify-between">
+            <div className="pt-2 border-t border-[#E2E5E8] dark:border-[#364356] text-[10px] text-[#6B7280] dark:text-[#94A3B8] flex items-center justify-between">
               <span>{scenario.sourceDocRef}</span>
-              <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
-                scenario.confidence === 'STRUCTURED-HIGH' ? 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' :
-                scenario.confidence === 'OCR-HIGH' ? 'bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800' :
-                'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
+              <span className={`px-1.5 py-0.5 rounded-none text-[9px] font-bold ${
+                scenario.confidence === 'STRUCTURED-HIGH' ? 'bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] border border-[#3FC3B6]' :
+                scenario.confidence === 'OCR-HIGH' ? 'bg-[#FEF9EE] dark:bg-[#F2B84B]/20 text-[#C68A1B] dark:text-[#F2B84B] border border-[#F2B84B]' :
+                'bg-[#F5F7F8] dark:bg-[#1E2532] text-[#6B7280] dark:text-[#94A3B8]'
               }`}>{scenario.confidence}</span>
             </div>
           </div>
@@ -503,13 +507,13 @@ export default function WellReplayPage() {
         <div className="xl:col-span-5 flex flex-col gap-4">
 
           {/* ARC GAUGES PANEL */}
-          <div className="rounded-2xl border border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] p-4 shadow-xs transition-colors">
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 shadow-2xs transition-colors">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
-                <Radio className="w-3 h-3 text-emerald-500 animate-pulse" />
+              <span className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-widest font-bold flex items-center gap-1.5">
+                <Radio className="w-3 h-3 text-[#3FAE68] animate-pulse" />
                 Live Replay Telemetry
               </span>
-              <span className="text-[10px] text-neutral-600 dark:text-neutral-400 tabular-nums font-bold">
+              <span className="text-[10px] text-[#252B33] dark:text-white tabular-nums font-bold">
                 {scenario.name} · {scenario.field} Field
               </span>
             </div>
@@ -523,8 +527,8 @@ export default function WellReplayPage() {
           </div>
 
           {/* MULTI-CHANNEL LOG STRIP */}
-          <div className="rounded-2xl border border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] p-4 flex-1 space-y-3 shadow-xs transition-colors">
-            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold">
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 flex-1 space-y-3 shadow-2xs transition-colors">
+            <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-widest font-bold">
               Channel Trend Logs
             </div>
 
@@ -532,20 +536,20 @@ export default function WellReplayPage() {
             <div className="space-y-1">
               <div className="flex items-center justify-between text-[10px]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-                  <span className="text-neutral-800 dark:text-neutral-300 font-bold">ROP</span>
-                  <span className="text-neutral-500 dark:text-neutral-400">Rate of Penetration</span>
+                  <span className="w-2 h-2 rounded-none bg-[#26A69A] inline-block" />
+                  <span className="text-[#252B33] dark:text-white font-bold">ROP</span>
+                  <span className="text-[#6B7280] dark:text-[#94A3B8]">Rate of Penetration</span>
                 </div>
-                <div className="flex items-center gap-2 text-neutral-800 dark:text-neutral-200 tabular-nums">
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">{simulatedROP.toFixed(1)}</span>
-                  <span className="text-neutral-500">m/h</span>
+                <div className="flex items-center gap-2 text-[#252B33] dark:text-white tabular-nums">
+                  <span className="font-bold text-[#26A69A] dark:text-[#3FC3B6]">{simulatedROP.toFixed(1)}</span>
+                  <span className="text-[#6B7280] dark:text-[#94A3B8]">m/h</span>
                   {simulatedROP < scenario.baseROP * 0.6
-                    ? <TrendingDown className="w-3 h-3 text-rose-500" />
-                    : <TrendingUp className="w-3 h-3 text-emerald-500" />}
+                    ? <TrendingDown className="w-3 h-3 text-[#ED1C24]" />
+                    : <TrendingUp className="w-3 h-3 text-[#26A69A] dark:text-[#3FC3B6]" />}
                 </div>
               </div>
-              <div className="h-7 bg-neutral-100 dark:bg-[#0e1520] rounded-lg border border-neutral-200 dark:border-[#1a2333] overflow-hidden">
-                <SparkBar values={ropHistory} color="#10B981" height={28} />
+              <div className="h-7 bg-[#F5F7F8] dark:bg-[#191E26] rounded-none border border-[#E2E5E8] dark:border-[#364356] overflow-hidden">
+                <SparkBar values={ropHistory} color="#26A69A" height={28} />
               </div>
             </div>
 
@@ -553,20 +557,20 @@ export default function WellReplayPage() {
             <div className="space-y-1">
               <div className="flex items-center justify-between text-[10px]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-amber-500 inline-block" />
-                  <span className="text-neutral-800 dark:text-neutral-300 font-bold">TORQUE</span>
-                  <span className="text-neutral-500 dark:text-neutral-400">Rotary Torque</span>
+                  <span className="w-2 h-2 rounded-none bg-[#F2B84B] inline-block" />
+                  <span className="text-[#252B33] dark:text-white font-bold">TORQUE</span>
+                  <span className="text-[#6B7280] dark:text-[#94A3B8]">Rotary Torque</span>
                 </div>
-                <div className="flex items-center gap-2 text-neutral-800 dark:text-neutral-200 tabular-nums">
-                  <span className={`font-bold ${simulatedTorque > 20 ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'}`}>{simulatedTorque.toFixed(1)}</span>
-                  <span className="text-neutral-500">kft·lb</span>
+                <div className="flex items-center gap-2 text-[#252B33] dark:text-white tabular-nums">
+                  <span className={`font-bold ${simulatedTorque > 20 ? 'text-[#ED1C24]' : 'text-[#34435A] dark:text-[#3FC3B6]'}`}>{simulatedTorque.toFixed(1)}</span>
+                  <span className="text-[#6B7280] dark:text-[#94A3B8]">kft·lb</span>
                   {simulatedTorque > scenario.baseTorque * 1.3
-                    ? <TrendingUp className="w-3 h-3 text-rose-500" />
-                    : <Minus className="w-3 h-3 text-neutral-400" />}
+                    ? <TrendingUp className="w-3 h-3 text-[#ED1C24]" />
+                    : <Minus className="w-3 h-3 text-[#6B7280] dark:text-[#94A3B8]" />}
                 </div>
               </div>
-              <div className="h-7 bg-neutral-100 dark:bg-[#0e1520] rounded-lg border border-neutral-200 dark:border-[#1a2333] overflow-hidden">
-                <SparkBar values={torqueHistory} color="#F59E0B" height={28} />
+              <div className="h-7 bg-[#F5F7F8] dark:bg-[#191E26] rounded-none border border-[#E2E5E8] dark:border-[#364356] overflow-hidden">
+                <SparkBar values={torqueHistory} color="#34435A" height={28} />
               </div>
             </div>
 
@@ -574,51 +578,51 @@ export default function WellReplayPage() {
             <div className="space-y-1">
               <div className="flex items-center justify-between text-[10px]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
-                  <span className="text-neutral-800 dark:text-neutral-300 font-bold">SPP</span>
-                  <span className="text-neutral-500 dark:text-neutral-400">Standpipe Pressure</span>
+                  <span className="w-2 h-2 rounded-none bg-[#3FC3B6] inline-block" />
+                  <span className="text-[#252B33] dark:text-white font-bold">SPP</span>
+                  <span className="text-[#6B7280] dark:text-[#94A3B8]">Standpipe Pressure</span>
                 </div>
-                <div className="flex items-center gap-2 text-neutral-800 dark:text-neutral-200 tabular-nums">
-                  <span className={`font-bold ${simulatedSPP < scenario.baseSPP * 0.7 ? 'text-rose-600 dark:text-rose-400' : 'text-blue-600 dark:text-blue-400'}`}>
+                <div className="flex items-center gap-2 text-[#252B33] dark:text-white tabular-nums">
+                  <span className={`font-bold ${simulatedSPP < scenario.baseSPP * 0.7 ? 'text-[#ED1C24]' : 'text-[#26A69A] dark:text-[#3FC3B6]'}`}>
                     {Math.round(simulatedSPP)}
                   </span>
-                  <span className="text-neutral-500">psi</span>
+                  <span className="text-[#6B7280] dark:text-[#94A3B8]">psi</span>
                   {simulatedSPP < scenario.baseSPP * 0.8
-                    ? <TrendingDown className="w-3 h-3 text-rose-500" />
-                    : <Minus className="w-3 h-3 text-neutral-400" />}
+                    ? <TrendingDown className="w-3 h-3 text-[#ED1C24]" />
+                    : <Minus className="w-3 h-3 text-[#6B7280] dark:text-[#94A3B8]" />}
                 </div>
               </div>
-              <div className="h-7 bg-neutral-100 dark:bg-[#0e1520] rounded-lg border border-neutral-200 dark:border-[#1a2333] overflow-hidden">
-                <SparkBar values={sppHistory} color="#3B82F6" height={28} />
+              <div className="h-7 bg-[#F5F7F8] dark:bg-[#191E26] rounded-none border border-[#E2E5E8] dark:border-[#364356] overflow-hidden">
+                <SparkBar values={sppHistory} color="#3FC3B6" height={28} />
               </div>
             </div>
 
             {/* Secondary KPIs grid */}
-            <div className="pt-3 border-t border-neutral-200 dark:border-[#1a2333] grid grid-cols-3 gap-2 text-center">
+            <div className="pt-3 border-t border-[#E2E5E8] dark:border-[#364356] grid grid-cols-3 gap-2 text-center">
               {[
                 { label: 'RPM', value: simulatedRPM.toFixed(0), unit: 'rpm', warn: simulatedRPM < 60 },
                 { label: 'FLOW RATE', value: Math.round(simulatedFlowRate).toString(), unit: 'l/min', warn: simulatedFlowRate < scenario.baseFlowRate * 0.65 },
                 { label: 'ECD', value: simulatedECD.toFixed(2), unit: 'ppg', warn: simulatedECD > 10.5 },
               ].map(({ label, value, unit, warn }) => (
-                <div key={label} className={`rounded-xl p-2 border ${warn ? 'border-rose-300 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-950/15' : 'border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520]'}`}>
-                  <div className="text-[9px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-bold">{label}</div>
-                  <div className={`text-sm font-extrabold tabular-nums mt-0.5 ${warn ? 'text-rose-600 dark:text-rose-400' : 'text-neutral-900 dark:text-neutral-100'}`}>{value}</div>
-                  <div className="text-[9px] text-neutral-500">{unit}</div>
+                <div key={label} className={`rounded-none p-2 border ${warn ? 'border-[#ED1C24] bg-[#FDF2F2] dark:bg-[#ED1C24]/15' : 'border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532]'}`}>
+                  <div className="text-[9px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider font-bold">{label}</div>
+                  <div className={`text-sm font-black tabular-nums mt-0.5 ${warn ? 'text-[#ED1C24]' : 'text-[#252B33] dark:text-white'}`}>{value}</div>
+                  <div className="text-[9px] text-[#6B7280] dark:text-[#94A3B8]">{unit}</div>
                 </div>
               ))}
             </div>
 
-            {/* Pit volume (key indicator for lost circ) */}
-            <div className="rounded-xl border border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520] p-2.5">
+            {/* Pit volume */}
+            <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] p-2.5">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[9px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-bold">Active Pit Volume</span>
-                <span className={`text-[10px] font-bold ${pitVolume < scenario.baseFlowRate * 0.6 ? 'text-rose-600 dark:text-rose-400' : 'text-neutral-700 dark:text-neutral-300'}`}>
+                <span className="text-[9px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider font-bold">Active Pit Volume</span>
+                <span className={`text-[10px] font-bold ${pitVolume < scenario.baseFlowRate * 0.6 ? 'text-[#ED1C24]' : 'text-[#252B33] dark:text-white'}`}>
                   {(pitVolume * 0.2).toFixed(0)} m³
                 </span>
               </div>
-              <div className="relative h-2 bg-neutral-200 dark:bg-[#141c27] rounded-full overflow-hidden">
+              <div className="relative h-2 bg-[#E2E5E8] dark:bg-[#191E26] rounded-none overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${pitVolume < scenario.baseFlowRate * 0.6 ? 'bg-rose-500' : 'bg-blue-500'}`}
+                  className={`h-full rounded-none transition-all duration-500 ${pitVolume < scenario.baseFlowRate * 0.6 ? 'bg-[#ED1C24]' : 'bg-[#26A69A]'}`}
                   style={{ width: `${Math.min(100, (pitVolume / scenario.baseFlowRate) * 100)}%` }}
                 />
               </div>
@@ -626,14 +630,14 @@ export default function WellReplayPage() {
           </div>
 
           {/* PLAYBACK CONTROL DECK */}
-          <div className="rounded-2xl border border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] p-4 shadow-xs transition-colors">
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 shadow-2xs transition-colors">
             <div className="flex flex-wrap items-center justify-between gap-3">
               {/* Primary Controls */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setCurrentDepth(scenario.startDepth)}
-                  className="w-8 h-8 rounded-xl border border-neutral-200 dark:border-[#1e2a3a] bg-neutral-100 dark:bg-[#0d1320] flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] flex items-center justify-center text-[#252B33] dark:text-white hover:bg-[#E2E5E8] dark:hover:bg-[#34435A] transition-colors cursor-pointer"
                   title="Reset to start"
                 >
                   <SkipBack className="w-3.5 h-3.5" />
@@ -642,10 +646,10 @@ export default function WellReplayPage() {
                 <button
                   type="button"
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold transition-all cursor-pointer shadow-md ${
+                  className={`w-10 h-10 rounded-none flex items-center justify-center font-bold transition-all cursor-pointer shadow-xs ${
                     isPlaying
-                      ? 'bg-amber-600 text-neutral-950 hover:bg-amber-500'
-                      : 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-neutral-100'
+                      ? 'bg-[#ED1C24] text-white hover:bg-[#C9141B]'
+                      : 'bg-[#34435A] text-white hover:bg-[#222222]'
                   }`}
                 >
                   {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
@@ -654,7 +658,7 @@ export default function WellReplayPage() {
                 <button
                   type="button"
                   onClick={() => setCurrentDepth(scenario.maxDepth)}
-                  className="w-8 h-8 rounded-xl border border-neutral-200 dark:border-[#1e2a3a] bg-neutral-100 dark:bg-[#0d1320] flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer"
+                  className="w-8 h-8 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] flex items-center justify-center text-[#252B33] dark:text-white hover:bg-[#E2E5E8] dark:hover:bg-[#34435A] transition-colors cursor-pointer"
                   title="Skip to end"
                 >
                   <SkipForward className="w-3.5 h-3.5" />
@@ -665,14 +669,14 @@ export default function WellReplayPage() {
                   <button
                     type="button"
                     onClick={() => setCurrentDepth((p) => Math.max(scenario.startDepth, Math.round((p - 10) * 10) / 10))}
-                    className="px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-[#1e2a3a] bg-neutral-100 dark:bg-[#0d1320] text-neutral-700 dark:text-neutral-400 text-[10px] hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer font-bold"
+                    className="px-2 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] text-[#252B33] dark:text-white text-[10px] hover:bg-[#E2E5E8] dark:hover:bg-[#34435A] transition-colors cursor-pointer font-bold"
                   >
                     −10m
                   </button>
                   <button
                     type="button"
                     onClick={() => setCurrentDepth((p) => Math.min(scenario.maxDepth, Math.round((p + 10) * 10) / 10))}
-                    className="px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-[#1e2a3a] bg-neutral-100 dark:bg-[#0d1320] text-neutral-700 dark:text-neutral-400 text-[10px] hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer font-bold"
+                    className="px-2 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] text-[#252B33] dark:text-white text-[10px] hover:bg-[#E2E5E8] dark:hover:bg-[#34435A] transition-colors cursor-pointer font-bold"
                   >
                     +10m
                   </button>
@@ -681,16 +685,16 @@ export default function WellReplayPage() {
 
               {/* Speed selector */}
               <div className="flex items-center gap-1.5">
-                <span className="text-[9px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mr-1 font-bold">Speed</span>
+                <span className="text-[9px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider mr-1 font-bold">Speed</span>
                 {[1, 5, 10, 20].map((spd) => (
                   <button
                     key={spd}
                     type="button"
                     onClick={() => setPlaybackSpeed(spd)}
-                    className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                    className={`px-2 py-1 rounded-none text-[10px] font-bold transition-all cursor-pointer ${
                       playbackSpeed === spd
-                        ? 'bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-500/50'
-                        : 'border border-neutral-200 dark:border-[#1e2a3a] text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                        ? 'bg-[#34435A] dark:bg-[#3FC3B6] text-white dark:text-[#191E26] border border-[#34435A] dark:border-[#3FC3B6]'
+                        : 'border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] text-[#252B33] dark:text-white hover:bg-white dark:hover:bg-[#34435A]'
                     }`}
                   >
                     {spd}×
@@ -708,7 +712,7 @@ export default function WellReplayPage() {
                 step="0.5"
                 value={currentDepth}
                 onChange={(e) => setCurrentDepth(parseFloat(e.target.value))}
-                className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-amber-500 bg-neutral-200 dark:bg-[#1a2333]"
+                className="w-full h-1.5 rounded-none appearance-none cursor-pointer accent-[#ED1C24] bg-[#E2E5E8] dark:bg-[#191E26]"
               />
             </div>
           </div>
@@ -718,98 +722,98 @@ export default function WellReplayPage() {
         <div className="xl:col-span-4 flex flex-col gap-4">
 
           {/* STATUS HEADER */}
-          <div className={`rounded-2xl border-2 p-4 shadow-xs transition-colors ${phase.border} ${phase.bg}`}>
+          <div className={`rounded-none border-2 p-4 shadow-2xs transition-colors ${phase.border} ${phase.bg}`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${phase.dot} ${isAlertFired ? 'animate-pulse' : ''}`} />
+                <div className={`w-2 h-2 rounded-none ${phase.dot} ${isAlertFired ? 'animate-pulse' : ''}`} />
                 <span className={`text-xs font-bold uppercase tracking-wider ${phase.labelColor}`}>{phase.label}</span>
               </div>
-              <span className="text-[10px] text-neutral-600 dark:text-neutral-400 tabular-nums font-bold">{currentDepth.toFixed(1)}m MD</span>
+              <span className="text-[10px] text-[#252B33] dark:text-white tabular-nums font-bold">{currentDepth.toFixed(1)}m MD</span>
             </div>
 
             {/* Context */}
-            <div className="text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+            <div className="text-xs text-[#252B33] dark:text-white leading-relaxed font-sans">
               {statusPhase === 'safe' && (
-                <span>Monitoring <strong className="text-neutral-950 dark:text-neutral-200">{scenario.formation}</strong>. Advance to <strong className="text-amber-700 dark:text-amber-400">{scenario.alertTriggerDepth}m MD</strong> to trigger the proactive advisory ({distanceToIncident.toFixed(0)}m ahead).</span>
+                <span>Monitoring <strong className="text-[#252B33] dark:text-white">{scenario.formation}</strong>. Advance to <strong className="text-[#26A69A] dark:text-[#3FC3B6]">{scenario.alertTriggerDepth}m MD</strong> to trigger the proactive advisory ({distanceToIncident.toFixed(0)}m ahead).</span>
               )}
               {statusPhase === 'warning' && (
-                <span>Corridor watcher triggered <strong className="text-amber-700 dark:text-amber-400">{(currentDepth - scenario.alertTriggerDepth).toFixed(0)}m ago</strong>. Historical incident was at <strong className="text-rose-700 dark:text-rose-400">{scenario.historicalIncidentDepth}m</strong> — {distanceToIncident.toFixed(0)}m ahead.</span>
+                <span>Corridor watcher triggered <strong className="text-[#26A69A] dark:text-[#3FC3B6]">{(currentDepth - scenario.alertTriggerDepth).toFixed(0)}m ago</strong>. Historical incident was at <strong className="text-[#ED1C24]">{scenario.historicalIncidentDepth}m</strong> — {distanceToIncident.toFixed(0)}m ahead.</span>
               )}
               {statusPhase === 'incident' && (
-                <span>Historical incident horizon breached. In {scenario.spudYear}, <strong className="text-rose-700 dark:text-rose-300">{scenario.historicalNptHours} NPT hours</strong> were lost here. NWIS would have fired advisory <strong className="text-amber-700 dark:text-amber-400">{scenario.historicalIncidentDepth - scenario.alertTriggerDepth}m earlier</strong>.</span>
+                <span>Historical incident horizon breached. In {scenario.spudYear}, <strong className="text-[#ED1C24]">{scenario.historicalNptHours} NPT hours</strong> were lost here. NWIS would have fired advisory <strong className="text-[#26A69A] dark:text-[#3FC3B6]">{scenario.historicalIncidentDepth - scenario.alertTriggerDepth}m earlier</strong>.</span>
               )}
             </div>
           </div>
 
           {/* NPT SAVINGS METRIC */}
-          <div className="rounded-2xl border border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] p-4 flex items-center gap-4 shadow-xs transition-colors">
-            <div className="w-14 h-14 rounded-full border-2 border-emerald-500/30 flex items-center justify-center bg-emerald-50 dark:bg-emerald-950/20 shrink-0">
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 flex items-center gap-4 shadow-2xs transition-colors">
+            <div className="w-14 h-14 rounded-none border-2 border-[#3FC3B6] flex items-center justify-center bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 shrink-0">
               <div className="text-center">
-                <div className="text-lg font-extrabold text-emerald-600 dark:text-emerald-400 leading-none">{scenario.historicalNptHours}</div>
-                <div className="text-[9px] text-emerald-700 dark:text-emerald-500 mt-0.5 font-bold">hrs</div>
+                <div className="text-lg font-black text-[#26A69A] dark:text-[#3FC3B6] leading-none">{scenario.historicalNptHours}</div>
+                <div className="text-[9px] text-[#26A69A] dark:text-[#3FC3B6] mt-0.5 font-bold">hrs</div>
               </div>
             </div>
             <div>
-              <div className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-wider font-bold">NPT Saved via Lookahead</div>
-              <div className="text-xs text-neutral-800 dark:text-neutral-300 mt-0.5 font-sans leading-snug">
-                Historical incident cost <strong className="text-neutral-950 dark:text-white">{scenario.historicalNptHours} hrs NPT</strong>. Proactive advisory eliminated this risk window.
+              <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider font-bold">NPT Saved via Lookahead</div>
+              <div className="text-xs text-[#252B33] dark:text-white mt-0.5 font-sans leading-snug">
+                Historical incident cost <strong className="text-[#ED1C24]">{scenario.historicalNptHours} hrs NPT</strong>. Proactive advisory eliminated this risk window.
               </div>
-              <div className="text-[11px] text-emerald-700 dark:text-emerald-400 mt-1 font-bold">≈ ${(scenario.historicalNptHours * 14800).toLocaleString()} avoided cost</div>
+              <div className="text-[11px] text-[#26A69A] dark:text-[#3FC3B6] mt-1 font-bold">≈ ${(scenario.historicalNptHours * 14800).toLocaleString()} avoided cost</div>
             </div>
           </div>
 
           {/* 3-PART SEPARATION */}
-          <div className={`rounded-2xl border p-4 space-y-3 flex-1 transition-all duration-300 shadow-xs ${
+          <div className={`rounded-none border p-4 space-y-3 flex-1 transition-all duration-300 shadow-2xs ${
             isAlertFired 
-              ? 'border-amber-300 dark:border-amber-500/40 bg-white dark:bg-[#0c1018]' 
-              : 'border-neutral-200 dark:border-[#1a2333] bg-white dark:bg-[#0b0f17] opacity-80'
+              ? 'border-l-4 border-l-[#ED1C24] border-y border-r border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B]' 
+              : 'border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] opacity-85'
           }`}>
 
-            <div className="text-[10px] text-neutral-500 dark:text-neutral-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
-              <AlertTriangle className={`w-3.5 h-3.5 ${isAlertFired ? 'text-amber-500' : 'text-neutral-400'}`} />
+            <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-widest font-bold flex items-center gap-1.5">
+              <AlertTriangle className={`w-3.5 h-3.5 ${isAlertFired ? 'text-[#ED1C24]' : 'text-[#6B7280] dark:text-[#94A3B8]'}`} />
               Intelligence Separation
-              {!isAlertFired && <span className="text-neutral-400 dark:text-neutral-500 text-[9px] ml-auto normal-case tracking-normal">Advance bit to activate</span>}
+              {!isAlertFired && <span className="text-[#6B7280] dark:text-[#94A3B8] text-[9px] ml-auto normal-case tracking-normal">Advance bit to activate</span>}
             </div>
 
             {/* 1. Ground Truth */}
-            <div className="rounded-xl border border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520] p-3 space-y-1.5">
+            <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] p-3 space-y-1.5">
               <div className="flex items-center justify-between">
-                <span className="text-[9px] font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">1 · Observed Ground Truth</span>
-                <span className="text-[9px] text-neutral-500 font-bold">{scenario.spudYear} record</span>
+                <span className="text-[9px] font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider">1 · Observed Ground Truth</span>
+                <span className="text-[9px] text-[#6B7280] dark:text-[#94A3B8] font-bold">{scenario.spudYear} record</span>
               </div>
-              <p className={`text-[11px] leading-relaxed font-sans ${isAlertFired ? 'text-neutral-800 dark:text-neutral-300' : 'text-neutral-600 dark:text-neutral-400'}`}>
+              <p className="text-[11px] leading-relaxed font-sans text-[#252B33] dark:text-white">
                 {scenario.fact}
               </p>
             </div>
 
             {/* 2. Model Estimate */}
-            <div className={`rounded-xl border p-3 space-y-1.5 ${isAlertFired ? 'border-amber-300 dark:border-amber-500/20 bg-amber-50/70 dark:bg-amber-950/10' : 'border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520]'}`}>
+            <div className={`rounded-none border p-3 space-y-1.5 ${isAlertFired ? 'border-[#F2B84B] bg-[#FEF9EE] dark:bg-[#F2B84B]/15' : 'border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532]'}`}>
               <div className="flex items-center justify-between">
-                <span className={`text-[9px] font-bold uppercase tracking-wider ${isAlertFired ? 'text-amber-800 dark:text-amber-400' : 'text-neutral-500'}`}>2 · Model-Estimated Risk</span>
-                <span className="text-[9px] text-neutral-500 font-bold">SIMILARITY MODEL</span>
+                <span className={`text-[9px] font-bold uppercase tracking-wider ${isAlertFired ? 'text-[#C68A1B] dark:text-[#F2B84B]' : 'text-[#6B7280] dark:text-[#94A3B8]'}`}>2 · Model-Estimated Risk</span>
+                <span className="text-[9px] text-[#6B7280] dark:text-[#94A3B8] font-bold">SIMILARITY MODEL</span>
               </div>
-              <p className={`text-[11px] leading-relaxed font-sans ${isAlertFired ? 'text-neutral-900 dark:text-neutral-200' : 'text-neutral-600 dark:text-neutral-400'}`}>
+              <p className="text-[11px] leading-relaxed font-sans text-[#252B33] dark:text-white">
                 {scenario.estimate}
               </p>
             </div>
 
             {/* 3. Mitigation */}
-            <div className={`rounded-xl border p-3 space-y-1.5 ${isAlertFired ? 'border-amber-400 dark:border-amber-500/30 bg-amber-100/60 dark:bg-amber-950/20' : 'border-neutral-200 dark:border-[#1a2333] bg-neutral-50 dark:bg-[#0e1520]'}`}>
+            <div className={`rounded-none border p-3 space-y-1.5 ${isAlertFired ? 'border-[#3FC3B6] bg-[#D9F2EE]/50 dark:bg-[#3FC3B6]/15' : 'border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532]'}`}>
               <div className="flex items-center justify-between">
-                <span className={`text-[9px] font-bold uppercase tracking-wider ${isAlertFired ? 'text-amber-900 dark:text-amber-300' : 'text-neutral-500'}`}>3 · Engineering Mitigation</span>
-                <span className={`text-[9px] font-bold ${isAlertFired ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-500'}`}>ADVISORY ONLY</span>
+                <span className={`text-[9px] font-bold uppercase tracking-wider ${isAlertFired ? 'text-[#26A69A] dark:text-[#3FC3B6]' : 'text-[#6B7280] dark:text-[#94A3B8]'}`}>3 · Engineering Mitigation</span>
+                <span className={`text-[9px] font-bold ${isAlertFired ? 'text-[#26A69A] dark:text-[#3FC3B6]' : 'text-[#6B7280] dark:text-[#94A3B8]'}`}>ADVISORY ONLY</span>
               </div>
-              <p className={`text-[11px] leading-relaxed font-sans font-medium ${isAlertFired ? 'text-neutral-950 dark:text-white' : 'text-neutral-600 dark:text-neutral-400'}`}>
+              <p className="text-[11px] leading-relaxed font-sans font-medium text-[#252B33] dark:text-white">
                 {scenario.recommendation}
               </p>
             </div>
 
             {/* Clean Pass Evidence */}
             {isAlertFired && (
-              <div className="rounded-xl border border-emerald-300 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-950/10 p-2.5 flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" />
-                <p className="text-[10px] text-neutral-800 dark:text-neutral-300 font-sans leading-relaxed">
-                  <strong className="text-emerald-700 dark:text-emerald-400">Disconfirming evidence:</strong> {scenario.cleanPassageEvidence}
+              <div className="rounded-none border border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15 p-2.5 flex items-start gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6] shrink-0 mt-0.5" />
+                <p className="text-[10px] text-[#252B33] dark:text-white font-sans leading-relaxed">
+                  <strong className="text-[#26A69A] dark:text-[#3FC3B6]">Disconfirming evidence:</strong> {scenario.cleanPassageEvidence}
                 </p>
               </div>
             )}
@@ -820,16 +824,16 @@ export default function WellReplayPage() {
             <button
               type="button"
               onClick={() => setIsEvidenceOpen(true)}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#111823] border border-neutral-200 dark:border-[#1e2a3a] hover:border-amber-500/50 text-neutral-800 dark:text-neutral-300 hover:text-amber-600 dark:hover:text-white text-xs font-bold transition-all cursor-pointer shadow-2xs"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-none bg-white dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] hover:border-[#3FC3B6] text-[#252B33] dark:text-white hover:text-[#3FC3B6] dark:hover:text-[#3FC3B6] text-xs font-bold transition-all cursor-pointer shadow-2xs"
             >
-              <FileText className="w-3.5 h-3.5 text-amber-500" />
+              <FileText className="w-3.5 h-3.5 text-[#3FC3B6]" />
               <span>Inspect Archival WCR</span>
             </button>
             <Link
               href="/operations"
-              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-[#111823] border border-neutral-200 dark:border-[#1e2a3a] hover:border-neutral-400 dark:hover:border-neutral-600 text-neutral-700 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white text-xs font-bold transition-all shadow-2xs"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-none bg-[#ED1C24] hover:bg-[#C9141B] text-white text-xs font-bold font-mono transition-all shadow-2xs"
             >
-              <Activity className="w-3.5 h-3.5 text-emerald-500" />
+              <Activity className="w-3.5 h-3.5 text-white" />
               <span>Live Ops</span>
             </Link>
           </div>

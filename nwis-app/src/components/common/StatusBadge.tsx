@@ -13,25 +13,24 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'sm', p
     switch (status) {
       case 'drilling':
       case 'LIVE_STREAMING':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        return 'bg-[#3FAE68]/15 text-[#3FAE68] border-[#3FAE68]/40';
       case 'completed':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/30';
+        return 'bg-[#D9F2EE] text-[#26A69A] border-[#3FC3B6]/50';
       case 'suspended':
       case 'INTERMITTENT':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-[#F2B84B]/15 text-[#F2B84B] border-[#F2B84B]/50';
       case 'planned':
       case 'OFFLINE':
-        return 'bg-slate-500/10 text-slate-400 border-slate-500/30';
+        return 'bg-[#6B7280]/15 text-[#6B7280] border-[#E2E5E8]';
       case 'critical':
-        return 'bg-red-500/15 text-red-400 border-red-500/40 font-semibold';
       case 'high':
-        return 'bg-orange-500/15 text-orange-400 border-orange-500/30';
+        return 'bg-[#ED1C24]/15 text-[#ED1C24] border-[#ED1C24]/50 font-bold';
       case 'medium':
-        return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+        return 'bg-[#F2B84B]/15 text-[#F2B84B] border-[#F2B84B]/50';
       case 'low':
-        return 'bg-blue-500/15 text-blue-400 border-blue-500/30';
+        return 'bg-[#D9F2EE] text-[#26A69A] border-[#3FC3B6]/40';
       default:
-        return 'bg-slate-800 text-slate-300 border-slate-700';
+        return 'bg-[#34435A]/15 text-[#34435A] dark:text-[#D9F2EE] border-[#E2E5E8]';
     }
   };
 
@@ -48,7 +47,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'sm', p
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-mono tracking-wider uppercase ${
+      className={`inline-flex items-center gap-1.5 rounded-none border px-2 py-0.5 font-mono tracking-wider uppercase ${
         size === 'sm' ? 'text-[10px]' : 'text-xs px-2.5 py-1'
       } ${getStyles()}`}
     >

@@ -2,12 +2,26 @@
 
 import React, { useState, use } from 'react';
 import Link from 'next/link';
+import { 
+  ArrowLeft, 
+  AlertTriangle, 
+  ShieldAlert, 
+  CheckCircle2, 
+  Check, 
+  CheckCheck, 
+  XCircle, 
+  Flag, 
+  FileText, 
+  Layers, 
+  History, 
+  Radio, 
+  Send 
+} from 'lucide-react';
 import { Breadcrumb } from '../../../components/layout/Breadcrumb';
 import { StatusTag } from '../../../components/common/StatusTag';
 import { FactEstimateRecommendation } from '../../../components/common/FactEstimateRecommendation';
 import { OffsetWellRow } from '../../../components/common/OffsetWellRow';
 import { useAppStore } from '../../../store/app-store';
-import { FeedbackEntry } from '../../../lib/data/types';
 
 interface AlertDetailPageProps {
   params: Promise<{ alertId: string }>;
@@ -15,31 +29,44 @@ interface AlertDetailPageProps {
 
 export default function AlertDetailPage({ params }: AlertDetailPageProps) {
   const { alertId } = use(params);
-  const { alerts, feedbackHistory, acknowledgeAlert, rejectAlert, applyMitigation, currentRole } = useAppStore();
+  const { alerts, feedbackHistory, acknowledgeAlert, rejectAlert, applyMitigation } = useAppStore();
 
-  const alert = alerts.find((a) => a.id === alertId);
+  const alert = alerts.find(
+    (a) => a.id === alertId || a.id.toLowerCase() === alertId?.toLowerCase()
+  );
   const [feedbackNote, setFeedbackNote] = useState('');
   const [actionSuccessMsg, setActionSuccessMsg] = useState('');
 
   if (!alert) {
     return (
-      <div className="p-8 font-mono">
-        <h2 className="text-lg font-bold text-[#ca3535]">Advisory Not Found: {alertId}</h2>
-        <Link href="/alerts" className="text-xs font-bold text-[#1d70b8] hover:underline mt-2 inline-block">
-          ← Return to Alert Inbox
-        </Link>
+      <div className="p-8 font-mono max-w-4xl mx-auto space-y-4">
+        <div className="rounded-none border-l-4 border-l-[#ED1C24] border border-[#E2E5E8] bg-white p-6 shadow-2xs">
+          <div className="flex items-center gap-2 text-[#ED1C24] font-bold text-base mb-2">
+            <AlertTriangle className="w-5 h-5 shrink-0" />
+            <h2>Advisory Record Not Found: {alertId}</h2>
+          </div>
+          <p className="text-xs text-[#6B7280] mb-4">
+            The requested geological advisory could not be retrieved from active cache or archives.
+          </p>
+          <Link 
+            href="/alerts" 
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#26A69A] hover:text-[#3FC3B6] hover:underline"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Return to Alert Inbox
+          </Link>
+        </div>
       </div>
     );
   }
 
-  const alertFeedback = feedbackHistory.filter((f) => f.alertId === alertId);
+  const alertFeedback = feedbackHistory.filter((f) => f.alertId === alert.id);
 
   const handleAction = (action: 'acknowledge' | 'reject' | 'mitigation_applied' | 'incorrect_formation' | 'incorrect_depth') => {
-    if (action === 'acknowledge') acknowledgeAlert(alertId, feedbackNote);
-    if (action === 'reject') rejectAlert(alertId, feedbackNote);
-    if (action === 'mitigation_applied') applyMitigation(alertId, feedbackNote);
+    if (action === 'acknowledge') acknowledgeAlert(alert.id, feedbackNote);
+    if (action === 'reject') rejectAlert(alert.id, feedbackNote);
+    if (action === 'mitigation_applied') applyMitigation(alert.id, feedbackNote);
     if (action === 'incorrect_formation' || action === 'incorrect_depth') {
-      rejectAlert(alertId, `Flagged by engineer: ${action.replace('_', ' ')}. ${feedbackNote}`);
+      rejectAlert(alert.id, `Flagged by engineer: ${action.replace('_', ' ')}. ${feedbackNote}`);
     }
 
     setActionSuccessMsg(`Feedback recorded: ${action.replace('_', ' ').toUpperCase()}`);
@@ -47,47 +74,79 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
     setTimeout(() => setActionSuccessMsg(''), 4000);
   };
 
+  // Border indicator by risk severity
+  const riskBorderColor = 
+    alert.riskLevel === 'high' 
+      ? 'border-l-[#ED1C24]' 
+      : alert.riskLevel === 'moderate' 
+      ? 'border-l-[#F2B84B]' 
+      : 'border-l-[#3FAE68]';
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <Breadcrumb
-        items={[
-          { label: 'Alert Inbox', href: '/alerts' },
-          { label: alert.id }
-        ]}
-      />
+      <div className="flex items-center justify-between">
+        <Breadcrumb
+          items={[
+            { label: 'Alert Inbox', href: '/alerts' },
+            { label: alert.id }
+          ]}
+        />
+        <Link
+          href="/alerts"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#26A69A] hover:text-[#3FC3B6] hover:underline"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Register
+        </Link>
+      </div>
 
       {/* Header Banner */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs transition-colors">
+      <div className={`rounded-none border-l-4 ${riskBorderColor} border-y border-r border-[#E2E5E8] bg-white p-5 shadow-2xs transition-colors`}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-              <h1 className="text-2xl font-extrabold font-mono text-neutral-950 dark:text-white">
+              <span className="p-1.5 bg-[#F5F7F8] border border-[#E2E5E8] text-[#34435A]">
+                <ShieldAlert className="w-4 h-4 text-[#ED1C24]" />
+              </span>
+              <h1 className="text-xl md:text-2xl font-extrabold font-mono text-[#252B33]">
                 {alert.id}
               </h1>
               <StatusTag label={`${alert.riskLevel.toUpperCase()} RISK`} />
               <StatusTag label={alert.status.replace('_', ' ').toUpperCase()} />
             </div>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
-              Subject Well: <strong className="text-neutral-950 dark:text-white font-mono">{alert.wellId.toUpperCase()}</strong> • Trigger Depth: <strong className="text-neutral-950 dark:text-white font-mono">{alert.currentDepth}m MD</strong> • Generated: <span className="font-mono">{alert.firedAt}</span>
+            <p className="text-xs text-[#6B7280] font-sans">
+              Subject Well: <strong className="text-[#252B33] font-mono">{alert.wellId.toUpperCase()}</strong> • Trigger Depth: <strong className="text-[#252B33] font-mono">{alert.currentDepth}m MD</strong> • Generated: <span className="font-mono">{alert.firedAt}</span>
             </p>
           </div>
 
-          <div className="text-xs font-mono text-neutral-600 dark:text-neutral-400 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/60 px-3.5 py-2">
-            <div>Corridor ID: <strong className="text-neutral-950 dark:text-white">{alert.corridorId}</strong></div>
-            <div>Companion Source: <strong className="text-neutral-950 dark:text-white">eRTMAC Bridge Feed</strong></div>
+          <div className="text-xs font-mono text-[#6B7280] rounded-none border border-[#E2E5E8] bg-[#F5F7F8] px-3.5 py-2.5 shrink-0 space-y-1">
+            <div className="flex items-center gap-1.5">
+              <Radio className="w-3.5 h-3.5 text-[#3FC3B6]" />
+              <span>Corridor ID: <strong className="text-[#252B33]">{alert.corridorId}</strong></span>
+            </div>
+            <div className="text-[11px] text-[#6B7280]">
+              Companion Feed: <strong className="text-[#34435A]">eRTMAC Bridge Telemetry</strong>
+            </div>
           </div>
         </div>
       </div>
 
       {/* ─── The Fact / Estimate / Recommendation 3-Block Core Component ─── */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs">
-        <div className="pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800">
-          <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide">
-            Subsurface Risk Evaluation Breakdown
-          </h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            Strict separation of observed facts from historical WCRs, model hazard estimates, and operational mitigations.
-          </p>
+      <div className="rounded-none border border-[#E2E5E8] bg-white p-5 shadow-2xs">
+        <div className="pb-3 mb-4 border-b border-[#E2E5E8] flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <FileText className="w-4 h-4 text-[#34435A]" />
+            <div>
+              <h2 className="text-sm font-extrabold text-[#252B33] uppercase tracking-wide font-mono">
+                Subsurface Risk Evaluation Breakdown
+              </h2>
+              <p className="text-xs text-[#6B7280]">
+                Strict operational separation of observed facts from historical WCRs, model hazard estimates, and mitigations.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono px-2 py-0.5 bg-[#F5F7F8] border border-[#E2E5E8] text-[#34435A] font-bold">
+            3-Tier Verification
+          </span>
         </div>
 
         <FactEstimateRecommendation
@@ -100,25 +159,34 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
       </div>
 
       {/* ─── Engineer Operational Feedback Controls ─── */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs">
-        <div className="pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800">
-          <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide">
-            Engineer Operational Feedback & Status Update
-          </h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            Rig-site engineers and operations managers review, verify, or record actions taken in response to this advisory.
-          </p>
+      <div className="rounded-none border border-[#E2E5E8] bg-white p-5 shadow-2xs">
+        <div className="pb-3 mb-4 border-b border-[#E2E5E8] flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#26A69A]" />
+            <div>
+              <h2 className="text-sm font-extrabold text-[#252B33] uppercase tracking-wide font-mono">
+                Engineer Operational Feedback & Verification
+              </h2>
+              <p className="text-xs text-[#6B7280]">
+                Rig-site engineers and operations managers review, verify, or record actions taken in response to this advisory.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono text-[#6B7280]">
+            Audit Trail Active
+          </span>
         </div>
 
         {actionSuccessMsg && (
-          <div className="mb-4 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-bold font-mono">
-            ✓ {actionSuccessMsg}
+          <div className="mb-4 p-3 rounded-none bg-[#D9F2EE] border border-[#3FC3B6] text-[#26A69A] text-xs font-bold font-mono flex items-center gap-2 animate-in fade-in">
+            <Check className="w-4 h-4 text-[#26A69A] shrink-0" />
+            <span>{actionSuccessMsg}</span>
           </div>
         )}
 
         <div className="space-y-4">
           <div>
-            <label htmlFor="feedback-note" className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase mb-1.5 font-mono">
+            <label htmlFor="feedback-note" className="block text-xs font-bold text-[#252B33] uppercase mb-1.5 font-mono">
               Operational Note / Verification Justification:
             </label>
             <input
@@ -127,7 +195,7 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
               placeholder="e.g. Pre-treated active mud pit with 35 ppb coarse nut-plug LCM; ECD verified at 10.2 ppg."
               value={feedbackNote}
               onChange={(e) => setFeedbackNote(e.target.value)}
-              className="w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-2.5 text-xs text-neutral-950 dark:text-white placeholder:text-neutral-400 focus:outline-hidden"
+              className="w-full rounded-none border border-[#E2E5E8] bg-[#F5F7F8] p-2.5 text-xs text-[#252B33] placeholder-[#6B7280] font-mono focus:outline-hidden focus:border-[#3FC3B6] focus:bg-white transition-colors"
             />
           </div>
 
@@ -135,57 +203,60 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
             <button
               type="button"
               onClick={() => handleAction('acknowledge')}
-              className="rounded-xl px-4 py-2 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-bold font-mono transition-colors cursor-pointer shadow-2xs"
+              className="rounded-none px-4 py-2 bg-[#ED1C24] hover:bg-[#C9141B] text-white text-xs font-bold font-mono transition-colors cursor-pointer shadow-2xs inline-flex items-center gap-1.5"
             >
-              Acknowledge Advisory
+              <Check className="w-3.5 h-3.5" /> Acknowledge Advisory
             </button>
             <button
               type="button"
               onClick={() => handleAction('mitigation_applied')}
-              className="rounded-xl px-4 py-2 border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-xs font-bold font-mono transition-colors cursor-pointer shadow-2xs"
+              className="rounded-none px-4 py-2 border border-[#3FC3B6] bg-[#3FC3B6] hover:bg-[#26A69A] text-[#222222] hover:text-white text-xs font-bold font-mono transition-colors cursor-pointer shadow-2xs inline-flex items-center gap-1.5"
             >
-              Confirm Mitigation Applied
+              <CheckCheck className="w-3.5 h-3.5" /> Confirm Mitigation Applied
             </button>
             <button
               type="button"
               onClick={() => handleAction('reject')}
-              className="rounded-xl px-4 py-2 border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50 text-xs font-bold font-mono transition-colors cursor-pointer shadow-2xs"
+              className="rounded-none px-4 py-2 border border-[#E05252] bg-[#FDF2F2] text-[#ED1C24] hover:bg-[#FDE8E8] text-xs font-bold font-mono transition-colors cursor-pointer shadow-2xs inline-flex items-center gap-1.5"
             >
-              Reject Advisory
+              <XCircle className="w-3.5 h-3.5" /> Reject Advisory
             </button>
             <button
               type="button"
               onClick={() => handleAction('incorrect_formation')}
-              className="rounded-xl px-3 py-2 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-xs font-bold font-mono transition-colors cursor-pointer"
+              className="rounded-none px-3 py-2 border border-[#E2E5E8] bg-white text-[#252B33] hover:bg-[#F5F7F8] hover:border-[#34435A] text-xs font-bold font-mono transition-colors cursor-pointer inline-flex items-center gap-1.5"
             >
-              Flag Incorrect Formation
+              <Flag className="w-3 h-3 text-[#6B7280]" /> Flag Incorrect Formation
             </button>
             <button
               type="button"
               onClick={() => handleAction('incorrect_depth')}
-              className="rounded-xl px-3 py-2 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-xs font-bold font-mono transition-colors cursor-pointer"
+              className="rounded-none px-3 py-2 border border-[#E2E5E8] bg-white text-[#252B33] hover:bg-[#F5F7F8] hover:border-[#34435A] text-xs font-bold font-mono transition-colors cursor-pointer inline-flex items-center gap-1.5"
             >
-              Flag Incorrect Depth Horizon
+              <Flag className="w-3 h-3 text-[#6B7280]" /> Flag Incorrect Depth Horizon
             </button>
           </div>
         </div>
 
         {/* Existing Feedback History */}
         {alertFeedback.length > 0 && (
-          <div className="mt-5 pt-4 border-t border-neutral-200 dark:border-neutral-800">
-            <span className="text-xs font-extrabold text-neutral-900 dark:text-white uppercase block mb-2.5 font-mono">
-              Feedback & Action Audit Trail ({alertFeedback.length})
-            </span>
+          <div className="mt-5 pt-4 border-t border-[#E2E5E8]">
+            <div className="flex items-center gap-1.5 mb-2.5">
+              <History className="w-3.5 h-3.5 text-[#34435A]" />
+              <span className="text-xs font-extrabold text-[#252B33] uppercase font-mono">
+                Feedback & Action Audit Trail ({alertFeedback.length})
+              </span>
+            </div>
             <div className="space-y-2">
               {alertFeedback.map((fb, idx) => (
-                <div key={idx} className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/50 p-3 text-xs font-mono space-y-1">
-                  <div className="flex items-center justify-between text-neutral-600 dark:text-neutral-400 flex-wrap gap-1">
-                    <span className="font-extrabold text-neutral-950 dark:text-white uppercase">
+                <div key={idx} className="rounded-none border border-[#E2E5E8] bg-[#F5F7F8] p-3 text-xs font-mono space-y-1">
+                  <div className="flex items-center justify-between text-[#6B7280] flex-wrap gap-1">
+                    <span className="font-extrabold text-[#252B33] uppercase">
                       Action: {fb.engineerAction.replace('_', ' ')}
                     </span>
                     <span className="text-[11px]">{fb.timestamp} • Role: {fb.userRole}</span>
                   </div>
-                  {fb.note && <p className="text-neutral-800 dark:text-neutral-200 font-sans text-xs">{fb.note}</p>}
+                  {fb.note && <p className="text-[#252B33] font-sans text-xs">{fb.note}</p>}
                 </div>
               ))}
             </div>
@@ -194,14 +265,22 @@ export default function AlertDetailPage({ params }: AlertDetailPageProps) {
       </div>
 
       {/* ─── Matched Offset Wells Register ─── */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs">
-        <div className="pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800">
-          <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide">
-            Matched Offset Wells Evidence Base ({alert.matchedOffsetWells.length})
-          </h2>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">
-            Historical wells correlating with current operation by formation sequence and depth interval.
-          </p>
+      <div className="rounded-none border border-[#E2E5E8] bg-white p-5 shadow-2xs">
+        <div className="pb-3 mb-4 border-b border-[#E2E5E8] flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-[#34435A]" />
+            <div>
+              <h2 className="text-sm font-extrabold text-[#252B33] uppercase tracking-wide font-mono">
+                Matched Offset Wells Evidence Base ({alert.matchedOffsetWells.length})
+              </h2>
+              <p className="text-xs text-[#6B7280]">
+                Historical wells correlating with current operation by formation sequence and depth interval.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] font-mono px-2 py-0.5 bg-[#D9F2EE] text-[#26A69A] border border-[#3FC3B6] font-bold">
+            Assam-Arakan Basin Correlated
+          </span>
         </div>
 
         <div className="space-y-3">

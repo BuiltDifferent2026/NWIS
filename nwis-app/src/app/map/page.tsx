@@ -25,8 +25,8 @@ const WellMapInner = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[620px] w-full rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-[#0c1017] flex flex-col items-center justify-center text-neutral-500 font-mono text-xs gap-2">
-        <Radio className="w-5 h-5 text-amber-500 animate-pulse" />
+      <div className="h-[620px] w-full rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] flex flex-col items-center justify-center text-[#6B7280] dark:text-[#94A3B8] font-mono text-xs gap-2">
+        <Radio className="w-5 h-5 text-[#3FC3B6] animate-pulse" />
         <span>Initializing Assam Basin Geospatial Correlation Engine...</span>
       </div>
     )
@@ -54,23 +54,23 @@ export default function GeospatialMapPage() {
       />
 
       {/* ─── Header & Filter Controls ─── */}
-      <section className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0e121a] p-5 shadow-xs transition-colors space-y-4">
+      <section className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-5 shadow-2xs transition-colors space-y-4">
         
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-neutral-200 dark:border-neutral-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#E2E5E8] dark:border-[#364356]">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center border border-amber-500/20">
+              <div className="w-8 h-8 rounded-none bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] flex items-center justify-center border border-[#3FC3B6]">
                 <MapPin className="w-4 h-4" />
               </div>
-              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-neutral-950 dark:text-white font-mono">
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#252B33] dark:text-white font-mono">
                 Geospatial Well Map & Coordinate Intelligence
               </h1>
-              <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 text-[10px] font-mono font-bold">
+              <span className="px-2 py-0.5 rounded-none bg-[#34435A] text-white border border-[#222222] text-[10px] font-mono font-bold">
                 Assam–Arakan Basin
               </span>
             </div>
             
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
+            <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] font-sans">
               Interactive multi-layer offset well mapping, radial proximity calibration, custom coordinates workbench, and 1-click clipboard tools.
             </p>
           </div>
@@ -78,11 +78,11 @@ export default function GeospatialMapPage() {
           {/* Quick jump to active well */}
           <Link
             href="/operations"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200 hover:border-amber-500 transition-colors shrink-0"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-none border border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15 text-xs font-mono font-bold text-[#26A69A] dark:text-[#3FC3B6] hover:bg-[#D9F2EE] dark:hover:bg-[#3FC3B6]/25 transition-colors shrink-0"
           >
-            <Radio className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
+            <Radio className="w-3.5 h-3.5 text-[#3FAE68] animate-pulse" />
             <span>Active Rig: {centerWell.name} (2,165.4m)</span>
-            <ArrowRight className="w-3.5 h-3.5 text-neutral-400 ml-1" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6] ml-1" />
           </Link>
         </div>
 
@@ -91,13 +91,13 @@ export default function GeospatialMapPage() {
           
           {/* Active Center Well Selector */}
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">
+            <label className="text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#94A3B8] block">
               Active Rig / Center Well
             </label>
             <select
               value={centerWellId}
               onChange={(e) => setCenterWellId(e.target.value)}
-              className="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 font-bold text-neutral-900 dark:text-white focus:outline-hidden"
+              className="w-full bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2.5 py-2 font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
               {WELLS.map((w) => (
                 <option key={w.id} value={w.id}>
@@ -109,13 +109,13 @@ export default function GeospatialMapPage() {
 
           {/* Basin Field Filter */}
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">
+            <label className="text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#94A3B8] block">
               Basin Field Filter
             </label>
             <select
               value={selectedField}
               onChange={(e) => setSelectedField(e.target.value)}
-              className="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 font-bold text-neutral-900 dark:text-white focus:outline-hidden"
+              className="w-full bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2.5 py-2 font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
               <option value="all">All Assam Fields</option>
               <option value="Geleki">Geleki Field</option>
@@ -129,13 +129,13 @@ export default function GeospatialMapPage() {
 
           {/* Radial Search Proximity */}
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">
+            <label className="text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#94A3B8] block">
               Proximity Radius
             </label>
             <select
               value={radiusKm}
               onChange={(e) => setRadiusKm(Number(e.target.value))}
-              className="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl px-2.5 py-2 font-bold text-neutral-900 dark:text-white focus:outline-hidden"
+              className="w-full bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2.5 py-2 font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
               <option value={10}>10 km Radius</option>
               <option value={25}>25 km Standard Radius</option>
@@ -146,34 +146,34 @@ export default function GeospatialMapPage() {
 
           {/* Search Query Input */}
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">
+            <label className="text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#94A3B8] block">
               Search Wells / Blocks
             </label>
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-3 text-neutral-400" />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-3 text-[#6B7280]" />
               <input
                 type="text"
                 placeholder="Search GLK-07, Tipam..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-xl pl-8 pr-2.5 py-2 text-xs font-mono text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-hidden"
+                className="w-full bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] rounded-none pl-8 pr-2.5 py-2 text-xs font-mono text-[#252B33] dark:text-white placeholder-[#6B7280] dark:placeholder-[#94A3B8] focus:outline-hidden focus:border-[#3FC3B6]"
               />
             </div>
           </div>
 
           {/* Ranking Mode Sorter */}
           <div className="space-y-1">
-            <label className="text-[10px] uppercase font-bold text-neutral-500 dark:text-neutral-400 block">
+            <label className="text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#94A3B8] block">
               Ranking Mode
             </label>
-            <div className="inline-flex w-full rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-0.5">
+            <div className="inline-flex w-full rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] p-0.5">
               <button
                 type="button"
                 onClick={() => setSortBy('similarity')}
-                className={`flex-1 py-1.5 rounded-lg text-center font-bold text-[11px] cursor-pointer transition-colors ${
+                className={`flex-1 py-1.5 rounded-none text-center font-bold text-[11px] cursor-pointer transition-colors ${
                   sortBy === 'similarity'
-                    ? 'bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-xs'
-                    : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                    ? 'bg-[#34435A] text-white shadow-2xs'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
               >
                 Similarity
@@ -181,10 +181,10 @@ export default function GeospatialMapPage() {
               <button
                 type="button"
                 onClick={() => setSortBy('distance')}
-                className={`flex-1 py-1.5 rounded-lg text-center font-bold text-[11px] cursor-pointer transition-colors ${
+                className={`flex-1 py-1.5 rounded-none text-center font-bold text-[11px] cursor-pointer transition-colors ${
                   sortBy === 'distance'
-                    ? 'bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-xs'
-                    : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                    ? 'bg-[#34435A] text-white shadow-2xs'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
               >
                 Distance
@@ -197,7 +197,7 @@ export default function GeospatialMapPage() {
       </section>
 
       {/* ─── Main Geospatial Console with Dedicated Sidebar Tabs ─── */}
-      <section className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0b0f18] p-4 sm:p-5 shadow-xs overflow-hidden transition-colors">
+      <section className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 sm:p-5 shadow-2xs overflow-hidden transition-colors">
         <div className="min-h-[640px] w-full">
           <WellMapInner
             centerWellId={centerWellId}

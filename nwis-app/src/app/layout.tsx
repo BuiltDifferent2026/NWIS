@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppShell } from "../components/layout/AppShell";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Inter, Public_Sans, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 
-const sans = Plus_Jakarta_Sans({ 
+const inter = Inter({ 
   subsets: ['latin'], 
-  variable: '--font-sans',
-  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-inter',
+  display: 'swap'
+});
+
+const publicSans = Public_Sans({ 
+  subsets: ['latin'], 
+  variable: '--font-public-sans',
   display: 'swap'
 });
 
@@ -32,9 +37,14 @@ export default function RootLayout({
     <html 
       lang="en" 
       suppressHydrationWarning
-      className={cn("h-full", sans.variable, mono.variable)}
+      className={cn("h-full", inter.variable, publicSans.variable, mono.variable)}
     >
       <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');`
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -52,7 +62,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-amber-500 selection:text-neutral-950 transition-colors">
+      <body className="h-full bg-[#F5F7F8] dark:bg-[#191E26] text-[#252B33] dark:text-white font-sans antialiased selection:bg-[#3FC3B6]/30 selection:text-[#191E26] transition-colors">
         <AppShell>{children}</AppShell>
       </body>
     </html>

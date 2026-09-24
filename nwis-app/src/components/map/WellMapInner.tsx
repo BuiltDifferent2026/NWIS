@@ -361,30 +361,30 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
   };
 
   const getMarkerColor = (well: Well) => {
-    if (well.id === centerWell.id) return '#0284C7'; // Cyan/Sky for active rig
-    if (well.status === 'drilling') return '#059669'; // Emerald
-    if (well.status === 'completed') return '#2563EB'; // Blue
-    if (well.status === 'suspended') return '#D97706'; // Amber
-    return '#64748B';
+    if (well.id === centerWell.id) return '#ED1C24'; // Brand Red for active rig
+    if (well.status === 'drilling') return '#3FAE68'; // Success
+    if (well.status === 'completed') return '#26A69A'; // Teal Dark
+    if (well.status === 'suspended') return '#F2B84B'; // Warning
+    return '#6B7280';
   };
 
   return (
     <div className="relative flex flex-col xl:flex-row h-full w-full gap-4 min-h-[580px] xl:h-[640px]">
       
       {/* ─── Map Viewport (Matches Page Theme) ─── */}
-      <div className={`flex-1 relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-[#090c12] min-h-[480px] xl:h-full shadow-xs ${
-        isPickingLocation ? 'cursor-crosshair ring-2 ring-amber-500' : ''
+      <div className={`flex-1 relative rounded-none overflow-hidden border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#191E26] min-h-[480px] xl:h-full shadow-2xs ${
+        isPickingLocation ? 'cursor-crosshair ring-2 ring-[#3FC3B6]' : ''
       }`}>
         
         {/* Picking Location Floating Guidance Banner */}
         {isPickingLocation && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-amber-500 text-neutral-950 px-4 py-2 rounded-xl font-mono text-xs font-bold shadow-xl flex items-center gap-3 animate-bounce">
-            <Crosshair className="w-4 h-4 animate-spin" />
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#34435A] text-white border-2 border-[#3FC3B6] px-4 py-2 rounded-none font-mono text-xs font-bold shadow-xl flex items-center gap-3 animate-bounce">
+            <Crosshair className="w-4 h-4 text-[#3FC3B6] animate-spin" />
             <span>CLICK ANYWHERE ON THE MAP TO CAPTURE COORDINATES</span>
             <button
               type="button"
               onClick={() => setIsPickingLocation(false)}
-              className="ml-2 bg-neutral-950/20 hover:bg-neutral-950/40 p-1 rounded text-neutral-950 cursor-pointer"
+              className="ml-2 bg-[#222222] hover:bg-[#222222]/80 p-1 text-white cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -396,7 +396,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           zoom={10}
           scrollWheelZoom={true}
           className="h-full w-full z-10"
-          style={{ background: isDarkMode ? '#090C12' : '#E2E8F0' }}
+          style={{ background: isDarkMode ? '#191E26' : '#E2E8F0' }}
         >
           {/* Map interactive handler for clicks and programmatic zooming */}
           <MapInteractiveController
@@ -421,8 +421,8 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
             center={[centerLat, centerLng]}
             radius={radiusKm * 1000}
             pathOptions={{
-              color: isDarkMode ? '#3B82F6' : '#2563EB',
-              fillColor: isDarkMode ? '#3B82F6' : '#3B82F6',
+              color: isDarkMode ? '#3FC3B6' : '#26A69A',
+              fillColor: '#3FC3B6',
               fillOpacity: isDarkMode ? 0.08 : 0.06,
               weight: 1.5,
               dashArray: '5, 5'
@@ -450,29 +450,29 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                 }}
               >
                 <Popup className="custom-popup">
-                  <div className="p-3 text-xs font-mono bg-white dark:bg-slate-900 text-neutral-900 dark:text-slate-100 rounded-lg min-w-[210px] space-y-2 border border-neutral-200 dark:border-slate-800 shadow-lg">
-                    <div className="font-bold flex items-center justify-between gap-2 border-b border-neutral-200 dark:border-slate-800 pb-1.5">
-                      <span className="text-sm font-extrabold text-blue-600 dark:text-cyan-400">{well.name}</span>
+                  <div className="p-3 text-xs font-mono bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-white rounded-none min-w-[210px] space-y-2 border border-[#E2E5E8] dark:border-[#364356] shadow-lg">
+                    <div className="font-bold flex items-center justify-between gap-2 border-b border-[#E2E5E8] dark:border-[#364356] pb-1.5">
+                      <span className="text-sm font-extrabold text-[#26A69A] dark:text-[#3FC3B6]">{well.name}</span>
                       <StatusBadge status={well.status} size="sm" />
                     </div>
 
-                    <div className="text-neutral-600 dark:text-slate-300 text-[11px]">
+                    <div className="text-[#6B7280] dark:text-[#94A3B8] text-[11px]">
                       {well.field} Field · Block {well.block}
                     </div>
 
-                    <div className="p-2 rounded bg-neutral-50 dark:bg-slate-950/80 border border-neutral-200 dark:border-slate-800 space-y-1 text-[11px]">
-                      <div className="text-neutral-500 dark:text-slate-400 text-[10px] uppercase font-bold">Surface Coords:</div>
-                      <div className="text-neutral-900 dark:text-slate-200 font-bold">
+                    <div className="p-2 rounded-none bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] space-y-1 text-[11px]">
+                      <div className="text-[#6B7280] dark:text-[#94A3B8] text-[10px] uppercase font-bold">Surface Coords:</div>
+                      <div className="text-[#252B33] dark:text-white font-bold">
                         {formatCoords(well.coordinates.surfaceLat, well.coordinates.surfaceLng, coordFormat)}
                       </div>
                       <button
                         type="button"
                         onClick={() => handleCopy(formatCoords(well.coordinates.surfaceLat, well.coordinates.surfaceLng, coordFormat), `popup-${well.id}`)}
-                        className="mt-1 w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded bg-neutral-200 hover:bg-neutral-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-neutral-900 dark:text-cyan-300 text-[10px] font-bold cursor-pointer transition-colors"
+                        className="mt-1 w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded-none bg-[#D9F2EE] dark:bg-[#34435A] hover:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] border border-[#3FC3B6] text-[10px] font-bold cursor-pointer transition-colors"
                       >
                         {copiedId === `popup-${well.id}` ? (
                           <>
-                            <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                            <Check className="w-3 h-3 text-[#3FAE68]" />
                             <span>COPIED!</span>
                           </>
                         ) : (
@@ -484,14 +484,14 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[10px] pt-1 border-t border-neutral-200 dark:border-slate-800">
+                    <div className="grid grid-cols-2 gap-2 text-[10px] pt-1 border-t border-[#E2E5E8] dark:border-[#364356]">
                       <div>
-                        <span className="text-neutral-500 dark:text-slate-400 block">DISTANCE</span>
-                        <span className="font-bold text-blue-600 dark:text-cyan-400">{distanceKm} km</span>
+                        <span className="text-[#6B7280] dark:text-[#94A3B8] block">DISTANCE</span>
+                        <span className="font-bold text-[#26A69A] dark:text-[#3FC3B6]">{distanceKm} km</span>
                       </div>
                       <div>
-                        <span className="text-neutral-500 dark:text-slate-400 block">SIMILARITY</span>
-                        <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                        <span className="text-[#6B7280] dark:text-[#94A3B8] block">SIMILARITY</span>
+                        <span className="font-bold text-[#3FAE68]">
                           {Math.round(similarity.total * 100)}%
                         </span>
                       </div>
@@ -499,7 +499,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
 
                     <Link
                       href={`/wells/${well.id}`}
-                      className="mt-2 block text-center py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-bold transition-colors"
+                      className="mt-2 block text-center py-1.5 bg-[#34435A] hover:bg-[#2b394f] text-white rounded-none font-bold transition-colors"
                     >
                       View Well Details
                     </Link>
@@ -555,36 +555,36 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                   }}
                 >
                   <Popup className="custom-popup">
-                    <div className="p-3 text-xs font-mono bg-white dark:bg-slate-900 text-neutral-900 dark:text-slate-100 rounded-lg min-w-[220px] space-y-2 border border-neutral-200 dark:border-slate-800 shadow-lg">
-                      <div className="flex items-center justify-between pb-1.5 border-b border-neutral-200 dark:border-slate-800">
-                        <div className="flex items-center gap-1.5 font-bold text-amber-600 dark:text-amber-400">
+                    <div className="p-3 text-xs font-mono bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-white rounded-none min-w-[220px] space-y-2 border border-[#E2E5E8] dark:border-[#364356] shadow-md">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-[#E2E5E8] dark:border-[#364356]">
+                        <div className="flex items-center gap-1.5 font-bold text-[#26A69A] dark:text-[#3FC3B6]">
                           <MapPin className="w-3.5 h-3.5" style={{ color: pin.color }} />
                           <span>{pin.name}</span>
                         </div>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold border border-amber-200 dark:border-transparent">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded-none bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] font-bold border border-[#3FC3B6]">
                           CUSTOM PIN
                         </span>
                       </div>
 
-                      <div className="text-[11px] text-neutral-600 dark:text-slate-300 space-y-0.5">
-                        {pin.formation && <div>Fm: <strong className="text-neutral-900 dark:text-white">{pin.formation}</strong></div>}
-                        {pin.depthMD && <div>Planned Depth: <strong className="text-neutral-900 dark:text-white">{pin.depthMD}m MD</strong></div>}
-                        <div>Distance from {centerWell.name}: <strong className="text-blue-600 dark:text-cyan-400">{distFromCenter} km</strong></div>
+                      <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8] space-y-0.5">
+                        {pin.formation && <div>Fm: <strong className="text-[#252B33] dark:text-white">{pin.formation}</strong></div>}
+                        {pin.depthMD && <div>Planned Depth: <strong className="text-[#252B33] dark:text-white">{pin.depthMD}m MD</strong></div>}
+                        <div>Distance from {centerWell.name}: <strong className="text-[#26A69A] dark:text-[#3FC3B6]">{distFromCenter} km</strong></div>
                       </div>
 
-                      <div className="p-2 rounded bg-neutral-50 dark:bg-slate-950/80 border border-neutral-200 dark:border-slate-800 space-y-1 text-[11px]">
-                        <div className="text-neutral-500 dark:text-slate-400 text-[10px] uppercase font-bold">Coordinates:</div>
-                        <div className="text-neutral-900 dark:text-slate-200 font-bold truncate">
+                      <div className="p-2 rounded-none bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] space-y-1 text-[11px]">
+                        <div className="text-[#6B7280] dark:text-[#94A3B8] text-[10px] uppercase font-bold">Coordinates:</div>
+                        <div className="text-[#252B33] dark:text-white font-bold truncate">
                           {formatCoords(pin.lat, pin.lng, coordFormat)}
                         </div>
                         <button
                           type="button"
                           onClick={() => handleCopy(formatCoords(pin.lat, pin.lng, coordFormat), `popup-${pin.id}`)}
-                          className="mt-1 w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded bg-amber-500 hover:bg-amber-600 text-neutral-950 text-[10px] font-bold cursor-pointer transition-colors"
+                          className="mt-1 w-full flex items-center justify-center gap-1.5 py-1 px-2 rounded-none bg-[#3FC3B6] hover:bg-[#26A69A] text-[#222222] text-[10px] font-bold cursor-pointer transition-colors"
                         >
                           {copiedId === `popup-${pin.id}` ? (
                             <>
-                              <Check className="w-3 h-3 text-neutral-950" />
+                              <Check className="w-3 h-3 text-[#222222]" />
                               <span>COPIED!</span>
                             </>
                           ) : (
@@ -599,7 +599,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                       <button
                         type="button"
                         onClick={() => handleDeletePin(pin.id)}
-                        className="w-full flex items-center justify-center gap-1 text-[10px] text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 py-1 rounded border border-rose-200 dark:border-rose-900/50 hover:bg-rose-50 dark:hover:bg-rose-950/40 cursor-pointer transition-colors"
+                        className="w-full flex items-center justify-center gap-1 text-[10px] text-[#E05252] hover:text-[#ED1C24] py-1 rounded-none border border-[#E05252]/40 hover:bg-[#FDF2F2] dark:hover:bg-[#ED1C24]/15 cursor-pointer transition-colors"
                       >
                         <Trash2 className="w-3 h-3" />
                         <span>Remove Pin</span>
@@ -613,27 +613,27 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
         </MapContainer>
 
         {/* Floating Map Legend (Adaptive Light/Dark Theme) */}
-        <div className="absolute bottom-4 left-4 z-20 rounded-xl bg-white/95 dark:bg-slate-950/90 backdrop-blur-md border border-neutral-200 dark:border-slate-800 p-3 text-xs font-mono space-y-2 shadow-md max-w-[220px]">
-          <div className="text-[10px] font-bold text-neutral-500 dark:text-slate-400 uppercase tracking-wider flex items-center justify-between">
+        <div className="absolute bottom-4 left-4 z-20 rounded-none bg-white/95 dark:bg-[#242D3B]/95 backdrop-blur-md border border-[#E2E5E8] dark:border-[#364356] p-3 text-xs font-mono space-y-2 shadow-xs max-w-[220px]">
+          <div className="text-[10px] font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider flex items-center justify-between">
             <span>Map Layers</span>
-            <span className="text-[9px] text-blue-600 dark:text-cyan-400 font-bold">{radiusKm}km radius</span>
+            <span className="text-[9px] text-[#26A69A] dark:text-[#3FC3B6] font-bold">{radiusKm}km radius</span>
           </div>
           <div className="space-y-1.5 text-[11px]">
             <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-sky-500 border border-neutral-900 dark:border-white" />
-              <span className="text-neutral-800 dark:text-slate-200">Active Rig ({centerWell.name})</span>
+              <span className="w-3 h-3 rounded-none bg-[#ED1C24] border border-[#222222]" />
+              <span className="text-[#252B33] dark:text-white font-bold">Active Rig ({centerWell.name})</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-              <span className="text-neutral-700 dark:text-slate-300">Drilling Offset</span>
+              <span className="w-2.5 h-2.5 rounded-none bg-[#3FAE68]" />
+              <span className="text-[#6B7280] dark:text-[#94A3B8]">Drilling Offset</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-              <span className="text-neutral-700 dark:text-slate-300">Completed Well</span>
+              <span className="w-2.5 h-2.5 rounded-none bg-[#26A69A]" />
+              <span className="text-[#6B7280] dark:text-[#94A3B8]">Completed Well</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              <span className="text-neutral-700 dark:text-slate-300">Custom Pin</span>
+              <span className="w-2.5 h-2.5 rounded-none bg-[#F2B84B]" />
+              <span className="text-[#6B7280] dark:text-[#94A3B8]">Custom Pin</span>
             </div>
           </div>
         </div>
@@ -641,23 +641,23 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
       </div>
 
       {/* ─── DEDICATED SIDEBAR PANEL WITH TABS (Matches Page Theme) ─── */}
-      <div className="w-full xl:w-[420px] flex flex-col h-[600px] xl:h-full max-h-[640px] min-h-0 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0c1017] p-4 shadow-sm dark:shadow-xl overflow-hidden shrink-0 transition-colors">
+      <div className="w-full xl:w-[420px] flex flex-col h-[600px] xl:h-full max-h-[640px] min-h-0 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-4 shadow-2xs overflow-hidden shrink-0 transition-colors">
         
         {/* ── Tab Switcher Header ── */}
-        <div className="flex items-center rounded-xl bg-neutral-100 dark:bg-neutral-900/90 p-1 border border-neutral-200 dark:border-neutral-800 mb-3.5">
+        <div className="flex items-center rounded-none bg-[#F5F7F8] dark:bg-[#1E2532] p-1 border border-[#E2E5E8] dark:border-[#364356] mb-3.5">
           <button
             type="button"
             onClick={() => setSidebarTab('coordinates')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-none text-xs font-mono font-bold transition-all cursor-pointer ${
               sidebarTab === 'coordinates'
-                ? 'bg-white dark:bg-amber-500 text-neutral-950 dark:text-neutral-950 shadow-xs border border-neutral-200/80 dark:border-transparent'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                ? 'bg-[#34435A] text-white shadow-xs border-b-2 border-b-[#3FC3B6]'
+                : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
             }`}
           >
-            <MapPin className="w-3.5 h-3.5 text-amber-600 dark:text-neutral-950" />
+            <MapPin className={`w-3.5 h-3.5 ${sidebarTab === 'coordinates' ? 'text-[#3FC3B6]' : 'text-[#6B7280]'}`} />
             <span>Custom Coordinates</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-              sidebarTab === 'coordinates' ? 'bg-neutral-100 dark:bg-neutral-950/20 text-neutral-900 dark:text-neutral-950' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-none font-bold ${
+              sidebarTab === 'coordinates' ? 'bg-[#26A69A] text-white' : 'bg-[#E2E5E8] dark:bg-[#34435A] text-[#6B7280] dark:text-white'
             }`}>
               {customPins.length}
             </span>
@@ -666,16 +666,16 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           <button
             type="button"
             onClick={() => setSidebarTab('offsets')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-none text-xs font-mono font-bold transition-all cursor-pointer ${
               sidebarTab === 'offsets'
-                ? 'bg-white dark:bg-amber-500 text-neutral-950 dark:text-neutral-950 shadow-xs border border-neutral-200/80 dark:border-transparent'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                ? 'bg-[#34435A] text-white shadow-xs border-b-2 border-b-[#3FC3B6]'
+                : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
             }`}
           >
-            <Compass className="w-3.5 h-3.5 text-blue-600 dark:text-neutral-950" />
+            <Compass className={`w-3.5 h-3.5 ${sidebarTab === 'offsets' ? 'text-[#3FC3B6]' : 'text-[#6B7280]'}`} />
             <span>Offset Analogs</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-              sidebarTab === 'offsets' ? 'bg-neutral-100 dark:bg-neutral-950/20 text-neutral-900 dark:text-neutral-950' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-none font-bold ${
+              sidebarTab === 'offsets' ? 'bg-[#26A69A] text-white' : 'bg-[#E2E5E8] dark:bg-[#34435A] text-[#6B7280] dark:text-white'
             }`}>
               {sortedWells.length}
             </span>
@@ -683,17 +683,17 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
         </div>
 
         {/* ── Coordinate Format Selector & Global Actions ── */}
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-neutral-200 dark:border-neutral-800/80 text-xs font-mono">
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E2E5E8] dark:border-[#364356] text-xs font-mono">
           <div className="flex items-center gap-1.5">
-            <span className="text-neutral-500 dark:text-neutral-400 text-[11px]">Format:</span>
-            <div className="inline-flex rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900/80 p-0.5">
+            <span className="text-[#6B7280] dark:text-[#94A3B8] text-[11px]">Format:</span>
+            <div className="inline-flex rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] p-0.5">
               <button
                 type="button"
                 onClick={() => setCoordFormat('DD')}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors ${
+                className={`px-2 py-0.5 rounded-none text-[10px] font-bold cursor-pointer transition-colors ${
                   coordFormat === 'DD'
-                    ? 'bg-white dark:bg-neutral-700 text-neutral-950 dark:text-white shadow-xs'
-                    : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                    ? 'bg-[#34435A] text-white'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
                 title="Decimal Degrees (e.g. 26.912400, 94.634100)"
               >
@@ -702,10 +702,10 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
               <button
                 type="button"
                 onClick={() => setCoordFormat('DMS')}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-colors ${
+                className={`px-2 py-0.5 rounded-none text-[10px] font-bold cursor-pointer transition-colors ${
                   coordFormat === 'DMS'
-                    ? 'bg-white dark:bg-neutral-700 text-neutral-950 dark:text-white shadow-xs'
-                    : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                    ? 'bg-[#34435A] text-white'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
                 title="Degrees Minutes Seconds (e.g. 26°54'44.6&quot;N 94°38'02.8&quot;E)"
               >
@@ -717,13 +717,13 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           <button
             type="button"
             onClick={handleCopyAllCoordinates}
-            className="flex items-center gap-1 text-[11px] text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 font-bold cursor-pointer transition-colors"
+            className="flex items-center gap-1 text-[11px] text-[#26A69A] dark:text-[#3FC3B6] hover:text-[#3FC3B6] font-bold cursor-pointer transition-colors"
             title="Copy all active, custom, and offset coordinates"
           >
             {copiedId === 'copy-all-batch' ? (
               <>
-                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-emerald-600 dark:text-emerald-400">All Copied!</span>
+                <Check className="w-3.5 h-3.5 text-[#3FAE68]" />
+                <span className="text-[#3FAE68]">All Copied!</span>
               </>
             ) : (
               <>
@@ -735,29 +735,29 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
         </div>
 
         {/* ── Active Well Surface Coordinates Card (Theme-Matched) ── */}
-        <div className="mb-3.5 p-3 rounded-xl border border-sky-200 dark:border-cyan-500/30 bg-sky-50/70 dark:bg-cyan-950/20 text-xs font-mono space-y-1.5 transition-colors">
+        <div className="mb-3.5 p-3 rounded-none border border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15 text-xs font-mono space-y-1.5 transition-colors">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-sky-600 dark:bg-cyan-400 animate-pulse" />
-              <span className="text-neutral-600 dark:text-slate-400 text-[10px] uppercase font-bold">Active Well Center</span>
+              <span className="w-2 h-2 rounded-none bg-[#ED1C24] animate-pulse" />
+              <span className="text-[#6B7280] dark:text-[#94A3B8] text-[10px] uppercase font-bold">Active Well Center</span>
             </div>
-            <span className="text-sky-800 dark:text-cyan-300 font-bold text-xs">{centerWell.name}</span>
+            <span className="text-[#26A69A] dark:text-[#3FC3B6] font-bold text-xs">{centerWell.name}</span>
           </div>
 
           <div className="flex items-center justify-between gap-2 pt-0.5">
-            <div className="text-neutral-900 dark:text-slate-200 font-bold truncate text-[11px]">
+            <div className="text-[#252B33] dark:text-white font-bold truncate text-[11px]">
               {formatCoords(centerLat, centerLng, coordFormat)}
             </div>
 
             <button
               type="button"
               onClick={() => handleCopy(formatCoords(centerLat, centerLng, coordFormat), `active-${centerWell.id}`)}
-              className="flex items-center gap-1 px-2 py-1 rounded bg-sky-100 hover:bg-sky-200 dark:bg-cyan-500/20 dark:hover:bg-cyan-500/30 border border-sky-300 dark:border-cyan-500/40 text-sky-900 dark:text-cyan-300 text-[10px] font-bold cursor-pointer transition-all shrink-0"
+              className="flex items-center gap-1 px-2 py-1 rounded-none bg-[#34435A] hover:bg-[#222222] border border-[#34435A] text-white text-[10px] font-bold cursor-pointer transition-all shrink-0"
               title="Copy active well coordinates"
             >
               {copiedId === `active-${centerWell.id}` ? (
                 <>
-                  <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                  <Check className="w-3 h-3 text-[#3FAE68]" />
                   <span>COPIED!</span>
                 </>
               ) : (
@@ -772,13 +772,13 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
 
         {/* ════════ TAB 1: CUSTOM COORDINATES (Theme-Matched) ════════ */}
         {sidebarTab === 'coordinates' && (
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 pr-1.5 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scroll-smooth">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 pr-1.5 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-[#364356] scroll-smooth">
             
             {/* Add Custom Coordinate Form (Theme-Matched) */}
-            <form onSubmit={handleAddPin} className="p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-950/70 space-y-3 transition-colors">
+            <form onSubmit={handleAddPin} className="p-3.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] space-y-3 transition-colors">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-neutral-900 dark:text-slate-100 font-mono flex items-center gap-1.5">
-                  <Plus className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
+                <span className="text-xs font-bold text-[#252B33] dark:text-white font-mono flex items-center gap-1.5">
+                  <Plus className="w-3.5 h-3.5 text-[#3FC3B6]" />
                   Add Custom Coordinate
                 </span>
 
@@ -786,27 +786,27 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsPickingLocation(!isPickingLocation)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold cursor-pointer transition-all ${
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-none text-[10px] font-mono font-bold cursor-pointer transition-all ${
                     isPickingLocation
-                      ? 'bg-amber-500 text-neutral-950 animate-pulse shadow-sm'
-                      : 'bg-white hover:bg-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-amber-400 border border-neutral-300 dark:border-neutral-700 shadow-2xs'
+                      ? 'bg-[#34435A] text-white border border-[#3FC3B6] animate-pulse shadow-sm'
+                      : 'bg-white dark:bg-[#242D3B] hover:bg-[#F5F7F8] dark:hover:bg-[#1E2532] text-[#252B33] dark:text-white border border-[#E2E5E8] dark:border-[#364356] shadow-2xs'
                   }`}
                   title="Click map to capture latitude and longitude"
                 >
-                  <Crosshair className="w-3 h-3" />
+                  <Crosshair className="w-3.5 h-3.5 text-[#3FC3B6]" />
                   <span>{isPickingLocation ? 'Picking...' : 'Pick on Map'}</span>
                 </button>
               </div>
 
               {formError && (
-                <div className="p-2 rounded bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-300 text-[11px] font-mono">
+                <div className="p-2 rounded-none bg-[#FDF2F2] dark:bg-[#ED1C24]/15 border border-[#E05252] text-[#ED1C24] text-[11px] font-mono">
                   {formError}
                 </div>
               )}
 
               {/* Point Name Input */}
               <div>
-                <label className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase block mb-1">
+                <label className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase block mb-1">
                   Target / Pin Name
                 </label>
                 <input
@@ -814,14 +814,14 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                   placeholder="e.g. Relief Well Pad B, Sidetrack GLK-14-ST"
                   value={inputName}
                   onChange={(e) => setInputName(e.target.value)}
-                  className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg px-2.5 py-1.5 text-xs font-mono text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-amber-500 focus:outline-hidden"
+                  className="w-full bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2.5 py-1.5 text-xs font-mono text-[#252B33] dark:text-white placeholder-[#6B7280] dark:placeholder-[#94A3B8] focus:border-[#3FC3B6] focus:outline-hidden"
                 />
               </div>
 
               {/* Lat and Lng Dual Inputs */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase block mb-1">
+                  <label className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase block mb-1">
                     Latitude (°N)
                   </label>
                   <input
@@ -830,12 +830,12 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     placeholder="26.912400"
                     value={inputLat}
                     onChange={(e) => setInputLat(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg px-2 py-1.5 text-xs font-mono text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-amber-500 focus:outline-hidden"
+                    className="w-full bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2 py-1.5 text-xs font-mono text-[#252B33] dark:text-white placeholder-[#6B7280] dark:placeholder-[#94A3B8] focus:border-[#3FC3B6] focus:outline-hidden"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase block mb-1">
+                  <label className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase block mb-1">
                     Longitude (°E)
                   </label>
                   <input
@@ -844,7 +844,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     placeholder="94.634100"
                     value={inputLng}
                     onChange={(e) => setInputLng(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg px-2 py-1.5 text-xs font-mono text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-amber-500 focus:outline-hidden"
+                    className="w-full bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2 py-1.5 text-xs font-mono text-[#252B33] dark:text-white placeholder-[#6B7280] dark:placeholder-[#94A3B8] focus:border-[#3FC3B6] focus:outline-hidden"
                     required
                   />
                 </div>
@@ -853,7 +853,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
               {/* Formation & Depth Inputs */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase block mb-1">
+                  <label className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase block mb-1">
                     Formation (Opt)
                   </label>
                   <input
@@ -861,11 +861,11 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     placeholder="e.g. Tipam SS"
                     value={inputFormation}
                     onChange={(e) => setInputFormation(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg px-2 py-1.5 text-xs font-mono text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-amber-500 focus:outline-hidden"
+                    className="w-full bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2 py-1.5 text-xs font-mono text-[#252B33] dark:text-white placeholder-[#6B7280] dark:placeholder-[#94A3B8] focus:border-[#3FC3B6] focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase block mb-1">
+                  <label className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase block mb-1">
                     Depth MD (m)
                   </label>
                   <input
@@ -873,25 +873,25 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     placeholder="e.g. 2350"
                     value={inputDepth}
                     onChange={(e) => setInputDepth(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 rounded-lg px-2 py-1.5 text-xs font-mono text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-amber-500 focus:outline-hidden"
+                    className="w-full bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2 py-1.5 text-xs font-mono text-[#252B33] dark:text-white placeholder-[#6B7280] dark:placeholder-[#94A3B8] focus:border-[#3FC3B6] focus:outline-hidden"
                   />
                 </div>
               </div>
 
               {/* Pin Color Selector */}
               <div>
-                <label className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase block mb-1">
+                <label className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase block mb-1">
                   Pin Marker Color
                 </label>
                 <div className="flex items-center gap-2">
-                  {['#F59E0B', '#06B6D4', '#10B981', '#F43F5E', '#8B5CF6', '#3B82F6'].map((color) => (
+                  {['#F2B84B', '#3FC3B6', '#3FAE68', '#ED1C24', '#34435A', '#26A69A'].map((color) => (
                     <button
                       key={color}
                       type="button"
                       onClick={() => setInputColor(color)}
                       style={{ backgroundColor: color }}
-                      className={`w-6 h-6 rounded-full transition-transform cursor-pointer ${
-                        inputColor === color ? 'scale-125 ring-2 ring-neutral-900 dark:ring-white shadow-md' : 'opacity-70 hover:opacity-100'
+                      className={`w-6 h-6 rounded-none transition-transform cursor-pointer ${
+                        inputColor === color ? 'scale-125 ring-2 ring-[#222222] shadow-sm' : 'opacity-70 hover:opacity-100'
                       }`}
                     />
                   ))}
@@ -901,7 +901,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-500 dark:to-orange-500 hover:from-amber-700 hover:to-orange-700 text-white dark:text-neutral-950 font-bold font-mono text-xs cursor-pointer shadow-xs transition-all flex items-center justify-center gap-1.5"
+                className="w-full py-2 px-3 rounded-none bg-[#ED1C24] hover:bg-[#C9141B] text-white font-bold font-mono text-xs cursor-pointer shadow-xs transition-all flex items-center justify-center gap-1.5"
               >
                 <MapPin className="w-3.5 h-3.5" />
                 <span>Plot Pin on Map</span>
@@ -910,7 +910,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
 
             {/* Quick Assam Basin Presets */}
             <div className="space-y-1.5">
-              <div className="text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase tracking-wider">
+              <div className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider">
                 Assam Basin Field Presets
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -919,7 +919,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     key={preset.name}
                     type="button"
                     onClick={() => handleApplyPreset(preset)}
-                    className="text-[10px] font-mono px-2 py-1 rounded bg-white hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-amber-700 dark:hover:text-amber-400 cursor-pointer transition-colors shadow-2xs"
+                    className="text-[10px] font-mono px-2 py-1 rounded-none bg-white hover:bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] text-[#252B33] dark:text-white hover:text-[#26A69A] cursor-pointer transition-colors shadow-2xs"
                   >
                     + {preset.name.split(' ')[0]} ({preset.depthMD}m)
                   </button>
@@ -929,13 +929,13 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
 
             {/* Plotted Pins Register (Theme-Matched) */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-[10px] font-mono font-bold text-neutral-600 dark:text-slate-400 uppercase tracking-wider">
+              <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider">
                 <span>Plotted Custom Pins ({customPins.length})</span>
-                <span className="text-neutral-500">Click to Zoom</span>
+                <span className="text-[#6B7280] dark:text-[#94A3B8]">Click to Zoom</span>
               </div>
 
               {customPins.length === 0 ? (
-                <div className="p-4 rounded-xl border border-dashed border-neutral-200 dark:border-neutral-800 text-center text-xs font-mono text-neutral-500">
+                <div className="p-4 rounded-none border border-dashed border-[#E2E5E8] dark:border-[#364356] text-center text-xs font-mono text-[#6B7280] dark:text-[#94A3B8]">
                   No custom coordinates added yet. Use the form above or click &quot;Pick on Map&quot;.
                 </div>
               ) : (
@@ -948,17 +948,17 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     return (
                       <div
                         key={pin.id}
-                        className="p-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/60 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all text-xs font-mono space-y-2 group shadow-2xs"
+                        className="p-3 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] hover:border-[#34435A] transition-all text-xs font-mono space-y-2 group shadow-2xs"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2">
                             <span 
-                              className="w-2.5 h-2.5 rounded-full shrink-0" 
+                              className="w-2.5 h-2.5 rounded-none shrink-0" 
                               style={{ backgroundColor: pin.color }} 
                             />
                             <div>
-                              <div className="font-bold text-neutral-900 dark:text-slate-100">{pin.name}</div>
-                              <div className="text-[10px] text-neutral-500 dark:text-slate-400">
+                              <div className="font-bold text-[#252B33] dark:text-white">{pin.name}</div>
+                              <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8]">
                                 {pin.formation || 'Subsurface Target'} {pin.depthMD ? `· ${pin.depthMD}m MD` : ''}
                               </div>
                             </div>
@@ -968,7 +968,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                             <button
                               type="button"
                               onClick={() => setZoomTarget([pin.lat, pin.lng])}
-                              className="p-1 rounded text-neutral-500 hover:text-sky-600 dark:hover:text-cyan-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
+                              className="p-1 rounded-none text-[#6B7280] dark:text-[#94A3B8] hover:text-[#26A69A] hover:bg-[#F5F7F8] dark:hover:bg-[#242D3B] cursor-pointer"
                               title="Zoom to pin location on map"
                             >
                               <Navigation className="w-3.5 h-3.5" />
@@ -976,7 +976,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                             <button
                               type="button"
                               onClick={() => handleDeletePin(pin.id)}
-                              className="p-1 rounded text-neutral-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
+                              className="p-1 rounded-none text-[#6B7280] dark:text-[#94A3B8] hover:text-[#ED1C24] hover:bg-[#FDF2F2] dark:hover:bg-[#ED1C24]/15 cursor-pointer"
                               title="Delete pin"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -984,21 +984,21 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-2 rounded bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between gap-2">
-                          <span className="text-[11px] text-neutral-800 dark:text-slate-300 font-bold truncate">
+                        <div className="p-2 rounded-none bg-[#F5F7F8] dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] flex items-center justify-between gap-2">
+                          <span className="text-[11px] text-[#252B33] dark:text-white font-bold truncate">
                             {formatCoords(pin.lat, pin.lng, coordFormat)}
                           </span>
 
                           <button
                             type="button"
                             onClick={() => handleCopy(formatCoords(pin.lat, pin.lng, coordFormat), pin.id)}
-                            className="flex items-center gap-1 px-2 py-0.5 rounded bg-neutral-200/80 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-amber-400 text-[10px] font-bold cursor-pointer transition-colors shrink-0"
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-none bg-[#D9F2EE] dark:bg-[#34435A] hover:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] border border-[#3FC3B6] text-[10px] font-bold cursor-pointer transition-colors shrink-0"
                             title="Copy coordinates"
                           >
                             {copiedId === pin.id ? (
                               <>
-                                <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-emerald-600 dark:text-emerald-400">COPIED</span>
+                                <Check className="w-3 h-3 text-[#3FAE68]" />
+                                <span className="text-[#3FAE68]">COPIED</span>
                               </>
                             ) : (
                               <>
@@ -1009,11 +1009,11 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                           </button>
                         </div>
 
-                        <div className="text-[10px] text-neutral-500 dark:text-slate-400 flex items-center justify-between">
-                          <span className="text-sky-700 dark:text-cyan-400 font-bold">
+                        <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] flex items-center justify-between">
+                          <span className="text-[#26A69A] dark:text-[#3FC3B6] font-bold">
                             {distFromCenter} km from {centerWell.name}
                           </span>
-                          <span className="text-neutral-500 font-mono">
+                          <span className="text-[#6B7280] dark:text-[#94A3B8] font-mono">
                             {pin.lat.toFixed(4)}°, {pin.lng.toFixed(4)}°
                           </span>
                         </div>
@@ -1030,11 +1030,11 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
         {/* ════════ TAB 2: OFFSET ANALOGS (Theme-Matched with Scroll Option) ════════ */}
         {sidebarTab === 'offsets' && (
           <div className="flex-1 min-h-0 flex flex-col">
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-neutral-200 dark:border-neutral-800/80 text-[11px] font-mono">
-              <span className="text-neutral-500 dark:text-slate-400">
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#E2E5E8] dark:border-[#364356] text-[11px] font-mono">
+              <span className="text-[#6B7280] dark:text-[#94A3B8]">
                 {sortBy === 'distance' ? 'By Distance' : 'By Stratigraphic Similarity'}
               </span>
-              <span className="inline-flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+              <span className="inline-flex items-center gap-1 text-[10px] text-[#26A69A] dark:text-[#3FC3B6] font-bold bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 px-2 py-0.5 rounded-none border border-[#3FC3B6]">
                 <ArrowUpDown className="w-3 h-3" />
                 Scroll Viewport ({sortedWells.length} Wells)
               </span>
@@ -1054,23 +1054,23 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     setSelectedWell(well);
                     setZoomTarget([well.coordinates.surfaceLat, well.coordinates.surfaceLng]);
                   }}
-                  className={`p-3 rounded-xl border transition cursor-pointer text-xs font-mono space-y-2 shadow-2xs ${
+                  className={`p-3 rounded-none border transition cursor-pointer text-xs font-mono space-y-2 shadow-2xs ${
                     selectedWell?.id === well.id
-                      ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/30'
+                      ? 'border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15'
                       : isCenter
-                      ? 'border-sky-400/60 bg-sky-50/40 dark:bg-cyan-950/20'
+                      ? 'border-[#ED1C24] bg-[#FDF2F2] dark:bg-[#ED1C24]/15'
                       : inRadius
-                      ? 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950/60 hover:border-neutral-300 dark:hover:border-neutral-700'
-                      : 'border-neutral-200/60 dark:border-neutral-800/50 bg-neutral-50/40 dark:bg-neutral-950/30 opacity-70 hover:opacity-100'
+                      ? 'border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] hover:border-[#34435A]'
+                      : 'border-[#E2E5E8]/60 dark:border-[#364356]/60 bg-[#F5F7F8] dark:bg-[#191E26] opacity-70 hover:opacity-100'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-neutral-900 dark:text-slate-100">{well.name}</span>
+                        <span className="font-bold text-[#252B33] dark:text-white">{well.name}</span>
                         <StatusBadge status={well.status} size="sm" />
                       </div>
-                      <div className="text-[11px] text-neutral-500 dark:text-slate-400 mt-0.5">
+                      <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8] mt-0.5">
                         {well.field} · {well.totalDepthMD}m TD
                       </div>
                     </div>
@@ -1082,11 +1082,11 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                           e.stopPropagation();
                           handleCopy(formattedWellCoords, `well-${well.id}`);
                         }}
-                        className="p-1.5 rounded bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-slate-300 hover:text-neutral-950 dark:hover:text-white cursor-pointer"
+                        className="p-1.5 rounded-none bg-[#F5F7F8] dark:bg-[#242D3B] hover:bg-[#E2E5E8] dark:hover:bg-[#34435A] text-[#252B33] dark:text-white cursor-pointer"
                         title="Copy well coordinates"
                       >
                         {copiedId === `well-${well.id}` ? (
-                          <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                          <Check className="w-3.5 h-3.5 text-[#3FAE68]" />
                         ) : (
                           <Copy className="w-3.5 h-3.5" />
                         )}
@@ -1095,7 +1095,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                       <Link
                         href={`/wells/${well.id}`}
                         onClick={(e) => e.stopPropagation()}
-                        className="p-1.5 rounded text-neutral-500 hover:text-blue-600 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        className="p-1.5 rounded-none text-[#6B7280] dark:text-[#94A3B8] hover:text-[#3FC3B6]"
                         title="Open Well Details"
                       >
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -1104,21 +1104,21 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                   </div>
 
                   {/* Surface Coordinates Row with Quick Copy Feedback */}
-                  <div className="text-[10px] text-neutral-600 dark:text-slate-400 flex items-center justify-between bg-neutral-50 dark:bg-neutral-900/80 px-2 py-1 rounded border border-neutral-200/80 dark:border-neutral-800/80">
+                  <div className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] flex items-center justify-between bg-[#F5F7F8] dark:bg-[#242D3B] px-2 py-1 rounded-none border border-[#E2E5E8] dark:border-[#364356]">
                     <span className="truncate">{formattedWellCoords}</span>
                     {copiedId === `well-${well.id}` && (
-                      <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold ml-1 shrink-0">COPIED</span>
+                      <span className="text-[9px] text-[#3FAE68] font-bold ml-1 shrink-0">COPIED</span>
                     )}
                   </div>
 
-                  <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800/80 grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="flex items-center gap-1 text-neutral-700 dark:text-slate-300">
-                      <MapPin className="w-3 h-3 text-sky-600 dark:text-cyan-400" />
+                  <div className="pt-2 border-t border-[#E2E5E8] dark:border-[#364356] grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="flex items-center gap-1 text-[#252B33] dark:text-white">
+                      <MapPin className="w-3 h-3 text-[#26A69A] dark:text-[#3FC3B6]" />
                       <span>{distanceKm} km dist</span>
                     </div>
                     <div className="flex items-center justify-end gap-1 font-bold">
-                      <Compass className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                      <span className={simPct >= 70 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}>
+                      <Compass className="w-3 h-3 text-[#3FC3B6]" />
+                      <span className={simPct >= 70 ? 'text-[#3FAE68]' : 'text-[#F2B84B]'}>
                         {simPct}% sim
                       </span>
                     </div>

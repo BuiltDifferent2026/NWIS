@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -11,77 +12,119 @@
 */
 
 :root {
-  /* Neutral Base Palette (GOV.UK / USWDS inspired) */
-  --gov-canvas: #f4f8fb;
-  --gov-surface: #ffffff;
-  --gov-surface-subtle: #f8fafc;
-  --gov-border: #bfc1c3;
-  --gov-border-subtle: #e5e7eb;
-  --gov-text-main: #0b0c0c;
-  --gov-text-muted: #505a5f;
-  --gov-text-light: #6f777b;
+  /* Official User-Specified Oil India Palette */
+  --gov-canvas: #F5F7F8;
+  --gov-surface: #FFFFFF;
+  --gov-surface-subtle: #D9F2EE;
+  --gov-border: #E2E5E8;
+  --gov-border-subtle: #E2E5E8;
+  --gov-text-main: #252B33;
+  --gov-text-muted: #6B7280;
+  --gov-text-light: #6B7280;
 
-  /* Functional Colours strictly reserved */
-  --gov-blue: #1d70b8;
-  --gov-blue-hover: #003078;
-  --gov-blue-subtle: #e8f1f8;
+  /* Brand Colors */
+  --oil-red: #ED1C24;
+  --oil-red-dark: #C9141B;
+  --oil-black: #222222;
+  --oil-navy: #34435A;
+  --oil-teal: #3FC3B6;
+  --oil-teal-dark: #26A69A;
+  --oil-teal-light: #D9F2EE;
 
-  --gov-red: #ca3535;
-  --gov-red-subtle: #fbeeed;
-  --gov-red-border: #e89999;
+  /* Sidebar Tokens (Dark Navy: #34435A) */
+  --sidebar-bg: #34435A;
+  --sidebar-active: #26A69A;
+  --sidebar-hover: #2b394f;
+  --sidebar-text: #D9F2EE;
+  --sidebar-border: #222222;
 
-  --gov-amber: #b56000;
-  --gov-amber-subtle: #fef4e8;
-  --gov-amber-border: #f4be7a;
+  /* Hazard / Alert Banner Tokens (Soft Rose-Coral Wash) */
+  --hazard-bg: #FDF2F2;
+  --hazard-border: #E05252;
+  --hazard-text: #ED1C24;
+  --hazard-subhead: #C9141B;
 
-  --gov-green: #0f7a52;
-  --gov-green-subtle: #ecf6f2;
-  --gov-green-border: #8ec3ad;
+  /* Functional Status Colors */
+  --gov-red: #ED1C24;
+  --gov-red-hover: #C9141B;
+  --gov-red-subtle: #FDF2F2;
+  --gov-red-border: #E05252;
+  --status-success: #3FAE68;
+  --status-warning: #F2B84B;
+  --status-error: #E05252;
 
-  /* Focus style */
-  --gov-focus: #ffdd00;
-  --gov-focus-text: #0b0c0c;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Base shadcn & theme tokens */
+  --gov-focus: #34435A;
+  --gov-focus-text: #FFFFFF;
+  --background: #F5F7F8;
+  --foreground: #252B33;
+  --card: #FFFFFF;
+  --card-foreground: #252B33;
+  --popover: #FFFFFF;
+  --popover-foreground: #252B33;
+  --primary: #34435A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #D9F2EE;
+  --secondary-foreground: #26A69A;
+  --muted: #F5F7F8;
+  --muted-foreground: #6B7280;
+  --accent: #3FC3B6;
+  --accent-foreground: #FFFFFF;
+  --destructive: #E05252;
+  --border: #E2E5E8;
+  --input: #E2E5E8;
+  --ring: #3FC3B6;
+  --radius: 0rem;
+  --sidebar: #34435A;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #26A69A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #2b394f;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #222222;
+  --sidebar-ring: #3FC3B6;
 }
 
 @theme {
-  --font-sans: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-oil-red: #ED1C24;
+  --color-oil-red-dark: #C9141B;
+  --color-oil-black: #222222;
+  --color-oil-navy: #34435A;
+  --color-oil-teal: #3FC3B6;
+  --color-oil-teal-dark: #26A69A;
+  --color-oil-teal-light: #D9F2EE;
+  --color-oil-bg: #F5F7F8;
+  --color-oil-card: #FFFFFF;
+  --color-oil-text: #252B33;
+  --color-oil-muted: #6B7280;
+  --color-oil-border: #E2E5E8;
+  --color-oil-success: #3FAE68;
+  --color-oil-warning: #F2B84B;
+  --color-oil-error: #E05252;
+
+  --font-sans: var(--font-inter), 'Inter', var(--font-public-sans), 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-inter: var(--font-inter), 'Inter', sans-serif;
+  --font-public-sans: var(--font-public-sans), 'Public Sans', sans-serif;
   --font-mono: var(--font-mono), 'JetBrains Mono', monospace;
+  --radius: 0rem;
+  --radius-xs: 0rem;
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
+  --radius-2xl: 0rem;
+  --radius-3xl: 0rem;
+  --radius-4xl: 0rem;
 }
 
-html, body, button, input, select, textarea, optgroup {
-  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+html,
+body,
+button,
+input,
+select,
+textarea,
+optgroup {
+  font-family: var(--font-inter), 'Inter', var(--font-public-sans), 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   letter-spacing: -0.011em;
 }
 
@@ -93,13 +136,39 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  letter-spacing: -0.03em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-public-sans), 'Public Sans', var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.025em;
 }
 
-code, kbd, samp, pre, .font-mono {
+code,
+kbd,
+samp,
+pre,
+.font-mono {
   font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* ─── Inter & Public Sans Utility Classes ─── */
+.inter-font,
+.font-inter,
+[class*="inter-"] {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.public-sans-font,
+.font-public-sans,
+[class*="public-sans-"] {
+  font-family: "Public Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 /* Accessible visible focus states */
@@ -143,23 +212,23 @@ select:focus {
 }
 
 .dark .gov-table {
-  background-color: #12151c;
-  border-color: #262a36;
+  background-color: #242D3B;
+  border-color: #364356;
 }
 
 .dark .gov-table th {
-  background-color: #181c26;
-  color: #f8fafc;
-  border-bottom-color: #262a36;
+  background-color: #1E2532;
+  color: #FFFFFF;
+  border-bottom-color: #364356;
 }
 
 .dark .gov-table td {
-  border-bottom-color: #1e232f;
-  color: #cbd5e1;
+  border-bottom-color: #2D3747;
+  color: #CBD5E1;
 }
 
 .dark .gov-table tr:hover td {
-  background-color: #1a1f2c;
+  background-color: #2D3747;
 }
 
 /* Operational Cards / Containers */
@@ -167,7 +236,7 @@ select:focus {
   background-color: var(--gov-surface);
   border: 1px solid var(--gov-border);
   padding: 18px;
-  border-radius: 16px;
+  border-radius: 0px;
 }
 
 .gov-card-title {
@@ -179,12 +248,12 @@ select:focus {
 }
 
 .dark .gov-card {
-  background-color: #12151c;
-  border-color: #262a36;
+  background-color: #242D3B;
+  border-color: #364356;
 }
 
 .dark .gov-card-title {
-  color: #f8fafc;
+  color: #FFFFFF;
 }
 
 /* Status Tags (Color + Always text) */
@@ -199,68 +268,80 @@ select:focus {
   letter-spacing: 0.04em;
   line-height: 1;
   border: 1px solid transparent;
-  border-radius: 9999px;
+  border-radius: 0px;
   font-family: var(--font-mono, monospace);
 }
 
 .gov-tag-red {
-  background-color: var(--gov-red-subtle);
-  color: #8a1f1f;
-  border-color: var(--gov-red-border);
+  background-color: #FDF2F2;
+  color: #ED1C24;
+  border-color: #E05252;
 }
 
 .gov-tag-amber {
-  background-color: var(--gov-amber-subtle);
-  color: #783d00;
-  border-color: var(--gov-amber-border);
+  background-color: #FEF9EE;
+  color: #C68A1B;
+  border-color: #F2B84B;
 }
 
 .gov-tag-green {
-  background-color: var(--gov-green-subtle);
-  color: #075034;
-  border-color: var(--gov-green-border);
+  background-color: #EDF8F2;
+  color: #2D8B50;
+  border-color: #3FAE68;
 }
 
-.gov-tag-blue {
-  background-color: var(--gov-blue-subtle);
-  color: #144e82;
-  border-color: #9ac2e6;
+.gov-tag-teal {
+  background-color: #D9F2EE;
+  color: #26A69A;
+  border-color: #3FC3B6;
+}
+
+.gov-tag-navy {
+  background-color: #34435A;
+  color: #FFFFFF;
+  border-color: #222222;
 }
 
 .gov-tag-grey {
-  background-color: #f3f4f6;
-  color: #374151;
-  border-color: #d1d5db;
+  background-color: #F5F7F8;
+  color: #6B7280;
+  border-color: #E2E5E8;
 }
 
 .dark .gov-tag-red {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.3);
+  background-color: rgba(237, 28, 36, 0.18);
+  color: #FF5C5C;
+  border-color: rgba(237, 28, 36, 0.5);
 }
 
 .dark .gov-tag-amber {
-  background-color: rgba(245, 158, 11, 0.15);
-  color: #fcd34d;
-  border-color: rgba(245, 158, 11, 0.3);
+  background-color: rgba(242, 184, 75, 0.18);
+  color: #F2B84B;
+  border-color: rgba(242, 184, 75, 0.5);
 }
 
 .dark .gov-tag-green {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #6ee7b7;
-  border-color: rgba(16, 185, 129, 0.3);
+  background-color: rgba(63, 174, 104, 0.18);
+  color: #3FAE68;
+  border-color: rgba(63, 174, 104, 0.5);
 }
 
-.dark .gov-tag-blue {
-  background-color: rgba(59, 130, 246, 0.15);
-  color: #93c5fd;
-  border-color: rgba(59, 130, 246, 0.3);
+.dark .gov-tag-teal {
+  background-color: rgba(63, 195, 182, 0.18);
+  color: #3FC3B6;
+  border-color: rgba(63, 195, 182, 0.5);
+}
+
+.dark .gov-tag-navy {
+  background-color: #34435A;
+  color: #FFFFFF;
+  border-color: #3FC3B6;
 }
 
 .dark .gov-tag-grey {
-  background-color: rgba(148, 163, 184, 0.12);
-  color: #cbd5e1;
-  border-color: rgba(148, 163, 184, 0.25);
+  background-color: rgba(148, 163, 184, 0.15);
+  color: #CBD5E1;
+  border-color: rgba(54, 67, 86, 0.8);
 }
 
 /* Button styles */
@@ -269,41 +350,57 @@ select:focus {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background-color: var(--gov-blue);
-  color: #ffffff;
+  background-color: #3FC3B6;
+  color: #252B33;
   font-weight: 700;
   font-size: 14px;
   padding: 8px 16px;
-  border: 2px solid transparent;
-  border-radius: 12px;
+  border: 1px solid #26A69A;
+  border-radius: 0px;
   cursor: pointer;
   text-decoration: none;
+  transition: all 0.15s ease-in-out;
 }
 
 .gov-button:hover {
-  background-color: var(--gov-blue-hover);
+  background-color: #26A69A;
+  color: #FFFFFF;
+}
+
+.gov-button-primary {
+  background-color: #ED1C24;
+  color: #FFFFFF;
+  border: 1px solid #C9141B;
+  border-radius: 0px;
+}
+
+.gov-button-primary:hover {
+  background-color: #C9141B;
 }
 
 .gov-button-secondary {
-  background-color: #f3f4f6;
-  color: var(--gov-text-main);
-  border: 1px solid var(--gov-border);
-  border-radius: 12px;
+  background-color: #FFFFFF;
+  color: #252B33;
+  border: 1px solid #E2E5E8;
+  border-radius: 0px;
 }
 
 .gov-button-secondary:hover {
-  background-color: #e5e7eb;
+  background-color: #F5F7F8;
+  border-color: #34435A;
 }
 
 .dark .gov-button-secondary {
-  background-color: #1e2330;
-  color: #f8fafc;
-  border-color: #2d3345;
+  background-color: #1E2532;
+  color: #FFFFFF;
+  border-color: #364356;
 }
 
 .dark .gov-button-secondary:hover {
-  background-color: #283042;
+  background-color: #2D3747;
+  border-color: #3FC3B6;
 }
+
 /* ---break---
 */
 @theme inline {
@@ -340,149 +437,298 @@ select:focus {
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
+  --radius-2xl: 0rem;
+  --radius-3xl: 0rem;
+  --radius-4xl: 0rem;
 }
+
+/* ─── Global Sharp Corners for Cards & Components ─── */
+.card,
+[class*="card"],
+section,
+article,
+dialog,
+button:not(.rounded-full),
+input,
+select,
+textarea,
+[class*="rounded-xl"],
+[class*="rounded-2xl"],
+[class*="rounded-3xl"],
+[class*="rounded-lg"],
+[class*="rounded-md"],
+[class*="rounded-sm"],
+[class*="rounded-xs"],
+[class*="rounded"]:not(.rounded-full) {
+  border-radius: 0px !important;
+}
+
 /* ---break---
 */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #191E26;
+  --foreground: #FFFFFF;
+  --card: #242D3B;
+  --card-foreground: #FFFFFF;
+  --popover: #242D3B;
+  --popover-foreground: #FFFFFF;
+  --primary: #3FC3B6;
+  --primary-foreground: #191E26;
+  --secondary: #1E2532;
+  --secondary-foreground: #3FC3B6;
+  --muted: #1E2532;
+  --muted-foreground: #94A3B8;
+  --accent: #3FC3B6;
+  --accent-foreground: #191E26;
+  --destructive: #ED1C24;
+  --border: #364356;
+  --input: #364356;
+  --ring: #3FC3B6;
+  --chart-1: #3FC3B6;
+  --chart-2: #26A69A;
+  --chart-3: #ED1C24;
+  --chart-4: #F2B84B;
+  --chart-5: #3FAE68;
+  --sidebar: #34435A;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #26A69A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #2b394f;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #222222;
+  --sidebar-ring: #3FC3B6;
 }
+
 /* ---break---
 */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
 }
 
-/* ─── Refined High-Contrast Theme System ─── */
+/* ─── Oil India Theme in Dark Mode ─── */
 .dark {
-  --gov-canvas: #08090d;
-  --gov-surface: #11141b;
-  --gov-surface-subtle: #161922;
-  --gov-border: #232835;
-  --gov-border-subtle: #181c26;
-  --gov-text-main: #f1f5f9;
-  --gov-text-muted: #94a3b8;
-  --gov-text-light: #64748b;
+  --gov-canvas: #191E26;
+  --gov-surface: #242D3B;
+  --gov-surface-subtle: #1E2532;
+  --gov-border: #364356;
+  --gov-border-subtle: #2D3747;
+  --gov-text-main: #FFFFFF;
+  --gov-text-muted: #94A3B8;
+  --gov-text-light: #CBD5E1;
   color-scheme: dark;
 }
 
-/* In dark mode, transform all component surfaces to control-room black */
+/* In dark mode, transform all component surfaces to Oil India Dark Navy */
 .dark body {
-  background-color: #08090d !important;
-  color: #f1f5f9 !important;
+  background-color: #191E26 !important;
+  color: #FFFFFF !important;
 }
 
-.dark .bg-white {
-  background-color: #11141b !important;
-  color: #f1f5f9 !important;
+/* Cards & Surfaces in Dark Navy */
+.dark .bg-white,
+.dark .bg-\[\#FFFFFF\],
+.dark .bg-\[\#ffffff\],
+.dark .bg-oil-card,
+.dark .card,
+.dark .gov-card,
+.dark .bg-\[\#12151c\],
+.dark .bg-\[\#11141a\],
+.dark .bg-\[\#11141b\],
+.dark .bg-\[\#0e121a\] {
+  background-color: #242D3B !important;
+  color: #FFFFFF !important;
 }
 
+.dark .bg-white\/95,
 .dark .bg-white\/90,
 .dark .bg-white\/80 {
-  background-color: rgba(17, 20, 27, 0.94) !important;
+  background-color: rgba(36, 45, 59, 0.95) !important;
 }
 
+/* Subtle / Recessed Panels & Table Headers */
+.dark .bg-\[\#F5F7F8\],
+.dark .bg-\[\#f5f7f8\],
+.dark .bg-oil-page,
 .dark .bg-neutral-50,
+.dark .bg-neutral-100,
+.dark .bg-\[\#0c0f17\],
+.dark .bg-\[\#07090f\],
+.dark .bg-\[\#08090d\],
+.dark .bg-\[\#090b0f\],
+.dark .bg-\[\#090c12\],
+.dark .bg-\[\#0c1017\],
+.dark .bg-\[\#161a22\],
+.dark .bg-\[\#161922\],
+.dark .bg-\[\#151c28\],
+.dark .bg-neutral-900,
+.dark .bg-neutral-950 {
+  background-color: #1E2532 !important;
+  color: #FFFFFF !important;
+}
+
+.dark .bg-\[\#F5F7F8\]\/50,
+.dark .bg-\[\#F5F7F8\]\/80,
 .dark .bg-neutral-50\/50,
 .dark .bg-neutral-50\/80 {
-  background-color: #0a0c10 !important;
+  background-color: rgba(30, 37, 50, 0.6) !important;
 }
 
-.dark .bg-neutral-100 {
-  background-color: #161922 !important;
-  color: #f1f5f9 !important;
-}
-
-/* Borders in dark mode */
-.dark .border-neutral-100 {
-  border-color: #181c26 !important;
-}
-
+/* Borders in Dark Navy */
+.dark .border-\[\#E2E5E8\],
+.dark .border-\[\#e2e5e8\],
+.dark .border-oil-border,
+.dark .border-neutral-100,
 .dark .border-neutral-200,
 .dark .border-neutral-200\/80,
-.dark .border-neutral-200\/60 {
-  border-color: #232835 !important;
-}
-
-.dark .border-neutral-300 {
-  border-color: #2d3444 !important;
+.dark .border-neutral-200\/60,
+.dark .border-neutral-300,
+.dark .border-neutral-700,
+.dark .border-neutral-800,
+.dark .border-neutral-900,
+.dark .border-\[\#1e2536\],
+.dark .border-\[\#1e273b\],
+.dark .border-\[\#232835\],
+.dark .border-\[\#262a36\] {
+  border-color: #364356 !important;
 }
 
 /* Dark mode typography */
+.dark .text-\[\#252B33\],
+.dark .text-\[\#252b33\],
+.dark .text-oil-main,
 .dark .text-neutral-950,
-.dark .text-neutral-900 {
-  color: #f8fafc !important;
-}
-
+.dark .text-neutral-900,
 .dark .text-neutral-800 {
-  color: #e2e8f0 !important;
+  color: #FFFFFF !important;
 }
 
-.dark .text-neutral-700 {
-  color: #cbd5e1 !important;
+.dark .text-\[\#6B7280\],
+.dark .text-\[\#6b7280\],
+.dark .text-oil-muted,
+.dark .text-neutral-600,
+.dark .text-neutral-500,
+.dark .text-neutral-400 {
+  color: #94A3B8 !important;
 }
 
-.dark .text-neutral-600 {
-  color: #94a3b8 !important;
+.dark .text-neutral-700,
+.dark .text-neutral-300 {
+  color: #CBD5E1 !important;
 }
 
-.dark .text-neutral-500 {
-  color: #64748b !important;
+/* Dark mode Teal washes (badges, tags, active indicators) */
+.dark .bg-\[\#D9F2EE\],
+.dark .bg-\[\#d9f2ee\],
+.dark .bg-oil-teal-light {
+  background-color: rgba(63, 195, 182, 0.16) !important;
+  color: #3FC3B6 !important;
+  border-color: rgba(63, 195, 182, 0.45) !important;
+}
+
+.dark .text-\[\#26A69A\],
+.dark .text-\[\#26a69a\],
+.dark .text-oil-teal-dark {
+  color: #3FC3B6 !important;
+}
+
+.dark .border-\[\#3FC3B6\],
+.dark .border-\[\#3fc3b6\],
+.dark .border-oil-teal {
+  border-color: #3FC3B6 !important;
+}
+
+/* Dark mode Hazard / Alert Red washes */
+.dark .bg-\[\#FDF2F2\],
+.dark .bg-\[\#fdf2f2\],
+.dark .bg-nwis-alert {
+  background-color: rgba(237, 28, 36, 0.16) !important;
+  color: #FF5C5C !important;
+  border-color: rgba(237, 28, 36, 0.45) !important;
+}
+
+.dark .text-\[\#ED1C24\],
+.dark .text-\[\#ed1c24\],
+.dark .text-oil-red,
+.dark .text-nwis-alert-title {
+  color: #FF5C5C !important;
+}
+
+.dark .text-\[\#C9141B\],
+.dark .text-\[\#c9141b\],
+.dark .text-oil-red-dark,
+.dark .text-nwis-alert-subhead {
+  color: #FFA39E !important;
+}
+
+.dark .border-\[\#E05252\],
+.dark .border-\[\#e05252\],
+.dark .border-nwis-alert {
+  border-color: rgba(237, 28, 36, 0.5) !important;
+}
+
+/* Dark mode Warning / Amber washes */
+.dark .bg-\[\#FEF9EE\],
+.dark .bg-\[\#fef9ee\] {
+  background-color: rgba(242, 184, 75, 0.16) !important;
+  color: #F2B84B !important;
+  border-color: rgba(242, 184, 75, 0.45) !important;
+}
+
+.dark .text-\[\#C68A1B\],
+.dark .text-\[\#c68a1b\] {
+  color: #F2B84B !important;
+}
+
+.dark .border-\[\#F2B84B\],
+.dark .border-\[\#f2b84b\] {
+  border-color: #F2B84B !important;
+}
+
+/* Dark mode Success / Green washes */
+.dark .bg-\[\#EDF8F2\],
+.dark .bg-\[\#edf8f2\] {
+  background-color: rgba(63, 174, 104, 0.16) !important;
+  color: #3FAE68 !important;
+  border-color: rgba(63, 174, 104, 0.45) !important;
+}
+
+.dark .text-\[\#2D8B50\],
+.dark .text-\[\#2d8b50\] {
+  color: #3FAE68 !important;
+}
+
+.dark .border-\[\#3FAE68\],
+.dark .border-\[\#3fae68\] {
+  border-color: #3FAE68 !important;
 }
 
 /* Hover states in dark mode */
+.dark .hover\:bg-\[\#F5F7F8\]:hover,
+.dark .hover\:bg-\[\#f5f7f8\]:hover,
 .dark .hover\:bg-neutral-50:hover,
-.dark .hover\:bg-neutral-50\/80:hover {
-  background-color: #161922 !important;
-}
-
+.dark .hover\:bg-neutral-50\/80:hover,
 .dark .hover\:bg-neutral-100:hover,
 .dark .hover\:bg-neutral-100\/80:hover {
-  background-color: #1e2330 !important;
+  background-color: #2D3747 !important;
+}
+
+.dark .hover\:border-\[\#34435A\]:hover,
+.dark .hover\:border-\[\#222222\]:hover {
+  border-color: #3FC3B6 !important;
 }
 
 .dark .hover\:text-neutral-950:hover,
@@ -494,38 +740,43 @@ select:focus {
 }
 
 /* Form inputs & select dropdowns in dark mode */
-.dark input,
+.dark input:not([type="checkbox"]):not([type="radio"]),
 .dark select,
 .dark textarea {
-  background-color: #11141b !important;
-  color: #f8fafc !important;
-  border-color: #232835 !important;
+  background-color: #1E2532 !important;
+  color: #FFFFFF !important;
+  border-color: #364356 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94A3B8 !important;
 }
 
 .dark select option {
-  background-color: #11141b !important;
-  color: #f8fafc !important;
+  background-color: #1E2532 !important;
+  color: #FFFFFF !important;
 }
 
 /* Table styles in dark mode */
 .dark .gov-table {
-  background-color: #11141b;
-  border-color: #232835;
+  background-color: #242D3B !important;
+  border-color: #364356 !important;
 }
 
 .dark .gov-table th {
-  background-color: #161922;
-  color: #f8fafc;
-  border-color: #232835;
+  background-color: #1E2532 !important;
+  color: #FFFFFF !important;
+  border-color: #364356 !important;
 }
 
 .dark .gov-table td {
-  color: #e2e8f0;
-  border-color: #181c26;
+  color: #CBD5E1 !important;
+  border-color: #2D3747 !important;
 }
 
 .dark .gov-table tr:hover td {
-  background-color: #161922;
+  background-color: #2D3747 !important;
 }
 
 /* ─── Light Mode Specific High-Contrast Rules (When NOT in dark mode) ─── */
@@ -547,3 +798,72 @@ html:not(.dark) select option {
   background-color: #ffffff;
   color: #0b0c0e;
 }
+
+/* ─── OIL India NWIS Theme Utilities ─── */
+.bg-nwis-navy {
+  background-color: #34435A;
+}
+
+.bg-nwis-navy-active {
+  background-color: #26A69A;
+}
+
+.bg-nwis-navy-hover:hover {
+  background-color: #2b394f;
+}
+
+.text-nwis-slate {
+  color: #D9F2EE;
+}
+
+.border-nwis-navy {
+  border-color: #222222;
+}
+
+.bg-nwis-alert {
+  background-color: #FDF2F2;
+}
+
+.border-nwis-alert {
+  border-color: #E05252;
+}
+
+.text-nwis-alert-title {
+  color: #ED1C24;
+}
+
+.text-nwis-alert-subhead {
+  color: #C9141B;
+}
+
+.bg-nwis-green-btn {
+  background-color: #3FC3B6;
+  color: #252B33;
+}
+
+.bg-nwis-green-btn:hover {
+  background-color: #26A69A;
+  color: #FFFFFF;
+}
+
+/* Custom Oil India Theme Classes for direct utility access */
+.bg-oil-red { background-color: #ED1C24; }
+.bg-oil-red-dark { background-color: #C9141B; }
+.bg-oil-black { background-color: #222222; }
+.bg-oil-navy { background-color: #34435A; }
+.bg-oil-teal { background-color: #3FC3B6; }
+.bg-oil-teal-dark { background-color: #26A69A; }
+.bg-oil-teal-light { background-color: #D9F2EE; }
+.bg-oil-page { background-color: #F5F7F8; }
+.bg-oil-card { background-color: #FFFFFF; }
+.text-oil-red { color: #ED1C24; }
+.text-oil-red-dark { color: #C9141B; }
+.text-oil-navy { color: #34435A; }
+.text-oil-teal { color: #3FC3B6; }
+.text-oil-teal-dark { color: #26A69A; }
+.text-oil-main { color: #252B33; }
+.text-oil-muted { color: #6B7280; }
+.border-oil-border { border-color: #E2E5E8; }
+.border-oil-red { border-color: #ED1C24; }
+.border-oil-teal { border-color: #3FC3B6; }
+.border-oil-navy { border-color: #34435A; }

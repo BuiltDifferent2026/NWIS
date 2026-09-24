@@ -57,11 +57,11 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
   if (!well) {
     return (
       <div className="space-y-6 max-w-7xl mx-auto animate-pulse">
-        <div className="h-5 w-48 bg-neutral-200 dark:bg-neutral-800 rounded-lg" />
-        <div className="h-28 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-6 shadow-xs" />
+        <div className="h-5 w-48 bg-neutral-200 dark:bg-[#1E2532] rounded-none" />
+        <div className="h-28 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-6 shadow-xs" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-7 h-[480px] rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c]" />
-          <div className="lg:col-span-5 h-[480px] rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c]" />
+          <div className="lg:col-span-7 h-[480px] rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B]" />
+          <div className="lg:col-span-5 h-[480px] rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B]" />
         </div>
       </div>
     );
@@ -84,35 +84,35 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
       />
 
       {/* Well Header Block */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs transition-colors">
+      <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-5 shadow-xs transition-colors">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-              <h1 className="text-2xl font-extrabold text-neutral-950 dark:text-white font-mono tracking-tight">
+              <h1 className="text-2xl font-extrabold text-[#252B33] dark:text-white font-mono tracking-tight">
                 {well.name}
               </h1>
               <StatusTag label={well.status.toUpperCase()} />
-              <span className="text-xs font-mono text-neutral-500 dark:text-neutral-400">
-                Rig: <strong className="text-neutral-900 dark:text-neutral-200">{well.rig}</strong> • Operator: <strong className="text-neutral-900 dark:text-neutral-200">{well.operator}</strong>
+              <span className="text-xs font-mono text-[#6B7280] dark:text-[#94A3B8]">
+                Rig: <strong className="text-[#252B33] dark:text-white">{well.rig}</strong> • Operator: <strong className="text-[#252B33] dark:text-white">{well.operator}</strong>
               </span>
             </div>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
-              Field: <strong className="text-neutral-900 dark:text-white">{well.field}</strong> • Coordinates: <span className="font-mono">{well.surfaceCoords.lat}°N, {well.surfaceCoords.lng}°E</span> • Spud Date: <span className="font-mono">{well.spudDate}</span>
+            <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] font-sans">
+              Field: <strong className="text-[#252B33] dark:text-white">{well.field}</strong> • Coordinates: <span className="font-mono">{well.surfaceCoords.lat}°N, {well.surfaceCoords.lng}°E</span> • Spud Date: <span className="font-mono">{well.spudDate}</span>
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 text-xs font-mono">
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/60 px-3.5 py-2">
-              <span className="text-neutral-500 dark:text-neutral-400 text-[10px] uppercase font-bold block">Bit Depth (MD)</span>
-              <span className="text-base font-extrabold text-neutral-950 dark:text-white">{well.currentDepthMD || well.totalDepthMD}m</span>
+            <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] px-3.5 py-2">
+              <span className="text-[#6B7280] dark:text-[#94A3B8] text-[10px] uppercase font-bold block">Bit Depth (MD)</span>
+              <span className="text-base font-extrabold text-[#252B33] dark:text-white">{well.currentDepthMD || well.totalDepthMD}m</span>
             </div>
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/60 px-3.5 py-2">
-              <span className="text-neutral-500 dark:text-neutral-400 text-[10px] uppercase font-bold block">Formation</span>
-              <span className="text-base font-extrabold text-amber-700 dark:text-amber-400">{well.currentFormation || 'Tipam Sandstone'}</span>
+            <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] px-3.5 py-2">
+              <span className="text-[#6B7280] dark:text-[#94A3B8] text-[10px] uppercase font-bold block">Formation</span>
+              <span className="text-base font-extrabold text-[#3FC3B6]">{well.currentFormation || 'Tipam Sandstone'}</span>
             </div>
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/60 px-3.5 py-2">
-              <span className="text-neutral-500 dark:text-neutral-400 text-[10px] uppercase font-bold block">Trajectory</span>
-              <span className="text-base font-extrabold text-neutral-950 dark:text-white capitalize">{well.trajectoryType}</span>
+            <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] px-3.5 py-2">
+              <span className="text-[#6B7280] dark:text-[#94A3B8] text-[10px] uppercase font-bold block">Trajectory</span>
+              <span className="text-base font-extrabold text-[#252B33] dark:text-white capitalize">{well.trajectoryType}</span>
             </div>
           </div>
         </div>
@@ -121,24 +121,24 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
       {/* ─── Simultaneous Legibility Layout: Map on Left, Depth Track on Right ─── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (7 cols): Offset Well Map */}
-        <div className="lg:col-span-7 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 flex flex-col shadow-xs">
-          <div className="flex flex-wrap items-center justify-between pb-3 mb-3 border-b border-neutral-200 dark:border-neutral-800 gap-2">
+        <div className="lg:col-span-7 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-5 flex flex-col shadow-xs">
+          <div className="flex flex-wrap items-center justify-between pb-3 mb-3 border-b border-[#E2E5E8] dark:border-[#364356] gap-2">
             <div>
-              <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide">
+              <h2 className="text-sm font-extrabold text-[#252B33] dark:text-white uppercase tracking-wide">
                 Geospatial Offset Well Map
               </h2>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              <p className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
                 Proximity radius around {well.name} in {well.field} Field.
               </p>
             </div>
 
             {/* Radius Selector */}
             <div className="flex items-center gap-2 text-xs font-mono">
-              <span className="text-neutral-600 dark:text-neutral-400">Radius:</span>
+              <span className="text-[#6B7280] dark:text-[#94A3B8]">Radius:</span>
               <select
                 value={radiusKm}
                 onChange={(e) => setRadiusKm(Number(e.target.value))}
-                className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-white px-2.5 py-1 text-xs font-bold font-mono focus:outline-hidden"
+                className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] text-[#252B33] dark:text-white px-2.5 py-1 text-xs font-bold font-mono focus:outline-hidden"
               >
                 <option value={10}>10 km</option>
                 <option value={25}>25 km</option>
@@ -147,7 +147,7 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
             </div>
           </div>
 
-          <div className="flex-1 min-h-[560px] rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
+          <div className="flex-1 min-h-[560px] rounded-none overflow-hidden border border-[#E2E5E8] dark:border-[#364356]">
             <WellMapInner
               selectedField={well.field}
               searchQuery=""
@@ -170,26 +170,26 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
       </div>
 
       {/* ─── Confidence Corridors: Showing DISCONFIRMING evidence with equal weight ─── */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs">
-        <div className="pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-5 shadow-xs">
+        <div className="pb-3 mb-4 border-b border-[#E2E5E8] dark:border-[#364356] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 className="text-sm font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide">
+            <h2 className="text-sm font-extrabold text-[#252B33] dark:text-white uppercase tracking-wide">
               Subsurface Confidence Corridors & Disconfirming Evidence
             </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+            <p className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
               Showing both hazard evidence and offset wells that crossed safely with zero incident.
             </p>
           </div>
-          <span className="text-xs font-mono text-neutral-600 dark:text-neutral-400">
+          <span className="text-xs font-mono text-[#6B7280] dark:text-[#94A3B8]">
             Assam Basin Stratigraphic Calibration
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {riskCorridors.map((rc) => (
-            <div key={rc.id} className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 bg-neutral-50/70 dark:bg-neutral-900/40 text-xs space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                <span className="font-extrabold text-neutral-950 dark:text-white font-mono text-sm">
+            <div key={rc.id} className="rounded-none border border-[#E2E5E8] dark:border-[#364356] p-4 bg-[#F5F7F8] dark:bg-[#1E2532] text-xs space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E2E5E8] dark:border-[#364356]">
+                <span className="font-extrabold text-[#252B33] dark:text-white font-mono text-sm">
                   {rc.formation} ({rc.depthInterval.from}m–{rc.depthInterval.to}m MD)
                 </span>
                 <StatusTag label={`${rc.eventType.replace('_', ' ').toUpperCase()}`} />
@@ -197,36 +197,36 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
 
               {/* Dual Visual Weight: Risk Evidence alongside Disconfirming Evidence */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50/80 dark:bg-red-950/30 p-3">
-                  <span className="text-[10px] font-extrabold text-red-800 dark:text-red-300 uppercase block font-mono">
+                <div className="rounded-none border border-[#ED1C24]/30 bg-[#ED1C24]/10 p-3">
+                  <span className="text-[10px] font-extrabold text-[#ED1C24] uppercase block font-mono">
                     Historical Incidents
                   </span>
-                  <div className="font-extrabold text-base text-red-950 dark:text-red-200 font-mono mt-0.5">
+                  <div className="font-extrabold text-base text-[#ED1C24] font-mono mt-0.5">
                     {rc.evidenceCount} Wells Affected
                   </div>
-                  <span className="text-[11px] text-red-800 dark:text-red-400 font-mono">
+                  <span className="text-[11px] text-[#ED1C24]/80 font-mono">
                     Frequency: {Math.round(rc.eventFrequency * 100)}%
                   </span>
                 </div>
 
-                <div className="rounded-xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50/80 dark:bg-emerald-950/30 p-3">
-                  <span className="text-[10px] font-extrabold text-emerald-800 dark:text-emerald-300 uppercase block font-mono">
+                <div className="rounded-none border border-[#3FAE68]/30 bg-[#3FAE68]/10 p-3">
+                  <span className="text-[10px] font-extrabold text-[#3FAE68] uppercase block font-mono">
                     Disconfirming Safe Passes
                   </span>
-                  <div className="font-extrabold text-base text-emerald-950 dark:text-emerald-200 font-mono mt-0.5">
+                  <div className="font-extrabold text-base text-[#3FAE68] font-mono mt-0.5">
                     {rc.disconfirmingWellCount} Wells Passed Safely
                   </div>
-                  <span className="text-[11px] text-emerald-800 dark:text-emerald-400 font-mono">
+                  <span className="text-[11px] text-[#3FAE68]/80 font-mono">
                     Mitigation Success: {Math.round(rc.successfulMitigationRate * 100)}%
                   </span>
                 </div>
               </div>
 
-              <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed text-xs">
-                <strong className="text-neutral-950 dark:text-white">Historical Fact: </strong>{rc.observedFactSummary}
+              <p className="text-[#252B33] dark:text-white leading-relaxed text-xs">
+                <strong className="text-[#252B33] dark:text-white">Historical Fact: </strong>{rc.observedFactSummary}
               </p>
-              <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-400">
-                <strong className="text-neutral-900 dark:text-neutral-200">Recommended Pre-treatment: </strong>{rc.recommendedMitigation}
+              <div className="pt-2 border-t border-[#E2E5E8] dark:border-[#364356] text-xs text-[#6B7280] dark:text-[#94A3B8]">
+                <strong className="text-[#252B33] dark:text-white">Recommended Pre-treatment: </strong>{rc.recommendedMitigation}
               </div>
             </div>
           ))}
@@ -234,28 +234,28 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
       </div>
 
       {/* ─── Offset Well Comparison List (Both Distance & Similarity Always Shown) ─── */}
-      <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs">
-        <div className="pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-5 shadow-xs">
+        <div className="pb-3 mb-4 border-b border-[#E2E5E8] dark:border-[#364356] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-extrabold text-neutral-950 dark:text-white">
+            <h2 className="text-base font-extrabold text-[#252B33] dark:text-white">
               Offset Wells Comparison Register
             </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+            <p className="text-xs text-[#6B7280] dark:text-[#94A3B8]">
               Ranked by dual independent metrics: pure map distance (km) vs composite stratigraphic & operational similarity (0-1).
             </p>
           </div>
 
           {/* Sort Switcher */}
           <div className="flex items-center gap-2 text-xs font-mono">
-            <span className="text-neutral-600 dark:text-neutral-400">Sort by:</span>
-            <div className="inline-flex rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-1">
+            <span className="text-[#6B7280] dark:text-[#94A3B8]">Sort by:</span>
+            <div className="inline-flex rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] p-1">
               <button
                 type="button"
                 onClick={() => setSortBy('similarity')}
-                className={`rounded-lg px-3 py-1 font-bold text-xs transition-colors cursor-pointer ${
+                className={`rounded-none px-3 py-1 font-bold text-xs transition-colors cursor-pointer ${
                   sortBy === 'similarity'
-                    ? 'bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-xs'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                    ? 'bg-[#34435A] text-white shadow-xs'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
               >
                 Similarity Score
@@ -263,10 +263,10 @@ export default function WellWorkspacePage({ params }: WellWorkspacePageProps) {
               <button
                 type="button"
                 onClick={() => setSortBy('distance')}
-                className={`rounded-lg px-3 py-1 font-bold text-xs transition-colors cursor-pointer ${
+                className={`rounded-none px-3 py-1 font-bold text-xs transition-colors cursor-pointer ${
                   sortBy === 'distance'
-                    ? 'bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-xs'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white'
+                    ? 'bg-[#34435A] text-white shadow-xs'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
               >
                 Map Distance (km)

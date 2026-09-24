@@ -57,29 +57,29 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
   const depthTicks = [0, 500, 1000, 1500, 2000, 2500, 3000, 3500];
 
   return (
-    <div className={`rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#12151c] p-5 shadow-xs transition-colors ${className}`}>
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-neutral-200 dark:border-neutral-800">
+    <div className={`rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] p-5 shadow-xs transition-colors ${className}`}>
+      <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#E2E5E8] dark:border-[#364356]">
         <div>
-          <span className="text-xs font-extrabold text-neutral-950 dark:text-white uppercase tracking-wide font-mono">
+          <span className="text-xs font-extrabold text-[#252B33] dark:text-white uppercase tracking-wide font-mono">
             Stratigraphic Depth-Track (MD)
           </span>
-          <div className="text-[11px] text-neutral-500 dark:text-neutral-400 font-mono">
+          <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8] font-mono">
             Vertical Depth Scale • 0m to {maxDepthMD}m MD
           </div>
         </div>
 
         {/* Replay / Comparison Readout */}
         {showComparisonReadout && historicalIncidentDepth !== undefined && (
-          <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-3 py-1.5 text-xs font-mono">
-            <span className="text-neutral-500 dark:text-neutral-400 uppercase text-[10px] block font-bold">
+          <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#1E2532] px-3 py-1.5 text-xs font-mono">
+            <span className="text-[#6B7280] dark:text-[#94A3B8] uppercase text-[10px] block font-bold">
               Advance Comparison:
             </span>
             {currentDepthMD < historicalIncidentDepth ? (
-              <span className="font-bold text-amber-600 dark:text-amber-400">
+              <span className="font-bold text-[#F2B84B]">
                 {(historicalIncidentDepth - currentDepthMD).toFixed(0)}m BEFORE historical incident
               </span>
             ) : (
-              <span className="font-bold text-rose-600 dark:text-rose-400">
+              <span className="font-bold text-[#ED1C24]">
                 {(currentDepthMD - historicalIncidentDepth).toFixed(0)}m PAST historical incident
               </span>
             )}
@@ -90,7 +90,7 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
       <div className="relative flex justify-center">
         <svg
           viewBox={`0 0 ${svgWidth} ${height}`}
-          className="w-full max-w-[360px] rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#090d16] transition-colors"
+          className="w-full max-w-[360px] rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#191E26] transition-colors"
           style={{ height }}
           role="img"
           aria-label="Stratigraphic depth track visualization"
@@ -238,26 +238,26 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
             </g>
           )}
 
-          {/* Active Bit Current Depth Marker (Blue Solid Line with Flag) */}
+          {/* Active Bit Current Depth Marker (Teal Solid Line with Flag) */}
           <g>
             <line
               x1={trackLeft - 15}
               y1={currentY}
               x2={trackLeft + trackWidth + 10}
               y2={currentY}
-              stroke="#ea580c"
+              stroke="#3FC3B6"
               strokeWidth="2.5"
             />
             <polygon
               points={`${trackLeft - 18},${currentY - 6} ${trackLeft - 8},${currentY} ${trackLeft - 18},${currentY + 6}`}
-              fill="#ea580c"
+              fill="#3FC3B6"
             />
             <rect
               x={trackLeft + trackWidth - 110}
               y={currentY - 18}
               width={105}
               height={16}
-              fill="#ea580c"
+              fill="#3FC3B6"
             />
             <text
               x={trackLeft + trackWidth - 58}
@@ -265,7 +265,7 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
               textAnchor="middle"
               fontSize="10"
               fontWeight="700"
-              fill="#ffffff"
+              fill="#222222"
               fontFamily="monospace"
             >
               BIT: {currentDepthMD.toFixed(1)}m MD
@@ -274,16 +274,16 @@ export const DepthTrack: React.FC<DepthTrackProps> = ({
         </svg>
       </div>
 
-      <div className="mt-3 pt-2 border-t border-neutral-200 flex flex-wrap items-center justify-between text-[11px] text-neutral-600 font-mono">
+      <div className="mt-3 pt-2 border-t border-[#E2E5E8] dark:border-[#364356] flex flex-wrap items-center justify-between text-[11px] text-[#6B7280] dark:text-[#94A3B8] font-mono">
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-0.5 bg-[#ea580c] inline-block" /> Live Bit Depth
+          <span className="w-3 h-1 bg-[#3FC3B6] inline-block" /> Live Bit Depth
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-3 h-2 bg-red-100 border border-red-500 inline-block" /> Risk Corridor
+          <span className="w-3 h-2 bg-[#ED1C24]/15 border border-[#ED1C24] inline-block" /> Risk Corridor
         </span>
         {historicalIncidentDepth && (
           <span className="flex items-center gap-1.5">
-            <span className="w-3 h-0.5 bg-[#b91c1c] inline-block" /> Historical Incident
+            <span className="w-3 h-1 bg-[#ED1C24] inline-block" /> Historical Incident
           </span>
         )}
       </div>

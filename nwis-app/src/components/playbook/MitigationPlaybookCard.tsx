@@ -73,19 +73,19 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
   };
 
   return (
-    <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#0e121a] shadow-xs overflow-hidden transition-colors">
+    <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] shadow-xs overflow-hidden transition-colors">
       
       {/* ─── Header: Strategic Value & Real Data Provenance ─── */}
-      <div className="p-4 sm:p-5 border-b border-neutral-200 dark:border-neutral-800 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent">
+      <div className="p-4 sm:p-5 border-b border-[#E2E5E8] dark:border-[#364356] bg-[#D9F2EE]/30 dark:bg-[#1E2532]">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-              <h3 className="text-base sm:text-lg font-extrabold font-mono text-neutral-950 dark:text-white tracking-tight">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#3FC3B6] animate-pulse" />
+              <h3 className="text-base sm:text-lg font-extrabold font-mono text-[#252B33] dark:text-white tracking-tight">
                 Sequential Mitigation Playbook Extraction
               </h3>
             </div>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-sans">
+            <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] font-sans">
               Directly extracted from OIL India WCR dedicated Mud Loss tables and shift narrative. Structures raw textual procedures into an ordered operational execution pipeline.
             </p>
           </div>
@@ -95,16 +95,16 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
             <button
               type="button"
               onClick={handleCopyPlaybook}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200 hover:border-amber-500 transition-colors cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] text-xs font-mono font-bold text-[#252B33] dark:text-white hover:border-[#3FC3B6] transition-colors cursor-pointer shadow-2xs"
             >
               {copiedStatus ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="text-emerald-600 dark:text-emerald-400">Playbook Copied</span>
+                  <Check className="w-3.5 h-3.5 text-[#3FAE68]" />
+                  <span className="text-[#3FAE68]">Playbook Copied</span>
                 </>
               ) : (
                 <>
-                  <Download className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                  <Download className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6]" />
                   <span>Copy Rig Procedure</span>
                 </>
               )}
@@ -122,10 +122,10 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
                 setSelectedPlaybookId(p.id);
                 setActiveStepIndex(0);
               }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold cursor-pointer transition-all ${
+              className={`px-3 py-1.5 rounded-none text-xs font-mono font-bold cursor-pointer transition-all ${
                 selectedPlaybookId === p.id
-                  ? 'bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 shadow-xs'
-                  : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white border border-neutral-200 dark:border-neutral-800'
+                  ? 'bg-[#34435A] text-white shadow-xs'
+                  : 'bg-[#F5F7F8] dark:bg-[#1E2532] text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white border border-[#E2E5E8] dark:border-[#364356]'
               }`}
             >
               {p.eventType === 'MUD_LOSS' ? 'Flagship: Upper Tipam Mud Loss (899 bbls)' : 'Barail Overpressure Kick (12.8 ppg)'}
@@ -135,26 +135,26 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
       </div>
 
       {/* ─── Context KPIs Strip (Real Data Proof) ─── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-neutral-200 dark:border-neutral-800 divide-x divide-neutral-200 dark:divide-neutral-800 text-xs font-mono">
+      <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-[#E2E5E8] dark:border-[#364356] divide-x divide-[#E2E5E8] dark:divide-[#364356] text-xs font-mono">
         <div className="p-3.5 space-y-0.5">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-bold">Cumulative Loss</span>
-          <span className="text-base font-extrabold text-amber-600 dark:text-amber-400">{playbook.incidentContext.cumulativeLossVolume}</span>
-          <span className="text-[10px] text-neutral-500 block truncate">Peak Rate: {playbook.incidentContext.peakLossRate}</span>
+          <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Cumulative Loss</span>
+          <span className="text-base font-extrabold text-[#ED1C24]">{playbook.incidentContext.cumulativeLossVolume}</span>
+          <span className="text-[10px] text-[#6B7280] block truncate">Peak Rate: {playbook.incidentContext.peakLossRate}</span>
         </div>
         <div className="p-3.5 space-y-0.5">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-bold">Loss Interval</span>
-          <span className="text-base font-extrabold text-neutral-900 dark:text-white">{playbook.incidentContext.depthMD.split(' ')[0]}</span>
-          <span className="text-[10px] text-neutral-500 block truncate">{playbook.incidentContext.formation.split('(')[0]}</span>
+          <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Loss Interval</span>
+          <span className="text-base font-extrabold text-[#252B33] dark:text-white">{playbook.incidentContext.depthMD.split(' ')[0]}</span>
+          <span className="text-[10px] text-[#6B7280] block truncate">{playbook.incidentContext.formation.split('(')[0]}</span>
         </div>
         <div className="p-3.5 space-y-0.5">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-bold">Verified Impact</span>
-          <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">{playbook.totalNPTAverted}</span>
-          <span className="text-[10px] text-neutral-500 block truncate">{playbook.costImpactEstimate}</span>
+          <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Verified Impact</span>
+          <span className="text-base font-extrabold text-[#3FAE68]">{playbook.totalNPTAverted}</span>
+          <span className="text-[10px] text-[#6B7280] block truncate">{playbook.costImpactEstimate}</span>
         </div>
         <div className="p-3.5 space-y-0.5">
-          <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-bold">Extraction Source</span>
-          <span className="text-xs font-bold text-neutral-900 dark:text-white truncate block">OIL India WCR Log</span>
-          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">100% Structured Schema</span>
+          <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Extraction Source</span>
+          <span className="text-xs font-bold text-[#252B33] dark:text-white truncate block">OIL India WCR Log</span>
+          <span className="text-[10px] text-[#3FAE68] font-bold block">100% Structured Schema</span>
         </div>
       </div>
 
@@ -172,27 +172,27 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
                 key={step.stepNumber}
                 type="button"
                 onClick={() => setActiveStepIndex(idx)}
-                className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                className={`p-2.5 rounded-none border text-left transition-all cursor-pointer ${
                   isSelected
-                    ? 'border-amber-500 bg-amber-500/10 shadow-xs'
+                    ? 'border-[#3FC3B6] bg-[#D9F2EE]/40 shadow-xs'
                     : isCompleted
-                    ? 'border-emerald-300 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/20'
-                    : 'border-neutral-200 dark:border-neutral-800 bg-neutral-50/60 dark:bg-neutral-900/40 hover:border-neutral-300 dark:hover:border-neutral-700'
+                    ? 'border-[#3FAE68]/50 bg-[#3FAE68]/10'
+                    : 'border-[#E2E5E8] bg-[#F5F7F8] dark:bg-neutral-900/40 hover:border-[#3FC3B6]'
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-1">
-                  <span className={isSelected ? 'text-amber-700 dark:text-amber-400' : 'text-neutral-500'}>
+                  <span className={isSelected ? 'text-[#26A69A]' : 'text-[#6B7280]'}>
                     STAGE 0{step.stepNumber}
                   </span>
                   {isCompleted ? (
-                    <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                    <span className="text-[#3FAE68] flex items-center gap-0.5">
                       <Check className="w-3 h-3" /> DONE
                     </span>
                   ) : (
-                    <span className="text-neutral-400">READY</span>
+                    <span className="text-[#6B7280]">READY</span>
                   )}
                 </div>
-                <div className="font-bold text-xs font-mono text-neutral-900 dark:text-white truncate">
+                <div className="font-bold text-xs font-mono text-[#252B33] dark:text-white truncate">
                   {step.stageName}
                 </div>
               </button>
@@ -200,16 +200,16 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
           })}
         </div>
 
-        {/* ── Active Step Detailed Execution Card (Action → Parameter → Outcome) ── */}
-        <div className="p-4 sm:p-5 rounded-2xl border border-amber-500/30 bg-amber-50/20 dark:bg-amber-950/10 space-y-4">
+        {/* ── Active Step Detailed Execution Card ── */}
+        <div className="p-4 sm:p-5 rounded-none border border-[#3FC3B6]/40 bg-[#D9F2EE]/20 dark:bg-[#1E2532] space-y-4">
           
           {/* Header of Active Step */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-neutral-200 dark:border-neutral-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E2E5E8] dark:border-[#364356]">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#26A69A] dark:text-[#3FC3B6]">
                 Step {activeStep.stepNumber} of {playbook.steps.length} · {activeStep.stageName}
               </span>
-              <h4 className="text-sm sm:text-base font-extrabold text-neutral-950 dark:text-white font-mono mt-0.5">
+              <h4 className="text-sm sm:text-base font-extrabold text-[#252B33] dark:text-white font-mono mt-0.5">
                 {activeStep.action}
               </h4>
             </div>
@@ -217,10 +217,10 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
             <button
               type="button"
               onClick={() => toggleStepCompleted(activeStep.stepNumber)}
-              className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 self-start sm:self-auto ${
+              className={`px-3 py-1.5 rounded-none font-mono text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 self-start sm:self-auto ${
                 completedSteps.includes(activeStep.stepNumber)
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 hover:border-emerald-500'
+                  ? 'bg-[#3FAE68] text-white shadow-xs'
+                  : 'bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] text-[#252B33] dark:text-white hover:border-[#3FAE68]'
               }`}
             >
               <Check className="w-3.5 h-3.5" />
@@ -230,8 +230,8 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
 
           {/* ── 1. Structured Parameters Grid ── */}
           <div className="space-y-1.5">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
-              <SlidersHorizontal className="w-3.5 h-3.5 text-amber-500" />
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#94A3B8] flex items-center gap-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#3FC3B6]" />
               Extracted Engineering Parameters
             </span>
 
@@ -239,14 +239,14 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
               {activeStep.parameters.map((param) => (
                 <div 
                   key={param.label}
-                  className="p-3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-1 shadow-2xs"
+                  className="p-3 rounded-none bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] space-y-1 shadow-2xs"
                 >
-                  <span className="text-[10px] text-neutral-500 block truncate">{param.label}</span>
-                  <div className="text-base font-extrabold text-neutral-950 dark:text-white">
+                  <span className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] block truncate">{param.label}</span>
+                  <div className="text-base font-extrabold text-[#252B33] dark:text-white">
                     {param.value}
                   </div>
                   {param.unit && (
-                    <span className="text-[10px] text-amber-700 dark:text-amber-400 block truncate font-sans">
+                    <span className="text-[10px] text-[#26A69A] dark:text-[#3FC3B6] block truncate font-sans">
                       {param.unit}
                     </span>
                   )}
@@ -257,32 +257,32 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
 
           {/* ── 2. Expected vs Observed Outcome ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div className="p-3.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-1">
-              <span className="text-[10px] font-mono font-bold uppercase text-neutral-500 block">
+            <div className="p-3.5 rounded-none bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] space-y-1">
+              <span className="text-[10px] font-mono font-bold uppercase text-[#6B7280] dark:text-[#94A3B8] block">
                 Engineering Target (Expected Outcome)
               </span>
-              <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed font-sans">
+              <p className="text-[#252B33] dark:text-white leading-relaxed font-sans">
                 {activeStep.expectedOutcome}
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40 space-y-1">
-              <span className="text-[10px] font-mono font-bold uppercase text-emerald-700 dark:text-emerald-400 block flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+            <div className="p-3.5 rounded-none bg-[#3FAE68]/10 dark:bg-[#3FAE68]/15 border border-[#3FAE68]/30 space-y-1">
+              <span className="text-[10px] font-mono font-bold uppercase text-[#3FAE68] block flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-[#3FAE68]" />
                 OIL India Verified Actual Outcome
               </span>
-              <p className="text-neutral-800 dark:text-neutral-200 leading-relaxed font-sans font-medium">
+              <p className="text-[#252B33] dark:text-white leading-relaxed font-sans font-medium">
                 {activeStep.observedOutcome}
               </p>
             </div>
           </div>
 
           {/* ── 3. Raw Evidence Excerpt from Genuine Record ── */}
-          <div className="p-3 rounded-xl bg-neutral-100 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800 text-xs font-mono space-y-1">
-            <span className="text-[10px] text-neutral-500 uppercase tracking-wider block font-bold">
+          <div className="p-3 rounded-none bg-[#F5F7F8] dark:bg-[#191E26] border border-[#E2E5E8] dark:border-[#364356] text-xs font-mono space-y-1">
+            <span className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider block font-bold">
               Raw WCR/DDR Narrative Excerpt (Evidence Provenance)
             </span>
-            <div className="text-neutral-800 dark:text-neutral-300 italic pl-2 border-l-2 border-amber-500">
+            <div className="text-[#252B33] dark:text-white italic pl-2 border-l-2 border-[#3FC3B6]">
               &quot;{activeStep.rawNarrativeExcerpt}&quot;
             </div>
           </div>
@@ -294,12 +294,12 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
               disabled={activeStepIndex === 0}
               suppressHydrationWarning
               onClick={() => setActiveStepIndex(Math.max(0, activeStepIndex - 1))}
-              className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 disabled:opacity-40 cursor-pointer font-bold"
+              className="px-3 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-white disabled:opacity-40 cursor-pointer font-bold"
             >
               ← Previous Stage
             </button>
 
-            <span className="text-neutral-500 font-bold">
+            <span className="text-[#6B7280] dark:text-[#94A3B8] font-bold">
               {activeStepIndex + 1} of {playbook.steps.length}
             </span>
 
@@ -308,7 +308,7 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
               disabled={activeStepIndex === playbook.steps.length - 1}
               suppressHydrationWarning
               onClick={() => setActiveStepIndex(Math.min(playbook.steps.length - 1, activeStepIndex + 1))}
-              className="px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 disabled:opacity-40 cursor-pointer font-bold"
+              className="px-3 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-white disabled:opacity-40 cursor-pointer font-bold"
             >
               Next Stage →
             </button>

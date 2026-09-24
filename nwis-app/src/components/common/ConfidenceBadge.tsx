@@ -11,24 +11,24 @@ export const ConfidenceBadge: React.FC<ConfidenceBadgeProps> = ({ level, classNa
   const getBadgeStyle = () => {
     switch (level) {
       case 'STRUCTURED-HIGH':
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
+        return 'bg-[#3FAE68]/15 text-[#3FAE68] border-[#3FAE68]/40';
       case 'OCR-HIGH':
-        return 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30';
+        return 'bg-[#D9F2EE] text-[#26A69A] border-[#3FC3B6]/50';
       case 'OCR-MEDIUM':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        return 'bg-[#F2B84B]/15 text-[#F2B84B] border-[#F2B84B]/50';
       case 'OCR-LOW':
-        return 'bg-orange-500/10 text-orange-400 border-orange-500/30';
+        return 'bg-[#ED1C24]/15 text-[#ED1C24] border-[#ED1C24]/50';
       case 'MANUAL-REVIEW':
-        return 'bg-purple-500/10 text-purple-400 border-purple-500/30';
+        return 'bg-[#34435A]/15 text-[#34435A] dark:text-[#D9F2EE] border-[#34435A]/40';
       default:
-        return 'bg-slate-700/20 text-slate-400 border-slate-700';
+        return 'bg-[#6B7280]/15 text-[#6B7280] border-[#E2E5E8]';
     }
   };
 
   return (
     <span
       title={sourceDoc ? `Extraction Pedigree: ${level} | Source: ${sourceDoc}` : `Extraction Pedigree: ${level}`}
-      className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-mono font-medium border uppercase tracking-wider ${getBadgeStyle()} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-none px-1.5 py-0.5 text-[10px] font-mono font-medium border uppercase tracking-wider ${getBadgeStyle()} ${className}`}
     >
       <span className="w-1.5 h-1.5 rounded-full bg-current opacity-80" />
       {level}
