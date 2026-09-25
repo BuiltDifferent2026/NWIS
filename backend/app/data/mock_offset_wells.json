@@ -1,0 +1,143 @@
+{
+  "target_well_default": {
+    "well_id": "WELL_A",
+    "basin": "ASSAM_ARAKAN",
+    "formation": "FORMATION_ALPHA",
+    "present_depth_md_m": 2145.0,
+    "formation_top_md_m": 2080.0,
+    "relative_depth_m": 65.0,
+    "mud_weight_ppg": 10.2,
+    "rig_type": "1500HP_ELECTRIC"
+  },
+  "offset_wells": [
+    {
+      "well_id": "Well B",
+      "distance_km": 14.8,
+      "similarity_score": 0.92,
+      "formation_alignment": "Formation Alpha (Upper Sandstone)",
+      "depth_alignment": "Relative depth: 68m (offset delta: +3m)",
+      "trajectory": "Deviated (S-Type, 24° max inc)",
+      "match_reason": "High petrophysical concordance in Formation Alpha; identical 8.5\" section and 10.2 ppg mud weight window despite 14.8 km distance.",
+      "is_closest": false,
+      "is_best_comparison": true,
+      "similarity_breakdown": {
+        "formation_match": 0.98,
+        "relative_depth_alignment": 0.95,
+        "trajectory_similarity": 0.88,
+        "drilling_parameter_similarity": 0.92,
+        "rig_type_context": 0.90,
+        "geographic_proximity": 0.72
+      },
+      "historical_event": {
+        "event_type": "Severe Mud Loss",
+        "relative_depth_m": 94.0,
+        "measured_depth_m": 2174.0,
+        "loss_rate": "38 m³/hr total returns loss",
+        "npt_lost_h": 28.5,
+        "mitigation_applied": "Pumped 45 bbl multi-modal medium-nut-plug LCM pill (35 ppb); capped ECD at 10.4 ppg; partial returns restored after 4.5 hrs soak.",
+        "success_rate": "100% circulation regained after secondary LCM squeeze",
+        "source_doc": "Historical record: Well B (DDR/WCR Section 4)",
+        "confidence": "Structured High"
+      }
+    },
+    {
+      "well_id": "Well C",
+      "distance_km": 2.1,
+      "similarity_score": 0.68,
+      "formation_alignment": "Formation Beta (Overlying Siltstone / Seal)",
+      "depth_alignment": "Relative depth: 32m (offset delta: -33m)",
+      "trajectory": "Vertical",
+      "match_reason": "Geographically closest well (2.1 km), but penetrates different sub-layer lithology with distinct pore-pressure regime.",
+      "is_closest": true,
+      "is_best_comparison": false,
+      "similarity_breakdown": {
+        "formation_match": 0.52,
+        "relative_depth_alignment": 0.60,
+        "trajectory_similarity": 0.70,
+        "drilling_parameter_similarity": 0.65,
+        "rig_type_context": 0.85,
+        "geographic_proximity": 0.98
+      },
+      "historical_event": {
+        "event_type": "Clean Drilling Interval (Zero Losses)",
+        "relative_depth_m": 65.0,
+        "measured_depth_m": 2045.0,
+        "loss_rate": "0 m³/hr (stable returns)",
+        "npt_lost_h": 0.0,
+        "mitigation_applied": "Maintained 9.8 ppg WBM; no LCM required in tight siltstone interval.",
+        "success_rate": "Clean interval passage",
+        "source_doc": "Historical record: Well C (DDR Log p. 11)",
+        "confidence": "Structured High"
+      }
+    },
+    {
+      "well_id": "Well D",
+      "distance_km": 8.4,
+      "similarity_score": 0.84,
+      "formation_alignment": "Formation Alpha (Fractured Member)",
+      "depth_alignment": "Relative depth: 72m (offset delta: +7m)",
+      "trajectory": "Deviated (J-Type, 18° max inc)",
+      "match_reason": "Same Formation Alpha member with documented micro-fractures; experienced seepage losses at 98m relative depth.",
+      "is_closest": false,
+      "is_best_comparison": false,
+      "similarity_breakdown": {
+        "formation_match": 0.92,
+        "relative_depth_alignment": 0.88,
+        "trajectory_similarity": 0.82,
+        "drilling_parameter_similarity": 0.85,
+        "rig_type_context": 0.78,
+        "geographic_proximity": 0.80
+      },
+      "historical_event": {
+        "event_type": "Partial Fluid Seepage",
+        "relative_depth_m": 102.0,
+        "measured_depth_m": 2182.0,
+        "loss_rate": "12 m³/hr dynamic loss",
+        "npt_lost_h": 12.0,
+        "mitigation_applied": "Spotted 30 bbl cellulosic fiber pill with 20 ppb CaCO3 bridge.",
+        "success_rate": "Seepage arrested within 2 hours",
+        "source_doc": "Historical record: Well D (DDR Log p. 18)",
+        "confidence": "Structured High"
+      }
+    }
+  ],
+  "historical_risk_corridor": {
+    "corridor_name": "Historical Mud-Loss Corridor",
+    "target_formation": "Formation Alpha",
+    "corridor_relative_depth_start_m": 90.0,
+    "corridor_relative_depth_end_m": 140.0,
+    "evidence_count": 5,
+    "historical_event_type": "Severe Lost Circulation (30-55 m³/hr)",
+    "disclaimer": "Illustrative evidence-backed corridor simulation; not a production drilling command or a trained risk prediction model."
+  },
+  "mitigation_playbook": {
+    "title": "Evidence-Linked Historical Mitigation Playbook",
+    "disclaimer": "Historical evidence only. Final operational action remains subject to approved OIL procedures and engineer judgment.",
+    "steps": [
+      {
+        "step_number": 1,
+        "title": "Detect Loss / Reduced Returns",
+        "action": "Continuously monitor active pit levels and flow-out paddle sensor for sudden delta > 2 m³/hr or volume drop > 3 bbls.",
+        "precaution": "Conduct immediate 10-minute flow check with pumps off to differentiate micro-fracture ballooning from matrix loss."
+      },
+      {
+        "step_number": 2,
+        "title": "Apply Loss-Control Treatment",
+        "action": "Spot pre-mixed 35–45 bbl multi-modal LCM pill (coarse resilient graphitic carbon + medium CaCO3 nut-plug @ 35 ppb) across the loss interval.",
+        "precaution": "Pull bit minimum 30m above loss zone prior to soaking to prevent differential sticking."
+      },
+      {
+        "step_number": 3,
+        "title": "Monitor Circulation and Returns",
+        "action": "Allow pill to soak for 4 to 6 hours under hydrostatic column; resume slow-rate staged circulation at 40–50% nominal GPM.",
+        "precaution": "Cap Equivalent Circulating Density (ECD) at 10.4 ppg; restrict surge velocities during pipe movement."
+      },
+      {
+        "step_number": 4,
+        "title": "Escalate According to Approved Drilling Procedure if Losses Persist",
+        "action": "If full returns are not established after secondary pill soak, stage thixotropic bentonite-diesel oil (BDOC) plug or balanced cement squeeze plug.",
+        "precaution": "Notify Drilling Superintendent and verify wellbore casing burst margin before pressure testing squeeze."
+      }
+    ]
+  }
+}

@@ -1,0 +1,333 @@
+# DDR Template Mapping Configuration
+# Label aliases, section detection keywords, and extraction rules
+
+sections:
+  - id: "well_context"
+    name: "Well Context & Header"
+    color: "blue"
+    keywords: ["basin", "rig", "location", "well", "target", "present depth", "installation manager"]
+  - id: "casing_details"
+    name: "Casing Details"
+    color: "cyan"
+    keywords: ["casing details", "size (inch)", "casing type", "shoe at", "fc at"]
+  - id: "operation_details"
+    name: "Operation Details"
+    color: "yellow"
+    keywords: ["operation details"]
+  - id: "bit_bha"
+    name: "Bit & BHA Details"
+    color: "teal"
+    keywords: ["bit details", "bit srl no", "type & nozzle", "make/iadc", "bha length", "bha weight"]
+  - id: "mud_parameters"
+    name: "Mud Parameters"
+    color: "purple"
+    keywords: ["mud parameters", "mud wt", "viscosity", "pv/yp", "fluid loss", "ph", "salinity"]
+  - id: "formation_data"
+    name: "Formation Data"
+    color: "green"
+    keywords: ["formation top", "formation drilled"]
+  - id: "bit_hydraulics"
+    name: "Bit Hydraulics"
+    color: "indigo"
+    keywords: ["bit hydraulics", "hhp", "jet velocity", "bit efficiency", "annular velocity"]
+  - id: "drilling_parameters"
+    name: "Drilling Parameters"
+    color: "orange"
+    keywords: ["drilling parameters", "wob", "torque", "rpm", "gpm", "spp"]
+  - id: "time_lost_npt"
+    name: "Time Lost & NPT"
+    color: "red"
+    keywords: ["time lost due to shut down", "hrs lost", "reason", "time b/up", "npt in 24 hrs", "operating time", "repairing time"]
+  - id: "narrative_remarks"
+    name: "Next Operation & Remarks"
+    color: "amber"
+    keywords: ["next operation", "remarks", "pre spud inspection"]
+
+fields:
+  # Source / Header
+  report_date:
+    aliases: ["operation date", "report date", "date of operation", "date"]
+    expected_unit: "date"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  # Well Context
+  well_id:
+    aliases: ["well", "well no", "well name", "well:"]
+    expected_unit: "text"
+    direction: "right_or_inline"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  basin:
+    aliases: ["basin", "sub-basin", "basin name"]
+    expected_unit: "text"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  location:
+    aliases: ["location", "loc", "rig location", "well location"]
+    expected_unit: "text"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  rig_name:
+    aliases: ["rig", "rig no", "rig name", "drilling rig"]
+    expected_unit: "text"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  present_depth_md_m:
+    aliases: ["present depth (m)", "present depth", "current depth (m)", "depth (m)", "hole depth"]
+    expected_unit: "m"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  progress_24h_m:
+    aliases: ["24 hrs progress (m)", "24 hrs progress", "24h progress", "daily progress (m)", "progress (24 hrs)"]
+    expected_unit: "m"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  present_operation:
+    aliases: ["present operation", "current operation", "activity", "operation"]
+    expected_unit: "text"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  hole_size_in:
+    aliases: ["hole size", "hole size (inch)", "hole diameter", "bit size"]
+    expected_unit: "in"
+    direction: "right"
+    section: "well_context"
+    confidence: "STRUCTURED_HIGH"
+
+  # Formation
+  top_md_m:
+    aliases: ["formation top(m)", "formation top (m)", "formation top", "top (m)", "formation entry depth"]
+    expected_unit: "m"
+    direction: "right"
+    section: "formation_data"
+    confidence: "STRUCTURED_HIGH"
+
+  current_formation:
+    aliases: ["formation drilled", "current formation", "formation name", "drilled formation"]
+    expected_unit: "text"
+    direction: "right"
+    section: "formation_data"
+    confidence: "STRUCTURED_HIGH"
+
+  # Drilling Parameters
+  wob_t:
+    aliases: ["wob (t)", "wob", "weight on bit", "wob (tonnes)", "wob (klbs)"]
+    expected_unit: "t"
+    direction: "right"
+    section: "drilling_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  torque_on_bottom_ft_lb:
+    aliases: ["torque (on bottom) (ft-lb)", "torque (on bottom)", "torque on bottom", "rotary torque on bottom", "torque on-bottom"]
+    expected_unit: "ft-lb"
+    direction: "right"
+    section: "drilling_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  torque_off_bottom_ft_lb:
+    aliases: ["torque (off bottom) (ft-lb)", "torque (off bottom)", "torque off bottom", "torque off-bottom"]
+    expected_unit: "ft-lb"
+    direction: "right"
+    section: "drilling_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  rpm:
+    aliases: ["rpm", "rotary speed", "string rpm", "table rpm"]
+    expected_unit: "rpm"
+    direction: "right"
+    section: "drilling_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  flow_rate_gpm:
+    aliases: ["gpm", "flow rate", "flow rate (gpm)", "flow rate gpm", "pump output"]
+    expected_unit: "gpm"
+    direction: "right"
+    section: "drilling_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  spp_psi:
+    aliases: ["spp (psi)", "spp", "stand pipe pressure", "standpipe pressure (psi)", "pump pressure"]
+    expected_unit: "psi"
+    direction: "right"
+    section: "drilling_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  # Mud Parameters
+  mud_weight_ppg:
+    aliases: ["mud wt. (ppg)", "mud wt (ppg)", "mud weight", "mud wt.", "active mud weight", "mud weight (ppg)"]
+    expected_unit: "ppg"
+    direction: "right"
+    section: "mud_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  viscosity_sec_qt:
+    aliases: ["viscosity (sec/qt)", "viscosity", "marsh funnel viscosity", "viscosity sec/qt"]
+    expected_unit: "sec/qt"
+    direction: "right"
+    section: "mud_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  fluid_loss_cc_30min:
+    aliases: ["fluid loss(cc/30min)", "fluid loss (cc/30min)", "fluid loss", "api fluid loss", "filtrate loss"]
+    expected_unit: "cc/30min"
+    direction: "right"
+    section: "mud_parameters"
+    confidence: "STRUCTURED_HIGH"
+
+  # Bit & BHA
+  bit_serial_no:
+    aliases: ["bit srl no.", "bit srl no", "bit serial no", "bit s/n", "bit number"]
+    expected_unit: "text"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  bit_type_nozzle:
+    aliases: ["type & nozzle size", "bit type & nozzle", "type & nozzle", "bit nozzle"]
+    expected_unit: "text"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  make_iadc:
+    aliases: ["make/iadc", "make / iadc", "iadc code", "bit make"]
+    expected_unit: "text"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  bit_hours_24h:
+    aliases: ["bit hrs (24 hrs)", "bit hrs (24h)", "bit hours 24h", "bit rotating hours"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  bit_hours_cum:
+    aliases: ["bit hrs (cum)", "bit hrs cum", "cumulative bit hours", "bit hours cumulative"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  bha_length_m:
+    aliases: ["bha length (m)", "bha length", "bottom hole assembly length"]
+    expected_unit: "m"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  bha_weight_t:
+    aliases: ["bha weight (t)", "bha weight", "bottom hole assembly weight"]
+    expected_unit: "t"
+    direction: "right"
+    section: "bit_bha"
+    confidence: "STRUCTURED_HIGH"
+
+  # Time Accounting / NPT
+  hours_lost:
+    aliases: ["hrs lost:", "hrs lost", "hours lost", "downtime hours", "time lost"]
+    expected_unit: "hrs"
+    direction: "right_or_inline"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  shutdown_reason:
+    aliases: ["reason:", "reason", "shutdown reason", "cause of shutdown"]
+    expected_unit: "text"
+    direction: "right_or_inline"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_MEDIUM"
+
+  operating_time_h:
+    aliases: ["operating time", "operating hrs", "drilling time"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  force_majeure_h:
+    aliases: ["force majeure time", "force majeure", "weather downtime"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  repairing_time_h:
+    aliases: ["repairing time", "rig repair time", "mechanical breakdown"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  standby_day_time_h:
+    aliases: ["standby day time", "standby time", "rig standby"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  non_operating_time_h:
+    aliases: ["non operating time", "non-operating time"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  ilm_time_h:
+    aliases: ["ilm time", "ilm hours", "inter-location movement"]
+    expected_unit: "hrs"
+    direction: "right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  npt_24h_h:
+    aliases: ["npt in 24 hrs", "npt (24 hrs)", "daily npt", "24h npt"]
+    expected_unit: "hrs"
+    direction: "regex_or_right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  monthly_cumulative_npt_h:
+    aliases: ["cumm monthly npt", "cum monthly npt", "monthly npt", "cumulative npt"]
+    expected_unit: "hrs"
+    direction: "regex_or_right"
+    section: "time_lost_npt"
+    confidence: "STRUCTURED_HIGH"
+
+  # Narrative
+  operation_details:
+    aliases: ["operation details", "daily operation log", "24 hour operations summary"]
+    expected_unit: "text"
+    direction: "below"
+    section: "operation_details"
+    confidence: "STRUCTURED_MEDIUM"
+
+  next_operation:
+    aliases: ["next operation", "look ahead operation", "planned operation"]
+    expected_unit: "text"
+    direction: "below"
+    section: "narrative_remarks"
+    confidence: "STRUCTURED_MEDIUM"
+
+  remarks:
+    aliases: ["remarks", "general remarks", "superintendent remarks"]
+    expected_unit: "text"
+    direction: "below"
+    section: "narrative_remarks"
+    confidence: "STRUCTURED_MEDIUM"
