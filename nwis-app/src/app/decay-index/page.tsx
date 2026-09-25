@@ -140,13 +140,220 @@ export default function MemoryDecayIndexPage() {
     MEMORY_DECAY_INDEX.reduce((acc, curr) => acc + curr.decayRiskScore, 0) / MEMORY_DECAY_INDEX.length
   );
 
-  const handleExport = () => {
-    setReportExported(true);
-    setTimeout(() => setReportExported(false), 3000);
+  const [downloadToast, setDownloadToast] = useState<string | null>(null);
+
+  const showNotification = (msg: string) => {
+    setDownloadToast(msg);
+    setTimeout(() => setDownloadToast(null), 4000);
+  };
+
+  const handleExport = async () => {
+    try {
+      setReportExported(true);
+      showNotification('Generating Institutional Memory Decay Audit PDF...');
+
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const primaryTeal = [38, 166, 154];
+      const darkSlate = [37, 43, 51];
+      const grayText = [107, 114, 128];
+      const redAlert = [237, 28, 36];
+      const amberAlert = [242, 184, 75];
+      const greenSuccess = [63, 174, 104];
+
+      // ─── Header Banner ───
+      doc.setFillColor(37, 43, 51);
+      doc.rect(0, 0, 210, 24, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(13);
+      doc.setFont('helvetica', 'bold');
+      doc.text('OIL INDIA LIMITED', 14, 11);
+
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(38, 166, 154);
+      doc.text('eRTMAC & SUB-SURFACE HERITAGE KNOWLEDGE REPOSITORY', 14, 18);
+
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+      doc.setFontSize(7.5);
+      doc.setTextColor(200, 205, 212);
+      doc.text(`AUDIT GENERATED: ${timestamp} IST`, 128, 15);
+
+      // ─── Title Section ───
+      doc.setTextColor(37, 43, 51);
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Institutional Memory Decay Audit Report', 14, 35);
+
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(107, 114, 128);
+      doc.text('Assessment of Assam-Arakan legacy wellbore archives, paper degradation rates & loss exposure.', 14, 41);
+
+      // ─── Key Metrics Summary Cards ───
+      const drawCard = (x: number, y: number, w: number, h: number, title: string, value: string, sub: string, alertColor?: number[]) => {
+        doc.setFillColor(248, 250, 252);
+        doc.setDrawColor(226, 229, 232);
+        doc.roundedRect(x, y, w, h, 1.5, 1.5, 'FD');
+
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(107, 114, 128);
+        doc.text(title.toUpperCase(), x + 3.5, y + 6);
+
+        if (alertColor) {
+          doc.setTextColor(alertColor[0], alertColor[1], alertColor[2]);
+        } else {
+          doc.setTextColor(37, 43, 51);
+        }
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(value, x + 3.5, y + 13);
+
+        doc.setFontSize(6.5);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(107, 114, 128);
+        doc.text(sub, x + 3.5, y + 17.5);
+      };
+
+      drawCard(14, 46, 42, 20, 'Highest Decay Risk', 'Digboi: 88/100', '54-yr avg age (1889)', redAlert);
+      drawCard(60, 46, 42, 20, 'Total At-Risk Records', `${totalAtRisk.toLocaleString()} Files`, `${totalPaperOnly} paper-only scans`, amberAlert);
+      drawCard(106, 46, 42, 20, 'Monitored Wells', `${totalLegacy.toLocaleString()} Wells`, '6 Assam Asset Fields', primaryTeal);
+      drawCard(152, 46, 44, 20, 'Average Basin Decay', `${avgDecay} / 100`, 'Critical Archive Threshold', redAlert);
+
+      // ─── Table Section ───
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(37, 43, 51);
+      doc.text('Field-by-Field Archival Decay Index Assessment', 14, 73);
+
+      // Table Header
+      let y = 78;
+      doc.setFillColor(38, 166, 154);
+      doc.rect(14, y, 182, 7, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text('ASSET / FIELD', 17, y + 4.8);
+      doc.text('LEGACY WELLS', 52, y + 4.8);
+      doc.text('AT-RISK', 80, y + 4.8);
+      doc.text('DECAY SCORE', 105, y + 4.8);
+      doc.text('KEY SUBSURFACE VULNERABILITY', 133, y + 4.8);
+
+      y += 7;
+
+      // Table Rows
+      MEMORY_DECAY_INDEX.forEach((item, index) => {
+        if (index % 2 === 0) {
+          doc.setFillColor(255, 255, 255);
+        } else {
+          doc.setFillColor(247, 249, 250);
+        }
+        doc.rect(14, y, 182, 8, 'F');
+        doc.setDrawColor(230, 233, 236);
+        doc.line(14, y + 8, 196, y + 8);
+
+        doc.setFontSize(7.5);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(37, 43, 51);
+        doc.text(item.field, 17, y + 5.2);
+
+        doc.setFont('helvetica', 'normal');
+        doc.text(String(item.totalLegacyWells), 55, y + 5.2);
+        doc.text(String(item.atRiskRecordCount), 83, y + 5.2);
+
+        // Score badge color
+        if (item.decayRiskScore >= 75) {
+          doc.setTextColor(redAlert[0], redAlert[1], redAlert[2]);
+        } else if (item.decayRiskScore >= 55) {
+          doc.setTextColor(217, 119, 6);
+        } else {
+          doc.setTextColor(greenSuccess[0], greenSuccess[1], greenSuccess[2]);
+        }
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${item.decayRiskScore}/100`, 108, y + 5.2);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(80, 85, 95);
+        const vulnText = item.keyVulnerability.length > 36 ? item.keyVulnerability.substring(0, 36) + '...' : item.keyVulnerability;
+        doc.text(vulnText, 133, y + 5.2);
+
+        y += 8;
+      });
+
+      // ─── Detailed Asset Action Plan ───
+      y += 6;
+      doc.setFontSize(9.5);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(37, 43, 51);
+      doc.text('Priority Digitization & Planetary Scanning Dossiers', 14, y);
+      y += 4;
+
+      Object.entries(FIELD_DOSSIERS).slice(0, 3).forEach(([name, dossier]) => {
+        y += 4;
+        doc.setFillColor(245, 247, 248);
+        doc.setDrawColor(220, 225, 230);
+        doc.roundedRect(14, y, 182, 23, 1, 1, 'FD');
+
+        doc.setFontSize(8.5);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(38, 166, 154);
+        doc.text(`${name.toUpperCase()} (Est. Discovery ${dossier.discoveryYear})`, 18, y + 5);
+
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(80, 85, 95);
+        doc.text(`Archive: ${dossier.primaryArchiveLocation}`, 18, y + 10);
+        doc.text(`Condition: ${dossier.paperDegradationState} · Est. CPU Hours: ${dossier.estimatedDigitizationHours} hrs`, 18, y + 14);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(37, 43, 51);
+        doc.text(`Action: ${dossier.recommendedAction}`, 18, y + 18.5);
+
+        y += 24;
+      });
+
+      // ─── Institutional Disclaimer & Footer ───
+      doc.setDrawColor(220, 225, 230);
+      doc.line(14, 276, 196, 276);
+
+      doc.setFontSize(6.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(130, 135, 145);
+      doc.text(
+        'Oil India Limited eRTMAC Subsurface Memory Protection Audit · SIH-OIL-DEC-01 · Prototype Decision-Support Assessment.',
+        14,
+        281
+      );
+      doc.text(
+        'Generated for operational planning. Physical archive preservation mandates planetary camera capture before brittle disintegration.',
+        14,
+        285
+      );
+
+      // Trigger standard save
+      const filename = `OIL_Institutional_Memory_Decay_Audit_${new Date().toISOString().slice(0, 10)}.pdf`;
+      doc.save(filename);
+      showNotification(`Audit PDF saved as ${filename}!`);
+    } catch (err) {
+      console.error('PDF generation error:', err);
+      // Fallback to browser print if jsPDF has any execution constraints
+      window.print();
+    } finally {
+      setTimeout(() => setReportExported(false), 3000);
+    }
   };
 
   const handleTriggerDigitization = (fieldName: string) => {
     setDigitizationTriggered(fieldName);
+    showNotification(`Dispatched ${fieldName} batch digitization to queue`);
     setTimeout(() => setDigitizationTriggered(null), 3500);
   };
 
@@ -625,6 +832,14 @@ export default function MemoryDecayIndexPage() {
             </div>
 
           </Card>
+        </div>
+      )}
+
+      {/* Floating Download / Status Toast */}
+      {downloadToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 bg-[#252B33] text-white text-xs font-mono rounded-none shadow-xl border border-[#26A69A] animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <CheckCircle2 className="w-4 h-4 text-[#3FAE68] shrink-0" />
+          <span>{downloadToast}</span>
         </div>
       )}
     </div>

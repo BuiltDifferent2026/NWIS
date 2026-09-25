@@ -552,6 +552,77 @@ export default function DDRIntelligencePage() {
 
   const simStatus = getSimulatedStatus(simulatedRelativeDepth);
 
+
+  const downloadFile = async (url: string, filename: string) => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('HTTP ' + response.status);
+      }
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      }, 100);
+    } catch (e) {
+      console.warn('Blob download fallback to direct anchor:', e);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => document.body.removeChild(a), 100);
+    }
+  };
+
+  const exportDecisionBrief = () => {
+    try {
+      const briefData = {
+        title: 'Oil India Limited - Drilling Intelligence Decision Brief',
+        generated_at: new Date().toISOString(),
+        active_well: {
+          well_id: 'OIL-GLK-14',
+          depth_md: presentDepth,
+          relative_depth_formation_m: relativeDepth,
+          status: 'WATCH: Approaching Loss Horizon'
+        },
+        recommended_mitigations: playbookSteps,
+        analog_well_evidence: {
+          well: 'OIL-GLK-07 (Well B)',
+          event: 'Total circulation loss (35 m3/hr) at 2,185m MD',
+          resolution: '45 bbl medium-nut-plug LCM pill + ECD capped @ 10.4 ppg'
+        },
+        disclaimer: 'Historical evidence only. Final operational action remains subject to approved OIL procedures and engineer judgment.'
+      };
+
+      const jsonStr = JSON.stringify(briefData, null, 2);
+      const filename = 'OIL-GLK-14_Drilling_Decision_Brief.json';
+      
+      // Use standard data URI to ensure browser sets the exact filename and extension
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(jsonStr);
+      const a = document.createElement('a');
+      a.href = dataUri;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        if (document.body.contains(a)) {
+          document.body.removeChild(a);
+        }
+      }, 300);
+    } catch (e) {
+      console.error('Export error:', e);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F7F8] dark:bg-[#1E2530] text-[#252B33] dark:text-[#E2E5E8] pb-16 font-sans">
       {/* ─── Breadcrumb & Top Bar ─── */}
@@ -586,9 +657,9 @@ export default function DDRIntelligencePage() {
               Reload Sample Data
             </button>
             <a
-              href="/samples/sample_ddr_with_mock_values.xlsx"
+              href="/api/ddr/download-sample"
               download="sample_ddr_with_mock_values.xlsx"
-              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-[#252B33] dark:text-white bg-white dark:bg-[#34435A] border border-[#E2E5E8] dark:border-[#4B5E7A] rounded hover:bg-gray-50 dark:hover:bg-[#3F526E] transition-colors shadow-2xs"
+              className="cursor-pointer inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold text-[#252B33] dark:text-white bg-white dark:bg-[#34435A] border border-[#26A69A] rounded hover:bg-[#D9F2EE]/30 dark:hover:bg-[#3F526E] transition-colors shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-[#26A69A]" />
               Download Test XLSX
@@ -597,7 +668,7 @@ export default function DDRIntelligencePage() {
         </div>
       </div>
 
-      {/* ─── 7-Step Navigation Bar ─── */}
+      {/* ─── 4-Step Navigation Bar ─── */}
       <div className="bg-white dark:bg-[#252E3D] border-b border-[#E2E5E8] dark:border-[#34435A] px-6 py-2.5 sticky top-0 z-20 shadow-2xs">
         <div className="max-w-7xl mx-auto overflow-x-auto">
           <nav aria-label="Pipeline Progression" className="flex items-center gap-1 min-w-[760px]">
@@ -609,22 +680,20 @@ export default function DDRIntelligencePage() {
                 <React.Fragment key={step.id}>
                   <button
                     onClick={() => setCurrentStep(step.id)}
-                    className={`flex items-center gap-2 px-3 py-2 text-xs font-medium rounded transition-all whitespace-nowrap ${
-                      isActive
+                    className={`flex items-center gap-2 px-3 py-2 text-xs font-medium rounded transition-all whitespace-nowrap ${isActive
                         ? 'bg-[#26A69A] text-white font-bold shadow-xs'
                         : isPast
-                        ? 'text-[#26A69A] dark:text-[#3FC3B6] hover:bg-[#D9F2EE]/60 dark:hover:bg-[#26A69A]/20'
-                        : 'text-[#6B7280] dark:text-[#A0AEC0] hover:text-[#252B33] dark:hover:text-white'
-                    }`}
+                          ? 'text-[#26A69A] dark:text-[#3FC3B6] hover:bg-[#D9F2EE]/60 dark:hover:bg-[#26A69A]/20'
+                          : 'text-[#6B7280] dark:text-[#A0AEC0] hover:text-[#252B33] dark:hover:text-white'
+                      }`}
                   >
                     <span
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${
-                        isActive
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-mono font-bold ${isActive
                           ? 'bg-white text-[#26A69A]'
                           : isPast
-                          ? 'bg-[#26A69A] text-white'
-                          : 'bg-[#E2E5E8] dark:bg-[#34435A] text-[#6B7280] dark:text-[#A0AEC0]'
-                      }`}
+                            ? 'bg-[#26A69A] text-white'
+                            : 'bg-[#E2E5E8] dark:bg-[#34435A] text-[#6B7280] dark:text-[#A0AEC0]'
+                        }`}
                     >
                       {isPast ? <Check className="w-3 h-3 stroke-[3]" /> : step.id}
                     </span>
@@ -657,14 +726,6 @@ export default function DDRIntelligencePage() {
                   <p className="text-xs text-[#6B7280] dark:text-[#A0AEC0] mt-1">
                     Accepts representative OIL-style structured spreadsheets (.xlsx) with label-value fields and merged-cell headers.
                   </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono text-[#6B7280] dark:text-[#A0AEC0]">
-                    Local Template Path:
-                  </span>
-                  <code className="text-xs font-mono px-2 py-1 bg-gray-100 dark:bg-[#1E2530] text-[#26A69A] border border-[#E2E5E8] dark:border-[#34435A] rounded">
-                    ./samples/DDR_Template_Anonymized.xlsx
-                  </code>
                 </div>
               </div>
 
@@ -818,11 +879,10 @@ export default function DDRIntelligencePage() {
                             onChange={(e) => handleFieldChange('header', key, e.target.value)}
                             className="w-32 px-2 py-1 bg-white dark:bg-[#252E3D] border border-[#E2E5E8] dark:border-[#34435A] rounded font-mono text-xs text-right"
                           />
-                          <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${
-                            field.confidence === 'USER_EDITED'
+                          <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded ${field.confidence === 'USER_EDITED'
                               ? 'bg-amber-100 text-amber-700'
                               : 'bg-teal-50 dark:bg-teal-950/40 text-[#26A69A]'
-                          }`}>
+                            }`}>
                             {field.confidence.replace('STRUCTURED_', '')}
                           </span>
                         </div>
@@ -986,13 +1046,12 @@ export default function DDRIntelligencePage() {
                 {offsetWells.map(well => (
                   <div
                     key={well.well_id}
-                    className={`border rounded-lg p-4 transition-all relative ${
-                      well.is_best_comparison
+                    className={`border rounded-lg p-4 transition-all relative ${well.is_best_comparison
                         ? 'border-[#26A69A] bg-[#D9F2EE]/15 dark:bg-[#26A69A]/10 shadow-xs'
                         : well.is_closest_geographically
-                        ? 'border-blue-300 dark:border-blue-800 bg-blue-50/20 dark:bg-blue-950/20'
-                        : 'border-[#E2E5E8] dark:border-[#34435A] bg-white dark:bg-[#252E3D]'
-                    }`}
+                          ? 'border-blue-300 dark:border-blue-800 bg-blue-50/20 dark:bg-blue-950/20'
+                          : 'border-[#E2E5E8] dark:border-[#34435A] bg-white dark:bg-[#252E3D]'
+                      }`}
                   >
                     {well.is_best_comparison && (
                       <span className="absolute -top-2.5 right-3 px-2 py-0.5 bg-[#26A69A] text-white text-[9px] font-mono font-bold uppercase rounded shadow-2xs">
@@ -1020,13 +1079,12 @@ export default function DDRIntelligencePage() {
                     {/* Overall Similarity Metric */}
                     <div className="p-3 bg-white dark:bg-[#1E2530] border border-[#E2E5E8] dark:border-[#34435A] rounded mb-3 flex items-center justify-between">
                       <span className="text-xs text-[#6B7280]">Multi-Factor Match:</span>
-                      <span className={`text-base font-mono font-extrabold ${
-                        well.multi_factor_similarity >= 0.9
+                      <span className={`text-base font-mono font-extrabold ${well.multi_factor_similarity >= 0.9
                           ? 'text-[#26A69A]'
                           : well.multi_factor_similarity >= 0.8
-                          ? 'text-blue-600'
-                          : 'text-amber-600'
-                      }`}>
+                            ? 'text-blue-600'
+                            : 'text-amber-600'
+                        }`}>
                         {(well.multi_factor_similarity * 100).toFixed(0)}%
                       </span>
                     </div>
@@ -1131,13 +1189,12 @@ export default function DDRIntelligencePage() {
                           <h4 className="text-sm font-bold text-[#252B33] dark:text-white">
                             {step.title}
                           </h4>
-                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
-                            step.status === 'ACTIVE'
+                          <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${step.status === 'ACTIVE'
                               ? 'bg-amber-100 text-amber-700'
                               : step.status === 'READY'
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-gray-200 text-gray-700 dark:bg-[#34435A] dark:text-gray-300'
-                          }`}>
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : 'bg-gray-200 text-gray-700 dark:bg-[#34435A] dark:text-gray-300'
+                            }`}>
                             {step.status}
                           </span>
                         </div>
@@ -1196,11 +1253,12 @@ export default function DDRIntelligencePage() {
 
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => alert('Decision Brief exported as JSON/PDF artifact.')}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#252E3D] border border-[#26A69A] text-[#26A69A] hover:bg-[#D9F2EE]/40 text-xs font-bold rounded shadow-2xs transition-colors"
+                  type="button"
+                  onClick={exportDecisionBrief}
+                  className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#252E3D] border border-[#26A69A] text-[#26A69A] hover:bg-[#D9F2EE]/40 text-xs font-bold rounded shadow-2xs transition-colors"
                 >
                   <Download className="w-4 h-4" />
-                  Export Decision Brief
+                  Export Decision Brief (JSON)
                 </button>
 
                 <Link

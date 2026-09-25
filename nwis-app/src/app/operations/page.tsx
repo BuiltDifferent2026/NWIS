@@ -177,21 +177,6 @@ export default function OperationsPage() {
               Field: <strong className="text-neutral-900 dark:text-neutral-200">Geleki</strong> · Basin: <strong className="text-neutral-900 dark:text-neutral-200">Assam–Arakan Basin</strong> · Rig: <strong className="text-neutral-900 dark:text-neutral-200">OIL-E2000-IV</strong> · Spud: <span className="font-mono">12-Jul-2026</span>
             </p>
           </div>
-
-          {/* eRTMAC Read-Only Feed Contract Tag */}
-          <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-xl border border-neutral-200 dark:border-[#1e273b] bg-neutral-50 dark:bg-[#131926] text-xs font-mono flex items-center gap-2.5">
-              <Radio className="w-4 h-4 text-emerald-500 animate-pulse" />
-              <div>
-                <div className="font-bold text-neutral-900 dark:text-white text-[11px]">
-                  eRTMAC Feed (Read-Only)
-                </div>
-                <div className="text-[10px] text-neutral-500 dark:text-neutral-400">
-                  WITSML 380ms · Zero rig write commands
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Live Telemetry KPI Gauges */}

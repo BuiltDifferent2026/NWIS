@@ -129,6 +129,32 @@ async def upload_ddr(
             detail=f"DDR Section-Aware Parser error: {str(e)}"
         )
 
+@app.get("/api/ddr/download-sample")
+def download_sample_ddr():
+    """
+    Serve the anonymized sample DDR spreadsheet (.xlsx) with explicit
+    Content-Disposition attachment and filename headers so browsers save it directly
+    with the correct .xlsx extension.
+    """
+    sample_candidates = [
+        os.path.join(os.path.dirname(__file__), "..", "..", "samples", "sample_ddr_with_mock_values.xlsx"),
+        os.path.join(os.path.dirname(__file__), "..", "..", "nwis-app", "public", "samples", "sample_ddr_with_mock_values.xlsx"),
+        "sample_ddr_with_mock_values.xlsx"
+    ]
+    for p in sample_candidates:
+        if os.path.exists(p):
+            from fastapi.responses import FileResponse
+            return FileResponse(
+                path=p,
+                filename="sample_ddr_with_mock_values.xlsx",
+                media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                headers={
+                    "Content-Disposition": 'attachment; filename="sample_ddr_with_mock_values.xlsx"',
+                    "Access-Control-Expose-Headers": "Content-Disposition"
+                }
+            )
+    raise HTTPException(status_code=404, detail="Sample DDR file not found on server")
+
 @app.post("/api/ddr/approve", response_model=ActiveWellContext)
 def approve_ddr(request: ApproveDDRRequest):
     """
