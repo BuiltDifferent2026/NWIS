@@ -167,10 +167,6 @@ export default function AnalogsPage() {
             Petrophysical similarity and stratigraphic twin matching across the Assam-Arakan Basin.
           </p>
         </div>
-
-        <Badge variant="outline" className="text-xs font-mono bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border-neutral-300 dark:border-neutral-700 py-1.5 px-3">
-          SIMILARITY ≠ DISTANCE
-        </Badge>
       </div>
 
       {/* ─── Formation Selector Tabs (Clean & Uncluttered) ─── */}

@@ -10,8 +10,8 @@ import {
   AlertTriangle,
   Database,
   FileText,
+  FileSpreadsheet,
   BarChart3,
-  Settings,
   Activity,
   Compass,
   Cpu,
@@ -90,16 +90,17 @@ export const GovNav: React.FC = () => {
       description: 'WCR & DDR archival repository'
     },
     {
+      name: 'DDR Intelligence',
+      href: '/ddr-intelligence',
+      icon: FileSpreadsheet,
+      description: 'Section-aware DDR extraction & risk pipeline',
+      activeMatch: ['/ddr-intelligence']
+    },
+    {
       name: 'Analytics',
       href: '/prediction-gap',
       icon: BarChart3,
       description: 'Geological prediction gap index'
-    },
-    {
-      name: 'Settings',
-      href: '/login',
-      icon: Settings,
-      description: 'Console persona & system configuration'
     }
   ];
 
@@ -297,14 +298,6 @@ export const GovNav: React.FC = () => {
 
         {!isSidebarCollapsed && (
           <>
-            {/* Integrated with eRTMAC Banner */}
-            <div className="flex items-center justify-between px-2.5 py-1.5 bg-[#222222]/40 border border-[#222222] text-[10px] font-mono text-[#D9F2EE]">
-              <span>Integrated with</span>
-              <span className="text-white font-bold flex items-center gap-1">
-                <span className="text-[#3FC3B6]">⇆</span> eRTMAC
-              </span>
-            </div>
-
             {/* Official Oil India Limited Emblem Branding */}
             <div className="flex items-center gap-2.5 px-2 py-2 bg-[#222222]/40 border border-[#222222]">
               <div className="w-8 h-8 bg-white p-0.5 flex items-center justify-center shrink-0 border border-white/20 shadow-2xs">
