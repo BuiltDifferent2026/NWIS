@@ -327,9 +327,6 @@ export default function AnalogsPage() {
               </span>
             ))}
           </div>
-          <span className="text-[#6B7280] text-[11px]">
-            Powered by Assam Basin Geospatial & Petrophysical Vector Engine
-          </span>
         </div>
 
       </Card>

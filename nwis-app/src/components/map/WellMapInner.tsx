@@ -368,6 +368,40 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
     return '#6B7280';
   };
 
+  // Mapbox Integration
+  const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '';
+  const [mapLayerStyle, setMapLayerStyle] = useState<'theme' | 'satellite' | 'outdoors'>('theme');
+
+  // Compute active tile URL and attribution based on Mapbox token availability and user style choice
+  const getTileConfig = () => {
+    if (mapboxToken && mapboxToken.trim().length > 0) {
+      let styleId = isDarkMode ? 'dark-v11' : 'light-v11';
+      if (mapLayerStyle === 'satellite') styleId = 'satellite-streets-v12';
+      if (mapLayerStyle === 'outdoors') styleId = 'outdoors-v12';
+
+      return {
+        isMapbox: true,
+        url: `https://api.mapbox.com/styles/v1/mapbox/${styleId}/tiles/{z}/{x}/{y}?access_token=${mapboxToken.trim()}`,
+        attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        tileSize: 512,
+        zoomOffset: -1
+      };
+    }
+
+    // Default Fallback when Mapbox Token is not yet provided in .env
+    return {
+      isMapbox: false,
+      url: isDarkMode
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+      attribution: '© <a href="https://carto.com/">CARTO</a> © <a href="https://openstreetmap.org">OSM</a>',
+      tileSize: 256,
+      zoomOffset: 0
+    };
+  };
+
+  const tileConfig = getTileConfig();
+
   return (
     <div className="relative flex flex-col xl:flex-row h-full w-full gap-4 min-h-[580px] xl:h-[640px]">
       
@@ -375,6 +409,60 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
       <div className={`flex-1 relative rounded-none overflow-hidden border border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#191E26] min-h-[480px] xl:h-full shadow-2xs ${
         isPickingLocation ? 'cursor-crosshair ring-2 ring-[#3FC3B6]' : ''
       }`}>
+
+        {/* ─── Mapbox / Tile Layer Control & Indicator ─── */}
+        <div className="absolute top-3 left-3 z-20 flex flex-wrap items-center gap-2">
+          {tileConfig.isMapbox ? (
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/95 dark:bg-[#242D3B]/95 backdrop-blur-xs border border-[#26A69A] text-[10px] font-mono font-bold text-[#26A69A] dark:text-[#3FC3B6] shadow-md">
+              <span className="w-2 h-2 rounded-full bg-[#3FAE68] animate-pulse" />
+              <span>MAPBOX API ACTIVE</span>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/90 dark:bg-[#242D3B]/90 backdrop-blur-xs border border-[#E2E5E8] dark:border-[#364356] text-[10px] font-mono text-[#6B7280] dark:text-[#94A3B8] shadow-xs">
+              <Layers className="w-3 h-3 text-[#26A69A]" />
+              <span>CARTOGRAPHIC BASE (Add token in .env for Mapbox)</span>
+            </div>
+          )}
+
+          {/* Quick Style Switcher (Standard, Satellite, Outdoors) */}
+          {tileConfig.isMapbox && (
+            <div className="inline-flex items-center bg-white/95 dark:bg-[#242D3B]/95 border border-[#E2E5E8] dark:border-[#364356] p-0.5 shadow-md">
+              <button
+                type="button"
+                onClick={() => setMapLayerStyle('theme')}
+                className={`px-2 py-0.5 text-[10px] font-mono font-bold transition-colors ${
+                  mapLayerStyle === 'theme'
+                    ? 'bg-[#26A69A] text-white'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
+                }`}
+              >
+                {isDarkMode ? 'Dark' : 'Light'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setMapLayerStyle('satellite')}
+                className={`px-2 py-0.5 text-[10px] font-mono font-bold transition-colors ${
+                  mapLayerStyle === 'satellite'
+                    ? 'bg-[#26A69A] text-white'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
+                }`}
+              >
+                Satellite
+              </button>
+              <button
+                type="button"
+                onClick={() => setMapLayerStyle('outdoors')}
+                className={`px-2 py-0.5 text-[10px] font-mono font-bold transition-colors ${
+                  mapLayerStyle === 'outdoors'
+                    ? 'bg-[#26A69A] text-white'
+                    : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
+                }`}
+              >
+                Terrain
+              </button>
+            </div>
+          )}
+        </div>
         
         {/* Picking Location Floating Guidance Banner */}
         {isPickingLocation && (
@@ -405,15 +493,14 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
             zoomTarget={zoomTarget}
           />
 
-          {/* Theme-Adaptive Tile Layer: Crisp Light Voyager in Light Mode, Carto Dark in Dark Mode */}
+          {/* Map Tile Layer: Mapbox Tiles when token is provided, with fallback to Carto/OSM */}
           <TileLayer
-            key={isDarkMode ? 'dark-tiles' : 'light-tiles'}
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            url={
-              isDarkMode
-                ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-            }
+            key={`${tileConfig.isMapbox ? 'mapbox' : 'fallback'}-${mapLayerStyle}-${isDarkMode ? 'dark' : 'light'}`}
+            attribution={tileConfig.attribution}
+            url={tileConfig.url}
+            tileSize={tileConfig.tileSize}
+            zoomOffset={tileConfig.zoomOffset}
+            maxZoom={19}
           />
 
           {/* Radius Circle from Active Rig */}

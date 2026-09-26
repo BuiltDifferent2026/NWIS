@@ -461,9 +461,6 @@ export default function OperationsPage() {
                 Offset Analogs &amp; Stratigraphic Correlation
               </h2>
             </div>
-            <p className="text-[11px] text-[#6B7280] dark:text-neutral-400 font-sans pl-6">
-              Geleki Field · 25 km proximity search radius · Stratigraphic correlation calibrated to active bit depth {currentDepth}m MD.
-            </p>
           </div>
 
           <Link

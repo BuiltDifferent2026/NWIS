@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { 
   Search, 
   X, 
@@ -11,7 +13,9 @@ import {
   Bot, 
   User, 
   RotateCcw,
-  ShieldCheck
+  ShieldCheck,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
@@ -107,9 +111,12 @@ export const AskNwisDrawer: React.FC<AskNwisDrawerProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
+  const [activeModelSource, setActiveModelSource] = useState<string>('eRTMAC Subsurface Engine');
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
   if (!isOpen) return null;
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || inputValue).trim();
     if (!query) return;
 
@@ -120,12 +127,46 @@ export const AskNwisDrawer: React.FC<AskNwisDrawerProps> = ({
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInputValue('');
     setIsTyping(true);
 
-    // Intelligent match against Assam Basin records
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query,
+          messages: newMessages.map(m => ({
+            role: m.sender,
+            content: m.text
+          }))
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      const data = await res.json();
+      if (data.source) {
+        setActiveModelSource(data.source);
+      }
+
+      const assistantMessage: ChatMessage = {
+        id: `assistant-${Date.now()}`,
+        sender: 'assistant',
+        text: data.reply || "No response received.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        structuredDetails: data.structuredDetails
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (err) {
+      console.warn('Backend Chat API error, falling back to local subsurface engine:', err);
+
+      // Graceful local fallback
       const lower = query.toLowerCase();
       let matchedKey = 'tipam';
       if (lower.includes('barail') || lower.includes('kick') || lower.includes('overpressure')) {
@@ -152,8 +193,9 @@ export const AskNwisDrawer: React.FC<AskNwisDrawerProps> = ({
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+    } finally {
       setIsTyping(false);
-    }, 700);
+    }
   };
 
   const handleCopy = (id: string, text: string) => {
@@ -182,7 +224,7 @@ export const AskNwisDrawer: React.FC<AskNwisDrawerProps> = ({
       />
 
       {/* Drawer Container */}
-      <div className="relative w-full max-w-lg bg-white dark:bg-[#1E2532] h-full shadow-2xl flex flex-col border-l border-[#E2E5E8] dark:border-[#364356] overflow-hidden z-10 animate-in slide-in-from-right duration-200 transition-colors">
+      <div className={`relative w-full ${isExpanded ? 'max-w-3xl' : 'max-w-xl'} bg-white dark:bg-[#1E2532] h-full shadow-2xl flex flex-col border-l border-[#E2E5E8] dark:border-[#364356] overflow-hidden z-10 animate-in slide-in-from-right duration-200 transition-all`}>
         
         {/* Top Header (Clean, Uncluttered) */}
         <div className="px-5 py-3.5 border-b border-[#E2E5E8] dark:border-[#364356] bg-[#F5F7F8] dark:bg-[#191E26] flex items-center justify-between">
@@ -193,17 +235,32 @@ export const AskNwisDrawer: React.FC<AskNwisDrawerProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <h2 className="font-extrabold text-sm text-[#252B33] dark:text-white">Well Intelligence Assistant</h2>
-                <Badge variant="outline" className="text-[9px] font-mono bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] border-[#3FC3B6] py-0 px-1.5 rounded-none">
-                  QUERY
+                <Badge variant="outline" className="text-[9px] font-mono bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 text-[#26A69A] dark:text-[#3FC3B6] border-[#3FC3B6] py-0 px-1.5 rounded-none uppercase">
+                  {activeModelSource.toLowerCase().includes('groq') || activeModelSource.toLowerCase().includes('oss') 
+                    ? 'GROQ · GPT-OSS' 
+                    : activeModelSource.toLowerCase().includes('grok') 
+                    ? 'GROK AI' 
+                    : activeModelSource.toLowerCase().includes('gpt') 
+                    ? 'GPT AI' 
+                    : 'DRILLING AGENT'}
                 </Badge>
               </div>
-              <p className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] font-mono">
-                Assam Basin Offset Intelligence
+              <p className="text-[10px] text-[#6B7280] dark:text-[#94A3B8] font-mono flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#3FAE68] animate-pulse" />
+                <span>Assam Basin Drilling Operations · {activeModelSource}</span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setIsExpanded(!isExpanded)}
+              title={isExpanded ? "Collapse View" : "Expand View"}
+              className="p-1.5 rounded-none text-[#6B7280] hover:text-[#252B33] dark:hover:text-white hover:bg-[#F5F7F8] dark:hover:bg-[#2D3747] transition-colors"
+            >
+              {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
             <button
               type="button"
               onClick={handleResetChat}
@@ -238,16 +295,95 @@ export const AskNwisDrawer: React.FC<AskNwisDrawerProps> = ({
                   </div>
                 )}
 
-                <div className={`max-w-[85%] space-y-2`}>
+                <div className={`max-w-[92%] space-y-2`}>
                   {/* Text bubble */}
                   <div
-                    className={`p-3.5 rounded-none text-xs sm:text-sm leading-relaxed ${
+                    className={`p-3.5 rounded-none text-xs sm:text-sm leading-relaxed overflow-x-auto ${
                       isUser
                         ? 'bg-[#34435A] text-white shadow-xs'
                         : 'bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-neutral-100 border border-[#E2E5E8] dark:border-[#364356] shadow-2xs'
                     }`}
                   >
-                    {msg.text}
+                    {isUser ? (
+                      <div className="whitespace-pre-wrap">{msg.text}</div>
+                    ) : (
+                      <div className="max-w-none text-[#252B33] dark:text-neutral-100">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            h1: ({ children }) => <h1 className="text-base font-bold text-[#26A69A] dark:text-[#3FC3B6] mt-3 mb-1.5 border-b border-[#E2E5E8] dark:border-[#364356] pb-1">{children}</h1>,
+                            h2: ({ children }) => <h2 className="text-sm font-bold text-[#26A69A] dark:text-[#3FC3B6] mt-3 mb-1.5">{children}</h2>,
+                            h3: ({ children }) => <h3 className="text-xs font-bold uppercase tracking-wider text-[#252B33] dark:text-white mt-2.5 mb-1">{children}</h3>,
+                            h4: ({ children }) => <h4 className="text-xs font-bold text-[#252B33] dark:text-white mt-2 mb-1">{children}</h4>,
+                            p: ({ children }) => <p className="mb-2 leading-relaxed text-xs sm:text-sm text-[#252B33] dark:text-neutral-200">{children}</p>,
+                            strong: ({ children }) => <strong className="font-bold text-[#252B33] dark:text-white">{children}</strong>,
+                            ul: ({ children }) => <ul className="list-disc pl-5 mb-2.5 space-y-1 text-xs sm:text-sm text-[#252B33] dark:text-neutral-200">{children}</ul>,
+                            ol: ({ children }) => <ol className="list-decimal pl-5 mb-2.5 space-y-1 text-xs sm:text-sm text-[#252B33] dark:text-neutral-200">{children}</ol>,
+                            li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                            hr: () => <hr className="my-3 border-t border-[#E2E5E8] dark:border-[#364356]" />,
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-2 border-[#26A69A] pl-3 py-1 my-2 bg-[#D9F2EE]/30 dark:bg-[#3FC3B6]/10 text-xs italic text-[#252B33] dark:text-neutral-200">
+                                {children}
+                              </blockquote>
+                            ),
+                            table: ({ children }) => (
+                              <div className="my-3 overflow-x-auto border border-[#E2E5E8] dark:border-[#364356] rounded-none shadow-2xs">
+                                <table className="min-w-full divide-y divide-[#E2E5E8] dark:divide-[#364356] text-xs">
+                                  {children}
+                                </table>
+                              </div>
+                            ),
+                            thead: ({ children }) => (
+                              <thead className="bg-[#F0F3F5] dark:bg-[#1E2532] text-[#252B33] dark:text-white font-mono font-bold">
+                                {children}
+                              </thead>
+                            ),
+                            th: ({ children }) => (
+                              <th className="px-3 py-2 text-left text-[11px] font-bold uppercase tracking-wider border-r border-[#E2E5E8] dark:border-[#364356] last:border-r-0 text-[#252B33] dark:text-white">
+                                {children}
+                              </th>
+                            ),
+                            tbody: ({ children }) => (
+                              <tbody className="divide-y divide-[#E2E5E8] dark:divide-[#364356] bg-white dark:bg-[#242D3B]">
+                                {children}
+                              </tbody>
+                            ),
+                            tr: ({ children }) => (
+                              <tr className="hover:bg-gray-50/70 dark:hover:bg-[#2A3545]/60 transition-colors">
+                                {children}
+                              </tr>
+                            ),
+                            td: ({ children }) => (
+                              <td className="px-3 py-2 text-xs border-r border-[#E2E5E8] dark:border-[#364356] last:border-r-0 leading-normal align-top text-[#252B33] dark:text-neutral-200">
+                                {children}
+                              </td>
+                            ),
+                            pre: ({ children }) => (
+                              <pre className="p-3 my-2 bg-[#191E26] text-[#D9F2EE] font-mono text-xs overflow-x-auto border border-[#364356] rounded-none">
+                                {children}
+                              </pre>
+                            ),
+                            code: ({ className, children, ...props }: any) => {
+                              const isInline = !className && !String(children).includes('\n');
+                              if (isInline) {
+                                return (
+                                  <code className="px-1.5 py-0.5 bg-gray-100 dark:bg-[#191E26] text-[#26A69A] dark:text-[#3FC3B6] font-mono text-[11px] border border-[#E2E5E8] dark:border-[#364356] rounded-none" {...props}>
+                                    {children}
+                                  </code>
+                                );
+                              }
+                              return (
+                                <code className="font-mono text-xs text-[#D9F2EE]" {...props}>
+                                  {children}
+                                </code>
+                              );
+                            }
+                          }}
+                        >
+                          {msg.text.replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n')}
+                        </ReactMarkdown>
+                      </div>
+                    )}
 
                     {/* Structured Knowledge Card */}
                     {msg.structuredDetails && (

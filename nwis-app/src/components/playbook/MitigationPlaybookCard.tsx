@@ -85,9 +85,6 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
                 Sequential Mitigation Playbook Extraction
               </h3>
             </div>
-            <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] font-sans">
-              Directly extracted from OIL India WCR dedicated Mud Loss tables and shift narrative. Structures raw textual procedures into an ordered operational execution pipeline.
-            </p>
           </div>
 
           {/* Action CTAs */}
