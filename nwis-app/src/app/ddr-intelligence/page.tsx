@@ -657,7 +657,7 @@ export default function DDRIntelligencePage() {
               Reload Sample Data
             </button>
             <a
-              href="/api/ddr/download-sample"
+              href="/samples/sample_ddr_with_mock_values.xlsx"
               download="sample_ddr_with_mock_values.xlsx"
               className="cursor-pointer inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold text-[#252B33] dark:text-white bg-white dark:bg-[#34435A] border border-[#26A69A] rounded hover:bg-[#D9F2EE]/30 dark:hover:bg-[#3F526E] transition-colors shadow-2xs"
             >

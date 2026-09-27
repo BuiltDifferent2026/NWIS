@@ -26,6 +26,13 @@ def test_upload_sample_ddr():
     assert data["well"]["well_id"]["value"] is not None
 
 
+def test_download_sample_ddr():
+    response = client.get("/api/ddr/download-sample")
+    assert response.status_code == 200
+    assert "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" in response.headers.get("content-type", "")
+    assert len(response.content) > 1000
+
+
 def test_approve_ddr():
     # First upload sample to get normalized data
     res_upload = client.post("/api/ddr/upload?use_sample=true")

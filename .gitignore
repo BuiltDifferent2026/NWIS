@@ -1,7 +1,44 @@
+# ─── Python / Backend ────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# ─── Environment files — NEVER commit secrets ─────────────────────────────
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+# Allowed: .env.example (no secrets), .env.test (non-sensitive test config)
+
+# ─── Node / Next.js Frontend ─────────────────────────────────────────────────
 node_modules/
 .next/
 out/
+/nwis-app/.next/
+/nwis-app/out/
+/nwis-app/node_modules/
+
+# ─── Build outputs ───────────────────────────────────────────────────────────
 build/
+
+# ─── System & Editor ─────────────────────────────────────────────────────────
 .DS_Store
 *.log
-.env*.local
+Thumbs.db
+.idea/
+.vscode/
+*.pem
+*.tsbuildinfo
+
+# ─── Docker ──────────────────────────────────────────────────────────────────
+*.dockerignore

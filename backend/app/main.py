@@ -31,10 +31,20 @@ app = FastAPI(
     version="2.0.0"
 )
 
-# Enable CORS for frontend running on localhost:3000
+# ─── CORS Configuration ───────────────────────────────────────────────────────
+# Set ALLOWED_ORIGINS in your Render environment as a comma-separated list of
+# allowed frontend URLs, e.g.:
+#   https://nwis-app.vercel.app,https://www.your-custom-domain.com
+# Defaults to "*" for local development only; restrict this in production.
+_raw_origins = os.environ.get("ALLOWED_ORIGINS", "*")
+if _raw_origins.strip() == "*":
+    _cors_origins: List[str] = ["*"]
+else:
+    _cors_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -91,8 +101,13 @@ async def upload_ddr(
         if use_sample or file is None:
             # Load the populated sample file from samples directory
             sample_candidates = [
+                os.path.join(os.path.dirname(__file__), "..", "samples", "sample_ddr_with_mock_values.xlsx"),
+                os.path.join(os.path.dirname(__file__), "..", "samples", "DDR_Template_Anonymized.xlsx"),
+                os.path.join("/app", "samples", "sample_ddr_with_mock_values.xlsx"),
+                os.path.join("/app", "samples", "DDR_Template_Anonymized.xlsx"),
                 os.path.join(os.path.dirname(__file__), "..", "..", "samples", "sample_ddr_with_mock_values.xlsx"),
                 os.path.join(os.path.dirname(__file__), "..", "..", "samples", "DDR_Template_Anonymized.xlsx"),
+                os.path.join(os.path.dirname(__file__), "..", "..", "nwis-app", "public", "samples", "sample_ddr_with_mock_values.xlsx"),
                 "sample_ddr_with_mock_values.xlsx",
                 "DDR_Template_Anonymized.xlsx"
             ]
@@ -137,6 +152,8 @@ def download_sample_ddr():
     with the correct .xlsx extension.
     """
     sample_candidates = [
+        os.path.join(os.path.dirname(__file__), "..", "samples", "sample_ddr_with_mock_values.xlsx"),
+        os.path.join("/app", "samples", "sample_ddr_with_mock_values.xlsx"),
         os.path.join(os.path.dirname(__file__), "..", "..", "samples", "sample_ddr_with_mock_values.xlsx"),
         os.path.join(os.path.dirname(__file__), "..", "..", "nwis-app", "public", "samples", "sample_ddr_with_mock_values.xlsx"),
         "sample_ddr_with_mock_values.xlsx"
