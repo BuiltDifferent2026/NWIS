@@ -65,9 +65,6 @@ export default function GeospatialMapPage() {
               <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-[#252B33] dark:text-white font-mono">
                 Geospatial Well Map & Coordinate Intelligence
               </h1>
-              <span className="px-2 py-0.5 rounded-none bg-[#34435A] text-white border border-[#222222] text-[10px] font-mono font-bold">
-                Seven Sisters & Pan-India Basin Grid
-              </span>
             </div>
             
             <p className="text-xs text-[#6B7280] dark:text-[#94A3B8] font-sans">

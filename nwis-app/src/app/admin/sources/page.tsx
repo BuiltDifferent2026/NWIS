@@ -74,7 +74,6 @@ export default function AdminSourcesPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-[#E2E5E8] dark:border-[#364356]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-none bg-[#3FC3B6] animate-pulse" />
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#252B33] dark:text-white font-mono">
               Source Document &amp; Evidence Register
             </h1>

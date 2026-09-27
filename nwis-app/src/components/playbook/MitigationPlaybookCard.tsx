@@ -75,42 +75,10 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
   return (
     <div className="rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] shadow-xs overflow-hidden transition-colors">
       
-      {/* ─── Header: Strategic Value & Real Data Provenance ─── */}
-      <div className="p-4 sm:p-5 border-b border-[#E2E5E8] dark:border-[#364356] bg-[#D9F2EE]/30 dark:bg-[#1E2532]">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#3FC3B6] animate-pulse" />
-              <h3 className="text-base sm:text-lg font-extrabold font-mono text-[#252B33] dark:text-white tracking-tight">
-                Sequential Mitigation Playbook Extraction
-              </h3>
-            </div>
-          </div>
-
-          {/* Action CTAs */}
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={handleCopyPlaybook}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] text-xs font-mono font-bold text-[#252B33] dark:text-white hover:border-[#3FC3B6] transition-colors cursor-pointer shadow-2xs"
-            >
-              {copiedStatus ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-[#3FAE68]" />
-                  <span className="text-[#3FAE68]">Playbook Copied</span>
-                </>
-              ) : (
-                <>
-                  <Download className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6]" />
-                  <span>Copy Rig Procedure</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
+      {/* ─── Header: Tabs and Action CTA in one row ─── */}
+      <div className="p-3 sm:p-4 border-b border-[#E2E5E8] dark:border-[#364356] bg-[#D9F2EE]/30 dark:bg-[#1E2532] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* ── Playbook Selector Tabs ── */}
-        <div className="flex items-center gap-2 pt-3 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
           {SEQUENTIAL_MITIGATION_PLAYBOOKS.map((p) => (
             <button
               key={p.id}
@@ -129,29 +97,45 @@ export const MitigationPlaybookCard: React.FC<MitigationPlaybookCardProps> = ({
             </button>
           ))}
         </div>
+
+        {/* Action CTAs */}
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleCopyPlaybook}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#242D3B] text-xs font-mono font-bold text-[#252B33] dark:text-white hover:border-[#3FC3B6] transition-colors cursor-pointer shadow-2xs"
+          >
+            {copiedStatus ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-[#3FAE68]" />
+                <span className="text-[#3FAE68]">Playbook Copied</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6]" />
+                <span>Copy Rig Procedure</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* ─── Context KPIs Strip (Real Data Proof) ─── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 border-b border-[#E2E5E8] dark:border-[#364356] divide-x divide-[#E2E5E8] dark:divide-[#364356] text-xs font-mono">
         <div className="p-3.5 space-y-0.5">
           <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Cumulative Loss</span>
-          <span className="text-base font-extrabold text-[#ED1C24]">{playbook.incidentContext.cumulativeLossVolume}</span>
-          <span className="text-[10px] text-[#6B7280] block truncate">Peak Rate: {playbook.incidentContext.peakLossRate}</span>
-        </div>
+          <span className="text-base font-extrabold text-[#ED1C24]">{playbook.incidentContext.cumulativeLossVolume}</span>        </div>
         <div className="p-3.5 space-y-0.5">
           <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Loss Interval</span>
           <span className="text-base font-extrabold text-[#252B33] dark:text-white">{playbook.incidentContext.depthMD.split(' ')[0]}</span>
-          <span className="text-[10px] text-[#6B7280] block truncate">{playbook.incidentContext.formation.split('(')[0]}</span>
         </div>
         <div className="p-3.5 space-y-0.5">
           <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Verified Impact</span>
           <span className="text-base font-extrabold text-[#3FAE68]">{playbook.totalNPTAverted}</span>
-          <span className="text-[10px] text-[#6B7280] block truncate">{playbook.costImpactEstimate}</span>
         </div>
         <div className="p-3.5 space-y-0.5">
           <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block font-bold">Extraction Source</span>
           <span className="text-xs font-bold text-[#252B33] dark:text-white truncate block">OIL India WCR Log</span>
-          <span className="text-[10px] text-[#3FAE68] font-bold block">100% Structured Schema</span>
         </div>
       </div>
 

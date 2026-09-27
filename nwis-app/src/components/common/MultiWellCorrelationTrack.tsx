@@ -180,7 +180,7 @@ export const MultiWellCorrelationTrack: React.FC<MultiWellCorrelationTrackProps>
               </h3>
             </div>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
-              Structural &amp; Lithological Tie-Lines · Active Well OIL-GLK-14 vs. Key Analog Offset Wells
+              Active Well OIL-GLK-14 vs. Key Analog Offset Wells
             </p>
           </div>
         </div>

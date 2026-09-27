@@ -338,7 +338,7 @@ export default function PredictionGapPage() {
       <section className="space-y-2">
         <div className="flex items-center gap-2">
           <h2 className="text-base sm:text-lg font-extrabold font-mono text-[#252B33] uppercase tracking-wide">
-            Connected Engineering Response · Sequential Mitigation Playbook
+            Sequential Mitigation Playbook
           </h2>
         </div>
         <p className="text-xs text-[#6B7280] font-sans">

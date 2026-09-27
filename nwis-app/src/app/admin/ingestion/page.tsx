@@ -75,7 +75,6 @@ export default function AdminIngestionPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-[#E2E5E8] dark:border-[#364356]">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-none bg-[#3FAE68] animate-pulse" />
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#252B33] dark:text-white font-mono">
               Hybrid Ingestion Pipeline &amp; OCR Pedigree
             </h1>

@@ -209,10 +209,6 @@ export default function AnalogsPage() {
         {/* Top Comparison Summary */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-4 rounded-none bg-[#F5F7F8] border border-[#E2E5E8]">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-[#6B7280] dark:text-neutral-400 mb-1">
-              <span>Target Formation Horizon:</span>
-              <strong className="text-[#252B33] dark:text-white">{currentCase.targetDepth}</strong>
-            </div>
             <div className="text-lg font-extrabold text-[#252B33] dark:text-white">
               {currentCase.targetFormation}
             </div>

@@ -36,7 +36,6 @@ import { DepthTrack } from '@/components/common/DepthTrack';
 import { MultiWellCorrelationTrack } from '@/components/common/MultiWellCorrelationTrack';
 import { EvidenceInspectorDrawer } from '@/components/common/EvidenceInspectorDrawer';
 import { StatusTag } from '@/components/common/StatusTag';
-import { MitigationPlaybookCard } from '@/components/playbook/MitigationPlaybookCard';
 
 // High-fidelity offset wells data for OIL-GLK-14 active workspace
 const GELEKI_OFFSET_WELLS = [
@@ -390,7 +389,7 @@ export default function OperationsPage() {
           <div className="flex items-center gap-2 text-[#252B33] dark:text-neutral-300 text-xs">
             <span className="w-2 h-2 rounded-full bg-[#3FAE68] shrink-0" />
             <span>
-              <strong>Disconfirming Evidence:</strong> 3 offset wells (OIL-GLK-05, OIL-GLK-11) crossed with zero losses by capping ECD &lt; 10.3 ppg.
+              <strong>Disconfirming Evidence:</strong> 3 offset wells crossed with zero losses by capping ECD &lt; 10.3 ppg
             </span>
           </div>
 
@@ -407,13 +406,13 @@ export default function OperationsPage() {
               <span>Review Archival Evidence (WCR-1996/p19)</span>
             </button>
 
-            <a
-              href="#mitigation-playbook"
+            <Link
+              href="/prediction-gap"
               className="px-4 py-2 rounded-none bg-[#3FC3B6] hover:bg-[#26A69A] text-[#252B33] hover:text-white text-xs font-bold font-mono transition-colors flex items-center gap-1.5"
             >
               <Zap className="w-3.5 h-3.5 text-[#252B33]" />
               <span>Execute Mitigation Playbook</span>
-            </a>
+            </Link>
 
             <Link
               href="/replay"
@@ -443,11 +442,6 @@ export default function OperationsPage() {
         </div>
 
       </section>
-
-      {/* ─── B2. SEQUENTIAL MITIGATION PLAYBOOK (REAL OIL INDIA RECORD EXTRACTION) ─── */}
-      <div id="mitigation-playbook" className="scroll-mt-4">
-        <MitigationPlaybookCard initialPlaybookId="playbook-glk-mudloss-1" />
-      </div>
 
       {/* ─── C. OFFSET ANALOGS & STRATIGRAPHIC CORRELATION ─── */}
       <section className="rounded-none border border-[#E2E5E8] dark:border-[#1e273b] bg-white dark:bg-[#0b0f18] shadow-sm overflow-hidden">
