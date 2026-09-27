@@ -29,6 +29,9 @@ interface AppState {
   isSidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
   toggleSidebar: () => void;
+  isMobileSidebarOpen: boolean;
+  setMobileSidebarOpen: (open: boolean) => void;
+  toggleMobileSidebar: () => void;
 
   // AI Copilot Modal Drawer
   isCopilotOpen: boolean;
@@ -46,6 +49,10 @@ export const useAppStore = create<AppState>((set) => ({
   isSidebarCollapsed: false,
   setSidebarCollapsed: (collapsed) => set({ isSidebarCollapsed: collapsed }),
   toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+
+  isMobileSidebarOpen: false,
+  setMobileSidebarOpen: (open) => set({ isMobileSidebarOpen: open }),
+  toggleMobileSidebar: () => set((state) => ({ isMobileSidebarOpen: !state.isMobileSidebarOpen })),
 
   isCopilotOpen: false,
   setCopilotOpen: (open) => set({ isCopilotOpen: open }),

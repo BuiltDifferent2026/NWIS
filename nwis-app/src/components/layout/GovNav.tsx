@@ -18,7 +18,8 @@ import {
   ChevronLeft,
   ChevronRight,
   HardHat,
-  LogOut
+  LogOut,
+  X
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
 import { UserRole } from '@/lib/data/types';
@@ -30,22 +31,32 @@ export const GovNav: React.FC = () => {
     setRole,
     alerts,
     isSidebarCollapsed,
-    toggleSidebar
+    toggleSidebar,
+    isMobileSidebarOpen,
+    setMobileSidebarOpen
   } = useAppStore();
 
   const openAlertsCount = alerts.filter((a) => a.status === 'new').length || 3;
 
-  // Keyboard shortcut: Ctrl+B or Cmd+B to toggle sidebar
+  // Auto-close mobile sidebar whenever route changes
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [pathname, setMobileSidebarOpen]);
+
+  // Keyboard shortcuts: Ctrl+B to toggle desktop sidebar, Escape to close mobile sidebar
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
         e.preventDefault();
         toggleSidebar();
       }
+      if (e.key === 'Escape' && isMobileSidebarOpen) {
+        setMobileSidebarOpen(false);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [toggleSidebar]);
+  }, [toggleSidebar, isMobileSidebarOpen, setMobileSidebarOpen]);
 
   // Primary navigation strictly matching Oil India NWIS specification
   const primaryNavItems = [
@@ -132,6 +143,7 @@ export const GovNav: React.FC = () => {
   };
 
   return (
+    <>
     <aside
       className={`border-r border-[#222222] bg-[#34435A] text-[#D9F2EE] shrink-0 flex flex-col justify-between transition-all duration-300 ease-in-out hidden md:flex select-none h-full overflow-y-auto ${
         isSidebarCollapsed ? 'w-[72px] p-2' : 'w-64 p-3'
@@ -351,5 +363,168 @@ export const GovNav: React.FC = () => {
 
       </div>
     </aside>
+
+    {/* ─── Mobile Off-Canvas Sliding Drawer (Mobile Screens Only) ─── */}
+    {isMobileSidebarOpen && (
+      <div className="fixed inset-0 z-50 md:hidden">
+        {/* Backdrop */}
+        <div 
+          className="fixed inset-0 bg-neutral-950/70 backdrop-blur-xs transition-opacity"
+          onClick={() => setMobileSidebarOpen(false)}
+          aria-hidden="true"
+        />
+
+        {/* Drawer Panel */}
+        <div 
+          className="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-[#34435A] text-[#D9F2EE] flex flex-col justify-between p-4 shadow-2xl animate-in slide-in-from-left duration-200 overflow-y-auto select-none border-r border-[#222222]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation"
+        >
+          <div className="space-y-4">
+            {/* Top Brand Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-[#222222]">
+              <Link 
+                href="/" 
+                onClick={() => setMobileSidebarOpen(false)}
+                className="flex items-center gap-2.5"
+              >
+                <div className="w-8 h-8 bg-white flex items-center justify-center p-0.5 border border-[#222222] shadow-2xs shrink-0">
+                  <img 
+                    src="/oil-india-logo.png" 
+                    alt="Oil India Limited Logo" 
+                    className="w-full h-full object-contain" 
+                  />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold text-sm tracking-tight text-white font-sans">
+                      NWIS
+                    </span>
+                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.2 bg-[#26A69A] text-white border border-[#3FC3B6]">
+                      eRTMAC
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-[#D9F2EE]/80 tracking-tight font-medium truncate">
+                    Nearby Wells Intelligence
+                  </span>
+                </div>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setMobileSidebarOpen(false)}
+                className="p-1.5 text-[#D9F2EE] hover:text-white hover:bg-[#26A69A]/30 transition-colors cursor-pointer"
+                aria-label="Close Navigation"
+              >
+                <X className="w-5 h-5" strokeWidth={1.75} />
+              </button>
+            </div>
+
+            {/* Navigation Items */}
+            <nav aria-label="Mobile Navigation Menu">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-[#3FC3B6] font-bold px-2 py-1">
+                Core Monitoring
+              </div>
+              <ul className="space-y-0.5">
+                {primaryNavItems.map((item) => {
+                  const Icon = item.icon;
+                  const active = isItemActive(item);
+
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileSidebarOpen(false)}
+                        className={`flex items-center justify-between w-full px-3 py-2.5 text-xs font-sans font-medium transition-all ${
+                          active
+                            ? 'bg-[#26A69A] text-white font-bold border-l-4 border-[#3FC3B6] shadow-2xs'
+                            : 'text-[#D9F2EE] hover:bg-[#26A69A]/20 hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-[#3FC3B6]'}`} strokeWidth={1.5} />
+                          <span>{item.name}</span>
+                        </div>
+                        {item.badgeCount !== undefined && (
+                          <span className="px-1.5 py-0.5 text-[9px] font-mono font-bold bg-[#ED1C24] text-white">
+                            {item.badgeCount}
+                          </span>
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <div className="pt-3 pb-1">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#3FC3B6] font-bold px-2 py-1">
+                  Geological Analytics
+                </div>
+              </div>
+              <ul className="space-y-0.5">
+                {engineeringModules.map((item) => {
+                  const Icon = item.icon;
+                  const active = isItemActive(item);
+
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileSidebarOpen(false)}
+                        className={`flex items-center gap-2.5 w-full px-3 py-2.5 text-xs font-sans font-medium transition-all ${
+                          active
+                            ? 'bg-[#26A69A] text-white font-bold border-l-4 border-[#3FC3B6] shadow-2xs'
+                            : 'text-[#D9F2EE] hover:bg-[#26A69A]/20 hover:text-white'
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 shrink-0 ${active ? 'text-white' : 'text-[#3FC3B6]'}`} strokeWidth={1.5} />
+                        <span>{item.name}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="pt-3 border-t border-[#222222] space-y-2.5">
+            <div className="p-2 bg-[#222222]/60 border border-[#34435A] space-y-1.5">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="font-bold text-white font-sans truncate">
+                  {currentRole === 'operations_manager' ? 'Dipankar Dutta' : currentRole === 'field_engineer' ? 'Anupam Mishra' : 'Priya Sharma'}
+                </span>
+                <span className="text-[9px] font-bold text-[#3FAE68] font-mono">
+                  ACTIVE
+                </span>
+              </div>
+              <select
+                value={currentRole}
+                onChange={(e) => setRole(e.target.value as UserRole)}
+                className="w-full bg-[#222222] border border-[#34435A] text-xs font-sans text-white px-2 py-1 cursor-pointer focus:outline-hidden focus:border-[#3FC3B6]"
+              >
+                <option value="operations_manager">Operations Manager (DD)</option>
+                <option value="field_engineer">Drilling Engineer (AM)</option>
+                <option value="admin">Lead Auditor (PS)</option>
+              </select>
+            </div>
+
+            <Link
+              href="/login"
+              onClick={() => setMobileSidebarOpen(false)}
+              className="flex items-center justify-between px-2.5 py-1.5 text-xs font-medium text-[#D9F2EE] hover:text-[#ED1C24] hover:bg-[#ED1C24]/10 transition-all"
+            >
+              <div className="flex items-center gap-2">
+                <LogOut className="w-3.5 h-3.5 text-[#D9F2EE]" strokeWidth={1.5} />
+                <span>Sign Out</span>
+              </div>
+              <span className="text-[10px] font-mono text-[#D9F2EE]/60">Exit</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 };

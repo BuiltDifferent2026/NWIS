@@ -7,25 +7,37 @@ import {
   ChevronDown,
   Layers,
   Radio,
-  LogOut
+  LogOut,
+  Menu
 } from 'lucide-react';
 import { useAppStore } from '../../store/app-store';
 import { UserRole } from '@/lib/data/types';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 export const GovHeader: React.FC = () => {
-  const { currentRole, setRole, activeWellId, setActiveWellId, alerts } = useAppStore();
+  const { currentRole, setRole, activeWellId, setActiveWellId, alerts, toggleMobileSidebar } = useAppStore();
   
   const unreadAlerts = alerts.filter((a) => a.status === 'new').length || 3;
 
   return (
-    <header className="h-16 border-b border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0 transition-colors z-30">
+    <header className="h-16 border-b border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] px-3 md:px-6 flex items-center justify-between gap-2 md:gap-4 shrink-0 transition-colors z-30">
       
       {/* Left: Console & Workspace Indicator */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
+        {/* Mobile Hamburger Menu Toggle Button */}
+        <button
+          type="button"
+          onClick={toggleMobileSidebar}
+          title="Open Navigation Menu"
+          aria-label="Open Navigation Menu"
+          className="md:hidden p-1.5 text-[#252B33] dark:text-white hover:bg-[#F5F7F8] dark:hover:bg-[#2A3545] border border-[#E2E5E8] dark:border-[#364356] transition-colors cursor-pointer shrink-0 shadow-2xs"
+        >
+          <Menu className="w-4 h-4 text-[#252B33] dark:text-white" strokeWidth={2} />
+        </button>
+
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#3FC3B6] animate-pulse" />
-          <span className="text-xs font-bold tracking-wider uppercase text-[#252B33] dark:text-white font-mono">
+          <span className="w-2 h-2 rounded-full bg-[#3FC3B6] animate-pulse shrink-0" />
+          <span className="text-xs font-bold tracking-wider text-[#252B33] dark:text-white font-mono truncate">
             AntarRig DDR Console
           </span>
         </div>
