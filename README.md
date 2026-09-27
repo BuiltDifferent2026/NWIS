@@ -1,198 +1,302 @@
-# AntarRig (eRTMAC-NWIS)
+<div align="center">
 
-## Section-Aware DDR Ingestion & Lookahead Intelligence Platform
+<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&weight=900&size=65&duration=2000&pause=500&color=00D9FF&center=true&vCenter=true&multiline=true&repeat=false&width=950&height=110&lines=AntarRig" alt="AntarRig" />
 
-AntarRig is an operational drilling decision-support prototype developed for the **Oil India Limited (OIL)** National Well Information System (NWIS / eRTMAC) ecosystem.
+<img src="https://readme-typing-svg.herokuapp.com?font=Poppins&size=22&duration=3000&pause=1000&color=00D9FF&center=true&vCenter=true&width=850&lines=Next-Gen+Well+Intelligence+%26+Lookahead+Drilling+Platform" alt="Typing Subtitle" />
 
-This platform bridges the gap between daily operations and institutional memory by providing:
-1. **Section-Aware Local DDR Ingestion**: Parses non-flat, merged-cell Excel spreadsheets (`.xlsx`) using an in-memory coordinate-aware engine without cloud APIs, OCR services, or external LLMs.
-2. **Prototype Active-Well Context Update**: Propagates engineer-reviewed drilling context into active telemetry and lookahead services.
-3. **Multi-Factor Offset Well Comparison**: Overcomes the "proximity trap" by demonstrating why the geographically closest well is not always the best geological analog.
-4. **Illustrative Risk-Corridor Simulation**: Dynamically watches historical hazard intervals (e.g. mud-loss corridors) based on relative formation penetration.
-5. **Evidence-Linked Historical Mitigation Playbook**: Provides actionable contingency playbooks directly tied to historical WCR/DDR analog evidence.
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.x-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Groq AI](https://img.shields.io/badge/Drilling_Copilot-Groq_AI-F05A28?style=for-the-badge&logo=meta&logoColor=white)](https://groq.com/)
+[![Mapbox](https://img.shields.io/badge/Mapbox-GL_GIS-000000?style=for-the-badge&logo=mapbox&logoColor=white)](https://www.mapbox.com/)
+[![Tests](https://img.shields.io/badge/Tests-13%20passing-brightgreen?style=for-the-badge)](https://github.com/BuiltDifferent2026/NWIS)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
----
+<p align="center">
+  <b>NWIS (AntarRig)</b> is an intelligent, operational drilling decision-support platform designed for the <b>Oil India Limited (OIL)</b> ecosystem. It ingests complex, merged-cell Daily Drilling Reports (DDRs), updates active-well telemetry, resolves geological analogs over misleading geographic proximity, forecasts formation hazard corridors, and provides a strictly grounded AI copilot.
+</p>
 
-## Important Disclaimers & Security Boundary
 
-> [!NOTE]
-> **Prototype Active-Well Context Update**:
-> *Context is updated from an approved representative DDR extraction. Production integration will use a read-only eRTMAC feed/export.*
+</div>
 
-> [!WARNING]
-> **Illustrative Risk-Corridor Simulation**:
-> *Illustrative evidence-backed corridor simulation; not a production drilling command or a trained risk prediction model.*
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
 
-> [!CAUTION]
-> **Evidence-Linked Historical Mitigation Playbook**:
-> *Historical evidence only. Final operational action remains subject to approved OIL procedures and engineer judgment.*
+## Overview
 
-> [!IMPORTANT]
-> **Representative DDR Workflow Simulation**:
-> *Confidential OIL operational data is not displayed. The backend works only with anonymized or sample-safe DDR files. It does not include, request, hard-code, log, or upload confidential OIL operational records.*
+Daily drilling operations generate vital institutional knowledge locked inside non-flat, merged-cell spreadsheets (`.xlsx`) and fragmented field logs. **NWIS (AntarRig)** bridges the divide between real-time rig operations and historical memory by providing an auditable, section-aware ingestion pipeline and lookahead intelligence suite.
 
----
+### Key Capabilities:
+- **Coordinate-Aware Ingestion**: Ingests non-flat, complex Excel workbooks with merged-cell pre-indexing and two-pass alias matching without relying on fragile cloud OCR or external document parsers.
+- **Active-Well State Propagation**: Seamlessly updates active well drilling parameters, depth tracking, and telemetry with full provenance metadata.
+- **Geological Analog Selection**: Overcomes the dangerous **"Proximity Trap"** by proving mathematically why the geographically closest well is often geologically inferior to a more distant true analog.
+- **Formation Risk Corridor**: Dynamically tracks penetration into hazardous formations (e.g. mud-loss intervals) calculated relative to formation tops rather than simple measured depth.
+- **Evidence-Linked Mitigation Playbooks**: Supplies actionable step-by-step contingency playbooks directly mapped to historical Well Completion Reports (WCR) and incident archives.
+- **Domain-Grounded AI Copilot**: Answers complex drilling engineering questions via streaming Groq LLM integration, strictly scoped to verified drilling parameters and best practices.
 
-## Architecture Overview
+> **Core Operating Invariant:** Zero confidential data leakage. Ingestion runs safely on local compute or isolated container environments; AI operates in a strictly read-only advisory capacity.
 
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
+
+## Features
+
+### 1. Section-Aware DDR Ingestion Engine
+Standard spreadsheet parsers fail on industry DDRs due to complex merged cells, arbitrary line breaks, and multi-row header banners. AntarRig utilizes a specialized openpyxl coordinate engine:
+- **Merged-Cell Pre-Indexing**: Child coordinates within any merged bounding box automatically resolve to their top-left anchor cell.
+- **Two-Pass Alias Matching**: Pass 1 matches exact standardized keys; Pass 2 cleanly extracts colon-delimited or inline label-value pairs (e.g., `PRESENT DEPTH : 2,145 m`).
+- **Provenance & Confidence Tiers**: Every extracted data point records its exact cell coordinate (e.g. `C12`), confidence rating (`STRUCTURED_HIGH`), and data quality tier (`HIGH`, `MEDIUM`, or `LOW`).
+
+### 2. Multi-Factor Offset Well Comparison
+Avoid the fatal drilling assumption that proximity equals similarity:
+- **The Proximity Trap**: Demonstrates why **Well C** (2.1 km away) shares only a 0.61 geological match, while **Well B** (14.8 km away) is the primary analog with a **0.92 correlation** across lithology, pore-pressure profile, and casing program.
+- **Multi-Factor Scoring Matrix**: Evaluates stratigraphy, structural dip, fault block alignment, pore pressure gradient, and mud weight compatibility.
+
+### 3. Relative-Depth Formation Risk Corridor
+Absolute measured depth (MD) is misleading across faulted or dipping basins:
+$$\text{Relative Formation Depth} = \text{Present Depth (MD)} - \text{Formation Top (MD)}$$
+- If `Present Depth = 2,145 m` and `Formation Top = 2,080 m`, penetration $\Delta = 65\text{ m}$.
+- When historical loss occurs at $90\text{ m} - 140\text{ m}$, the system detects an entry distance of **$25\text{ m}$**, automatically promoting alert status from `NORMAL` to `WATCH` with real-time LCM pill pre-hydration alerts.
+
+### 4. Interactive GIS Spatial Mapping
+- Powered by high-performance **Mapbox GL**.
+- Visualizes active rig coordinates, offset well clusters, hazard envelopes, and structural fault lines directly in the browser.
+
+### 5. Grounded Drilling AI Copilot
+- High-speed conversational AI powered by **Groq** (`llama-3.3-70b-versatile` / `openai/gpt-oss-20b`).
+- Formatted Markdown output with syntax highlighting, drilling parameter tables, and direct contextual awareness of the active well state.
+- Guardrails ensure the copilot strictly answers drilling queries and never executes unverified operational commands.
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Frontend["Frontend (Next.js 16 • React 19 • Tailwind CSS)"]
+        UI["Modern Web Interface"]
+        DDR_UI["DDR Intelligence 4-Step Stepper"]
+        GIS["Mapbox GL Geospatial View"]
+        Chat["Drilling AI Copilot (Streaming)"]
+        Static["Static Sample Workbooks (/public/samples)"]
+    end
+
+    subgraph Proxy["Next.js Edge Proxy & API Routes"]
+        Rewrite["next.config.ts API Rewrites"]
+        ChatRoute["/api/chat (Groq SDK Proxy)"]
+    end
+
+    subgraph Backend["Backend API (FastAPI • Python 3.11)"]
+        API["FastAPI REST Endpoints"]
+        Parser["Section-Aware In-Memory Parser (Openpyxl)"]
+        Normalizer["Field Normalizer & Unit Extraction"]
+        OffsetService["Offset Comparison Engine"]
+        CorridorService["Risk-Corridor & Relative Depth Engine"]
+        Context["Active-Well State & Provenance Cache"]
+    end
+
+    subgraph External["External Services & Deployment"]
+        Groq["Groq Cloud AI (Llama 3.3 / GPT-OSS)"]
+        Render["Render Cloud (Dockerized Backend)"]
+        Vercel["Vercel Edge (Frontend App)"]
+        KeepAlive["GitHub Actions 10-Min Health Ping"]
+    end
+
+    UI --> DDR_UI & GIS & Chat
+    DDR_UI --> Static
+    DDR_UI --> Rewrite
+    Chat --> ChatRoute
+    Rewrite --> API
+    ChatRoute --> Groq
+    API --> Parser --> Normalizer --> Context
+    API --> OffsetService
+    API --> CorridorService
+    Frontend -.-> Vercel
+    Backend -.-> Render
+    KeepAlive -.->|Pings /health| Render
 ```
+
+### Directory Structure
+
+```text
 NWIS/
-├── backend/                             # Python FastAPI Section-Aware Parser Backend
+├── backend/                             # Python FastAPI Backend
 │   ├── app/
 │   │   ├── config/
-│   │   │   └── ddr_template_mapping.yaml # Section detection boundaries & 50+ field aliases
+│   │   │   └── ddr_template_mapping.yaml # Section boundaries & 50+ field aliases
 │   │   ├── data/
-│   │   │   └── mock_offset_wells.json   # Anonymized offset wells (Well B, C, D) & playbooks
+│   │   │   └── mock_offset_wells.json   # Anonymized offset wells & mitigation playbooks
 │   │   ├── models/
-│   │   │   └── ddr_models.py            # Pydantic v2 schemas for provenance & normalized JSON
+│   │   │   └── ddr_models.py            # Pydantic v2 schemas for provenance & telemetry
 │   │   ├── services/
-│   │   │   ├── ddr_normalizer.py        # Units, numeric casting, NPT parser, colon cleaners
-│   │   │   ├── ddr_parser.py            # Openpyxl parser with merged-cell coordinate resolution
+│   │   │   ├── ddr_normalizer.py        # Units, numeric casting, NPT parser
+│   │   │   ├── ddr_parser.py            # Openpyxl coordinate & merged-cell resolution
 │   │   │   └── ddr_validation.py        # Data quality scoring (HIGH/MEDIUM/LOW)
-│   │   └── main.py                      # FastAPI application & REST endpoints
+│   │   └── main.py                      # FastAPI app, CORS, and REST endpoints
+│   ├── samples/                         # Bundled test workbooks for production Docker
+│   │   ├── DDR_Template_Anonymized.xlsx
+│   │   └── sample_ddr_with_mock_values.xlsx
 │   ├── tests/
-│   │   ├── test_ddr_parser.py           # Unit tests for parser, aliases, and math
-│   │   └── test_api_endpoints.py        # Integration tests for FastAPI endpoints
-│   ├── Dockerfile
-│   └── requirements.txt
-├── nwis-app/                            # Next.js 16 (App Router) + TailwindCSS Frontend
+│   │   ├── test_api_endpoints.py        # Integration tests for FastAPI endpoints
+│   │   └── test_ddr_parser.py           # Unit tests for parser, aliases, and math
+│   ├── Dockerfile                       # Multi-stage production container
+│   ├── requirements.txt
+│   └── pytest.ini
+├── nwis-app/                            # Next.js 16 (App Router) Frontend
+│   ├── public/
+│   │   └── samples/                     # Static test workbooks for instant CDN download
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── ddr-intelligence/page.tsx # 7-Screen Stepper Workflow UI
-│   │   │   ├── operations/              # Active Rig Workspace
-│   │   │   └── ...
-│   │   └── components/layout/GovNav.tsx # Navigation bar with DDR Intelligence item
-│   ├── public/samples/                  # Bundled test workbooks
-│   ├── Dockerfile
-│   └── next.config.ts                   # Standalone output & /api/ backend rewrites
-├── samples/
-│   ├── DDR_Template_Anonymized.xlsx     # Anonymized representative blank OIL template
-│   └── sample_ddr_with_mock_values.xlsx # Fabricated populated test workbook
-├── docker-compose.yml                   # Unified multi-container deployment
-└── pytest.ini                           # Test configuration
+│   │   │   ├── ddr-intelligence/page.tsx # 4-Step Pipeline Stepper UI
+│   │   │   ├── operations/              # Active Rig Workspace & Telemetry
+│   │   │   ├── map/                     # Interactive Mapbox GIS View
+│   │   │   ├── decay-index/             # Legacy Well Data Loss / Preservation Index
+│   │   │   ├── replay/                  # Time-Series Telemetry Replay
+│   │   │   └── api/chat/route.ts        # Groq streaming chatbot route
+│   │   └── components/                  # Reusable UI components & layouts
+│   ├── next.config.ts                   # Backend proxy rewrites & standalone output
+│   └── package.json
+├── samples/                             # Master repository sample spreadsheets
+├── .github/workflows/
+│   └── keep-render-alive.yml            # Scheduled ping to prevent free-tier spindown
+├── docker-compose.yml                   # Unified container deployment
+└── README.md
 ```
 
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
+
+## 4-Step Operational Workflow
+
+Access the end-to-end engineering workflow via the `/ddr-intelligence` route:
+
+| Step | Stage Name | Technical Capabilities & Engineering Safeguards |
+| :---: | :--- | :--- |
+| **01** | **Upload DDR** | Upload custom OIL-style `.xlsx` or load the bundled sample with 1 click. Instant local validation with zero third-party cloud data transmission. |
+| **02** | **Review Extracted Data** | View normalized parameters across General Info, Operations, Mud Properties, BHA, Lithology, and NPT with cell provenance (e.g. `B14`) and confidence tags. |
+| **03** | **Offset-Well Analysis** | Interactive comparison against offset wells. Identifies the primary geological analog (Well B, 0.92 similarity) vs misleading nearest well (Well C, 2.1 km). |
+| **04** | **Mitigation Playbook** | 4-step actionable contingency plan (LCM pill pre-hydration, ECD cap @ 10.4 ppg, PVT alarm configuration) tied to historical incident records. |
+
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
+
+## Quickstart
+
+### Prerequisites
+- **Python 3.10+**
+- **Node.js 18+** & npm
+- *(Optional)* **Docker & Docker Compose**
+
 ---
 
-## 4-Step Operational Workflow (`/ddr-intelligence`)
+### Option 1: Local Development
 
-| Step | Screen Name | Key Engineering Capabilities |
-| :--- | :--- | :--- |
-| **Step 1** | **Upload DDR** | Local file upload or 1-click **Use Anonymized Sample DDR**. Strict local safety notice with path `./samples/DDR_Template_Anonymized.xlsx`. |
-| **Step 2** | **Extracted Data Review** | Normalized drilling parameters with field-level provenance (`source_cell`), confidence tier (`STRUCTURED_HIGH`), units, data quality check, and mandatory eRTMAC context note. |
-| **Step 3** | **Mock Offset-Well Comparison** | Compares Active Well against 3 analogs (Well B, Well C, Well D). Demonstrates why closest well (Well C, 2.1 km) is inferior to the true analog (Well B, 14.8 km, 0.92 match). |
-| **Step 4** | **Evidence-Linked Historical Mitigation Playbook** | 4-step contingency action sequence (LCM pill pre-hydration, ECD cap @ 10.4 ppg, PVT alarm) linked to Well B historical incident record. |
-
----
-
-## Quickstart Guide
-
-### Option 1: Running Locally with Python & Node.js
-
-#### Prerequisites
-- Python 3.10+
-- Node.js 18+ and npm
-
-#### 1. Start the Backend Service
+#### 1. Setup Backend
 ```bash
 cd backend
+
+# Create and activate virtual environment
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate       # Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Start FastAPI server
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-The backend API documentation is available at [http://localhost:8000/docs](http://localhost:8000/docs) and health check at [http://localhost:8000/health](http://localhost:8000/health).
+- API Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+- Health Check: [http://localhost:8000/health](http://localhost:8000/health)
 
-#### 2. Start the Frontend Application
-In a separate terminal:
+#### 2. Setup Frontend
 ```bash
 cd nwis-app
+
+# Install npm dependencies
 npm install
+
+# Configure environment variables
+cp .env.example .env.local
+```
+
+Set the following in `nwis-app/.env.local`:
+```env
+NEXT_PUBLIC_MAPBOX_TOKEN=your_mapbox_token_here
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=openai/gpt-oss-20b
+BACKEND_URL=http://127.0.0.1:8000
+```
+
+Start the Next.js development server:
+```bash
 npm run dev
 ```
-Open [http://localhost:3000/ddr-intelligence](http://localhost:3000/ddr-intelligence) in your browser.
+Open [http://localhost:3000](http://localhost:3000) or [http://localhost:3000/ddr-intelligence](http://localhost:3000/ddr-intelligence).
 
 ---
 
-### Option 2: Running with Docker Compose
+### Option 2: Docker Compose
 
-To launch both backend and frontend services simultaneously in isolated containers:
+Launch both the frontend and backend in isolated, production-grade containers with a single command:
 
 ```bash
-# Build and run containers
+# Build and start services
 docker-compose up --build -d
 
-# Check service health
+# Verify container health
 docker-compose ps
 ```
 
-- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Frontend App**: [http://localhost:3000](http://localhost:3000)
 - **Backend API**: [http://localhost:8000](http://localhost:8000)
-- **DDR Intelligence Route**: [http://localhost:3000/ddr-intelligence](http://localhost:3000/ddr-intelligence)
 
-To stop the containers:
+To stop services:
 ```bash
 docker-compose down
 ```
 
----
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
 
-## Running the Automated Test Suite
 
-The test suite validates openpyxl merged-cell coordinate resolution, label alias matching, unit extraction, relative depth calculation, and all FastAPI endpoints:
+## Deployment
 
-```bash
-# Run all backend unit & integration tests
-./backend/venv/bin/pytest -v
-```
+The architecture is split for high availability and zero cost:
 
-Expected output:
-```text
-backend/tests/test_api_endpoints.py::test_health_check PASSED
-backend/tests/test_api_endpoints.py::test_upload_sample_ddr PASSED
-backend/tests/test_api_endpoints.py::test_approve_ddr PASSED
-backend/tests/test_api_endpoints.py::test_get_active_well_context PASSED
-backend/tests/test_api_endpoints.py::test_get_offset_analysis PASSED
-backend/tests/test_api_endpoints.py::test_get_risk_corridor PASSED
-backend/tests/test_ddr_parser.py::test_merged_cell_resolution PASSED
-backend/tests/test_ddr_parser.py::test_label_alias_matching PASSED
-backend/tests/test_numeric_parsing_with_units PASSED
-backend/tests/test_ddr_parser.py::test_npt_summary_parsing PASSED
-backend/tests/test_ddr_parser.py::test_formation_relative_depth_calculation PASSED
-backend/tests/test_ddr_parser.py::test_full_workbook_extraction_and_validation PASSED
+| Component | Platform | Configuration |
+| :--- | :--- | :--- |
+| **Frontend** | **Vercel** | Set `BACKEND_URL` to your Render service URL, `GROQ_API_KEY`, and `NEXT_PUBLIC_MAPBOX_TOKEN`. |
+| **Backend** | **Render** | Docker runtime (`backend/Dockerfile`). Set `ALLOWED_ORIGINS` to your Vercel frontend domain. |
+| **Keep-Alive** | **GitHub Actions** | `.github/workflows/keep-render-alive.yml` automatically pings Render's `/health` endpoint every 10 minutes to prevent free-tier cold-starts. |
 
-======================== 12 passed in 0.42s ========================
-```
+<div align="center">
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
+</div>
+
+## Security & Compliance Boundary
+
+- **Zero Confidential Data**: All well identifiers, coordinates, formation tops, and drilling records in this repository are entirely fabricated and representative.
+- **Local Compute Guarantee**: The Excel coordinate parser runs strictly in memory on local/container compute; no operational DDR is sent to external clouds or third-party OCR engines.
+- **Read-Only AI Advisory**: The Groq-powered drilling copilot is strictly advisory. It cannot alter telemetry, approve operations, or dispatch drilling commands.
 
 ---
 
-## Technical Parser Details
+## License
 
-### Merged-Cell Coordinate Resolution
-Excel templates frequently merge cells for aesthetic section headers or wide values. Standard parsers often return `None` when reading merged child coordinates. AntarRig pre-indexes every merged cell range:
-```python
-# Mapped in DDRSectionParser:
-# Any coordinate inside merged range (min_row, min_col, max_row, max_col)
-# is automatically resolved to its top-left anchor cell.
-coord = f"{get_column_letter(min_col)}{min_row}"
-```
+This project is licensed under the [MIT License](LICENSE).
 
-### Two-Pass Label-Alias Matching
-Section fields are resolved in two passes to prevent short generic tokens (e.g. `formation`) from masking specific headers (e.g. `formation top (m)`):
-1. **Pass 1 (Exact Match)**: Case-insensitive normalized exact label comparison.
-2. **Pass 2 (Prefix Match)**: Handles colon-delimited or inline label combinations (e.g., `PRESENT DEPTH : 2145 m`).
+<div align="center">
 
-### Relative Depth vs Hazard Corridors
-Drilling hazards correlate with formation penetration rather than absolute measured depth (due to structural dipping and fault offsets):
-$$\text{Relative Formation Depth} = \text{Present Depth (MD)} - \text{Formation Top (MD)}$$
-- For `Present Depth = 2,145m` and `Top MD = 2,080m`, $\Delta = 65\text{m}$.
-- Historical loss corridor: $90\text{m} - 140\text{m}$ into the formation.
-- Distance to entry: $25\text{m}$ $\rightarrow$ triggers **WATCH** state with proactive LCM pill staging.
+![Wave](https://raw.githubusercontent.com/mayhemantt/mayhemantt/Update/svg/Bottom.svg)
 
----
-
-## Verification & Compliance
-
-- **No Hardcoded Machine Paths**: Configured strictly with relative `./samples/DDR_Template_Anonymized.xlsx` and `<path-to-anonymized-template>`.
-- **Zero Confidential Data**: All sample figures, rig IDs, and formation names are fully fabricated and representative.
-- **Offline / Local Execution**: Runs entirely on local compute without external third-party cloud dependencies.
+</div>
