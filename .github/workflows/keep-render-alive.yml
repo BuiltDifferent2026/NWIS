@@ -2,35 +2,76 @@ name: Keep Render Backend Alive
 
 on:
   schedule:
-    # Runs every 10 minutes (GitHub Actions minimum is 5 minutes)
+    # Runs every 10 minutes to prevent Render free-tier spindown
     - cron: "*/10 * * * *"
   workflow_dispatch:
-    # Allow manual trigger from GitHub Actions UI
+    inputs:
+      backend_url:
+        description: "Render Backend URL (Optional override; defaults to RENDER_BACKEND_URL secret or variable)"
+        required: false
+        type: string
 
 jobs:
   ping:
     name: Ping /health endpoint
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 4
 
     steps:
-      - name: Ping Render backend /health
+      - name: Ping Render Backend Health Check
         run: |
-          curl \
-            --fail \
+          RAW_URL="${{ inputs.backend_url || secrets.RENDER_BACKEND_URL || vars.RENDER_BACKEND_URL }}"
+
+          # Check if URL was supplied
+          if [ -z "$RAW_URL" ]; then
+            echo "::error::RENDER_BACKEND_URL is not set!"
+            echo ""
+            echo "👉 How to configure it:"
+            echo "1. Go to your GitHub Repository -> Settings -> Secrets and variables -> Actions"
+            echo "2. Under 'Repository secrets' (or 'Variables'), click 'New repository secret'"
+            echo "3. Name: RENDER_BACKEND_URL"
+            echo "4. Value: https://your-backend-service.onrender.com (replace with your Render backend URL)"
+            echo ""
+            echo "Alternatively, you can provide the URL in the 'Run workflow' dialog inputs when triggering manually."
+            exit 1
+          fi
+
+          # Clean whitespace and strip trailing slashes
+          CLEAN_URL="$(echo "$RAW_URL" | tr -d '[:space:]')"
+          CLEAN_URL="${CLEAN_URL%/}"
+
+          # Ensure https protocol is present
+          if [[ ! "$CLEAN_URL" =~ ^https?:// ]]; then
+            CLEAN_URL="https://${CLEAN_URL}"
+          fi
+
+          TARGET_ENDPOINT="${CLEAN_URL}/health"
+          echo "Target Health Endpoint: $TARGET_ENDPOINT"
+          echo "Sending ping to prevent Render spindown..."
+
+          # Curl with cold-start tolerance (Render free instances take 40-50s to wake up)
+          HTTP_RESPONSE=$(curl \
             --silent \
             --show-error \
-            --max-time 30 \
-            --retry 2 \
-            --retry-delay 5 \
-            "${{ secrets.RENDER_BACKEND_URL }}/health"
+            --location \
+            --max-time 60 \
+            --retry 3 \
+            --retry-delay 10 \
+            --retry-connrefused \
+            --write-out "\nHTTP_STATUS:%{http_code}" \
+            "$TARGET_ENDPOINT") || CURL_EXIT=$?
 
-      - name: Report success
-        if: success()
-        run: echo "✅ Backend is alive and healthy."
+          echo "Response:"
+          echo "$HTTP_RESPONSE"
 
-      - name: Report failure
-        if: failure()
-        run: |
-          echo "❌ Backend health check failed — Render may be spinning up or unreachable."
-          exit 1
+          # Extract status code
+          STATUS_CODE=$(echo "$HTTP_RESPONSE" | grep "HTTP_STATUS:" | cut -d':' -f2)
+
+          if [ "$STATUS_CODE" = "200" ]; then
+            echo ""
+            echo "✅ Render backend is active and healthy (HTTP 200)!"
+          else
+            echo ""
+            echo "::error::Health check returned HTTP $STATUS_CODE (expected 200)."
+            exit 1
+          fi
