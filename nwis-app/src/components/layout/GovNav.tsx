@@ -17,7 +17,6 @@ import {
   Cpu,
   ChevronLeft,
   ChevronRight,
-  Search,
   HardHat,
   LogOut
 } from 'lucide-react';
@@ -31,8 +30,7 @@ export const GovNav: React.FC = () => {
     setRole,
     alerts,
     isSidebarCollapsed,
-    toggleSidebar,
-    toggleCopilot
+    toggleSidebar
   } = useAppStore();
 
   const openAlertsCount = alerts.filter((a) => a.status === 'new').length || 3;
@@ -182,31 +180,6 @@ export const GovNav: React.FC = () => {
           </button>
         </div>
 
-        {/* ─── Clean Search Command Bar (No generic AI sparkles) ─── */}
-        {isSidebarCollapsed ? (
-          <button
-            type="button"
-            onClick={toggleCopilot}
-            title="Search Intelligence (⌘K)"
-            className="flex items-center justify-center w-11 h-11 mx-auto bg-[#222222]/40 border border-[#222222] text-[#D9F2EE] hover:text-white hover:border-[#3FC3B6] transition-all cursor-pointer shadow-2xs"
-          >
-            <Search className="w-4 h-4 text-[#3FC3B6]" strokeWidth={1.5} />
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={toggleCopilot}
-            className="flex items-center justify-between w-full px-3 py-2 bg-[#222222]/40 border border-[#222222] hover:border-[#3FC3B6] text-xs font-sans font-medium text-[#D9F2EE] hover:text-white transition-all cursor-pointer group shadow-2xs"
-          >
-            <div className="flex items-center gap-2">
-              <Search className="w-4 h-4 text-[#3FC3B6] group-hover:text-white transition-colors shrink-0" strokeWidth={1.5} />
-              <span className="text-xs">Search Intelligence</span>
-            </div>
-            <kbd className="text-[10px] px-1.5 py-0.5 bg-[#222222] text-[#D9F2EE] border border-[#34435A] font-mono">
-              ⌘K
-            </kbd>
-          </button>
-        )}
 
         {/* ─── Primary Navigation Menu ─── */}
         <nav aria-label="Primary Navigation">

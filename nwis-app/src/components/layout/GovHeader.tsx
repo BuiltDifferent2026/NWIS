@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { 
-  Search, 
   Bell, 
   ChevronDown,
   Layers,
@@ -15,26 +14,20 @@ import { UserRole } from '@/lib/data/types';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 
 export const GovHeader: React.FC = () => {
-  const { currentRole, setRole, activeWellId, setActiveWellId, alerts, setCopilotOpen } = useAppStore();
+  const { currentRole, setRole, activeWellId, setActiveWellId, alerts } = useAppStore();
   
   const unreadAlerts = alerts.filter((a) => a.status === 'new').length || 3;
 
   return (
     <header className="h-16 border-b border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] px-4 md:px-6 flex items-center justify-between gap-4 shrink-0 transition-colors z-30">
       
-      {/* Left: Search Bar */}
-      <div className="flex-1 max-w-md">
-        <div 
-          onClick={() => setCopilotOpen(true)}
-          className="relative flex items-center w-full max-w-sm bg-[#F5F7F8] dark:bg-[#191E26] border border-[#E2E5E8] dark:border-[#364356] px-3.5 py-1.5 text-xs text-[#252B33] dark:text-slate-200 cursor-pointer shadow-2xs hover:border-[#3FC3B6] transition-all group"
-        >
-          <Search className="w-3.5 h-3.5 text-[#6B7280] group-hover:text-[#3FC3B6] transition-colors mr-2.5 shrink-0" strokeWidth={1.5} />
-          <span className="text-[#6B7280] dark:text-slate-400 font-sans text-xs truncate">
-            Search wells, formations, events...
+      {/* Left: Console & Workspace Indicator */}
+      <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#3FC3B6] animate-pulse" />
+          <span className="text-xs font-bold tracking-wider uppercase text-[#252B33] dark:text-white font-mono">
+            AntarRig DDR Console
           </span>
-          <kbd className="ml-auto inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono text-[#6B7280] dark:text-slate-400 bg-white dark:bg-[#242D3B] border border-[#E2E5E8] dark:border-[#364356] shrink-0">
-            ⌘K
-          </kbd>
         </div>
       </div>
 
@@ -49,9 +42,6 @@ export const GovHeader: React.FC = () => {
           <span className="w-2 h-2 rounded-full bg-[#3FAE68] animate-pulse" />
           <span className="font-bold text-[#26A69A] dark:text-[#3FC3B6]">
             Active Well: OIL-GLK-14 (Geleki Field)
-          </span>
-          <span className="text-[#6B7280] dark:text-slate-400 font-normal">
-            · Drilling (2,165 m TVD)
           </span>
         </Link>
 

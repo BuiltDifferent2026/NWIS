@@ -59,10 +59,11 @@ export function AppShell({ children }: AppShellProps) {
         </main>
       </div>
 
-      {/* Global AI Copilot Modal Drawer */}
+      {/* Global AI Copilot Floating Popup & Action Trigger */}
       <AskNwisDrawer
         isOpen={isCopilotOpen}
         onClose={() => setCopilotOpen(false)}
+        onToggle={toggleCopilot}
       />
     </div>
   );

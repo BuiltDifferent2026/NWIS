@@ -2,14 +2,18 @@ name: Keep Render Backend Alive
 
 on:
   schedule:
-    # Runs every 10 minutes to prevent Render free-tier spindown
-    - cron: "*/10 * * * *"
+    # Runs every 10 minutes with off-minute offset (:03, :13, :23, :33, :43, :53 UTC)
+    # Off-minute schedules avoid the massive GitHub queue congestion at :00, :10, :20, :30
+    - cron: '3,13,23,33,43,53 * * * *'
   workflow_dispatch:
     inputs:
       backend_url:
         description: "Render Backend URL (Optional override; defaults to RENDER_BACKEND_URL secret or variable)"
         required: false
         type: string
+
+permissions:
+  contents: read
 
 jobs:
   ping:

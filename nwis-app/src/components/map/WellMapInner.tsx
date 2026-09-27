@@ -52,12 +52,13 @@ interface WellMapInnerProps {
   radiusKm: number;
   centerWellId: string;
   sortBy: 'distance' | 'similarity';
+  onSortByChange?: (mode: 'distance' | 'similarity') => void;
 }
 
-// ─── Preset Reference Locations in Assam-Arakan Basin ───
-const ASSAM_BASIN_PRESETS = [
+// ─── Preset Reference Locations in Seven Sisters & Pan-India Basins ───
+const INDIAN_BASIN_PRESETS = [
   {
-    name: 'Geleki South Relief Pad',
+    name: 'Geleki South Pad (Assam)',
     lat: 26.9280,
     lng: 94.6520,
     formation: 'Tipam Sandstone',
@@ -65,7 +66,7 @@ const ASSAM_BASIN_PRESETS = [
     color: '#F59E0B'
   },
   {
-    name: 'Digboi Historical Discovery',
+    name: 'Digboi Historical Discovery (Assam)',
     lat: 27.3800,
     lng: 95.6300,
     formation: 'Bhuban Member',
@@ -73,30 +74,72 @@ const ASSAM_BASIN_PRESETS = [
     color: '#10B981'
   },
   {
-    name: 'Rudrasagar Step-Out 04',
-    lat: 26.9800,
-    lng: 94.5700,
-    formation: 'Barail Transition',
-    depthMD: 3100,
-    color: '#8B5CF6'
-  },
-  {
-    name: 'Lakwa East Cluster',
-    lat: 27.0200,
-    lng: 94.8600,
-    formation: 'Tipam Member-B',
-    depthMD: 2650,
+    name: 'Rokhia Gas Pad (Tripura)',
+    lat: 23.6350,
+    lng: 91.1980,
+    formation: 'Bhuban Gas Sand',
+    depthMD: 2950,
     color: '#06B6D4'
   },
   {
-    name: 'Kharsang Pad-04',
-    lat: 27.2700,
-    lng: 95.9300,
-    formation: 'Girujan Clay Cap',
-    depthMD: 1950,
+    name: 'Kumchai Foothills Pad (Arunachal)',
+    lat: 27.3200,
+    lng: 96.0250,
+    formation: 'Girujan / Tipam Fault',
+    depthMD: 3450,
+    color: '#8B5CF6'
+  },
+  {
+    name: 'Changpang Strike Pad (Nagaland)',
+    lat: 26.0420,
+    lng: 94.1350,
+    formation: 'Barail Main Sand',
+    depthMD: 2850,
     color: '#F43F5E'
+  },
+  {
+    name: 'Bilkhawthlir Frontier Pad (Mizoram)',
+    lat: 24.1680,
+    lng: 92.7350,
+    formation: 'Surma Fold Belt',
+    depthMD: 4200,
+    color: '#EC4899'
+  },
+  {
+    name: 'Barmer Mangala Pad (Rajasthan)',
+    lat: 25.8200,
+    lng: 71.2500,
+    formation: 'Fatehgarh Sandstone',
+    depthMD: 1450,
+    color: '#EAB308'
+  },
+  {
+    name: 'Ankleshwar Pad (Gujarat)',
+    lat: 21.6250,
+    lng: 72.9900,
+    formation: 'Ankleshwar Sand',
+    depthMD: 1350,
+    color: '#14B8A6'
+  },
+  {
+    name: 'KG-D6 Deepwater Target (AP)',
+    lat: 16.3100,
+    lng: 82.3500,
+    formation: 'Pliocene Deepwater Channel',
+    depthMD: 3100,
+    color: '#3B82F6'
+  },
+  {
+    name: 'Mumbai High North (Offshore MH)',
+    lat: 19.4200,
+    lng: 71.3500,
+    formation: 'L-III Carbonate Reservoir',
+    depthMD: 2100,
+    color: '#6366F1'
   }
 ];
+
+const ASSAM_BASIN_PRESETS = INDIAN_BASIN_PRESETS;
 
 // ─── Default Sample Custom Pins ───
 const INITIAL_CUSTOM_PINS: CustomCoordinatePin[] = [
@@ -142,19 +185,40 @@ function formatCoords(lat: number, lng: number, format: 'DD' | 'DMS'): string {
 function MapInteractiveController({
   isPicking,
   onPick,
-  zoomTarget
+  zoomTarget,
+  centerCoords,
+  radiusKm
 }: {
   isPicking: boolean;
   onPick: (lat: number, lng: number) => void;
   zoomTarget: [number, number] | null;
+  centerCoords?: [number, number];
+  radiusKm?: number;
 }) {
   const map = useMap();
 
+  // Fly to zoomTarget when explicitly triggered (e.g. clicking a custom pin or preset)
   useEffect(() => {
     if (zoomTarget) {
       map.flyTo(zoomTarget, 12, { duration: 1.2 });
     }
   }, [zoomTarget, map]);
+
+  // Smoothly pan & scale zoom when center well changes or radius expands significantly
+  useEffect(() => {
+    if (centerCoords && centerCoords[0] && centerCoords[1]) {
+      let targetZoom = 10;
+      if (radiusKm) {
+        if (radiusKm <= 25) targetZoom = 11;
+        else if (radiusKm <= 50) targetZoom = 10;
+        else if (radiusKm <= 100) targetZoom = 9;
+        else if (radiusKm <= 350) targetZoom = 7;
+        else if (radiusKm <= 1000) targetZoom = 6;
+        else targetZoom = 5;
+      }
+      map.flyTo(centerCoords, targetZoom, { duration: 1.0 });
+    }
+  }, [centerCoords?.[0], centerCoords?.[1], radiusKm, map]);
 
   useMapEvents({
     click(e) {
@@ -172,7 +236,8 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
   searchQuery,
   radiusKm,
   centerWellId,
-  sortBy
+  sortBy,
+  onSortByChange
 }) => {
   const [selectedWell, setSelectedWell] = useState<Well | null>(null);
   
@@ -193,8 +258,13 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
     return () => observer.disconnect();
   }, []);
   
-  // Dedicated Tab State in Sidebar: 'offsets' vs 'coordinates'
-  const [sidebarTab, setSidebarTab] = useState<'offsets' | 'coordinates'>('coordinates');
+  // Dedicated Tab State in Sidebar: default to 'offsets' so ranking is immediately visible
+  const [sidebarTab, setSidebarTab] = useState<'offsets' | 'coordinates'>('offsets');
+
+  // Auto-switch to 'offsets' tab whenever ranking mode changes so the user instantly sees the reordered list
+  useEffect(() => {
+    setSidebarTab('offsets');
+  }, [sortBy]);
   
   // Custom Coordinates State
   const [customPins, setCustomPins] = useState<CustomCoordinatePin[]>(INITIAL_CUSTOM_PINS);
@@ -244,11 +314,17 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
     };
   });
 
-  // Sort by chosen metric
-  const sortedWells = [...wellsWithMetrics].sort((a, b) => {
+  // Exclude centerWell from the offset candidate ranking (center well is the active reference, not its own offset)
+  const offsetWellsWithMetrics = wellsWithMetrics.filter((m) => m.well.id !== centerWell.id);
+
+  // Sort offset wells by chosen metric
+  const sortedWells = [...offsetWellsWithMetrics].sort((a, b) => {
     if (sortBy === 'distance') return a.distanceKm - b.distanceKm;
     return b.similarity.total - a.similarity.total;
   });
+
+  // The #1 leading offset well under current ranking criteria
+  const topRankedOffset = sortedWells[0];
 
   // Clipboard copy handler with temporary feedback
   const handleCopy = async (text: string, id: string) => {
@@ -340,7 +416,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
   // Batch copy all coordinates
   const handleCopyAllCoordinates = () => {
     const lines = [
-      `=== ASSAM BASIN GEOSPATIAL COORDINATES REGISTER ===`,
+      `=== INDIAN BASINS & SEVEN SISTERS GEOSPATIAL REGISTER ===`,
       `Active Well: ${centerWell.name} (${centerWell.field} Field)`,
       `Surface Coordinates: ${formatCoords(centerLat, centerLng, coordFormat)}`,
       `Depth MD: ${centerWell.totalDepthMD}m | Rig: ${centerWell.rig}`,
@@ -479,6 +555,68 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           </div>
         )}
 
+        {/* Active Ranking Mode Floating HUD on Map */}
+        <div className="absolute top-3 left-3 z-20 bg-white/95 dark:bg-[#1E2532]/95 backdrop-blur-xs border border-[#E2E5E8] dark:border-[#364356] p-2.5 shadow-md font-mono text-xs max-w-[320px] pointer-events-auto">
+          <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-[#E2E5E8] dark:border-[#364356]">
+            <div className="flex items-center gap-1.5 font-bold">
+              {sortBy === 'similarity' ? (
+                <>
+                  <Compass className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6]" />
+                  <span className="text-[#26A69A] dark:text-[#3FC3B6] text-[11px]">MODE: SIMILARITY</span>
+                </>
+              ) : (
+                <>
+                  <MapPin className="w-3.5 h-3.5 text-[#F59E0B]" />
+                  <span className="text-[#D97706] dark:text-[#F59E0B] text-[11px]">MODE: DISTANCE</span>
+                </>
+              )}
+            </div>
+            {onSortByChange && (
+              <div className="inline-flex rounded-none border border-[#E2E5E8] dark:border-[#364356] p-0.5 bg-[#F5F7F8] dark:bg-[#191E26]">
+                <button
+                  type="button"
+                  onClick={() => onSortByChange('similarity')}
+                  className={`px-1.5 py-0.5 text-[9px] font-bold cursor-pointer transition-colors ${
+                    sortBy === 'similarity'
+                      ? 'bg-[#26A69A] text-white'
+                      : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33]'
+                  }`}
+                  title="Rank by Geological & Stratigraphic Similarity"
+                >
+                  Sim
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSortByChange('distance')}
+                  className={`px-1.5 py-0.5 text-[9px] font-bold cursor-pointer transition-colors ${
+                    sortBy === 'distance'
+                      ? 'bg-[#F59E0B] text-black'
+                      : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33]'
+                  }`}
+                  title="Rank by Geographic Radial Distance"
+                >
+                  Dist
+                </button>
+              </div>
+            )}
+          </div>
+
+          {topRankedOffset && (
+            <div className="pt-1.5 space-y-0.5">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-[#6B7280] dark:text-[#94A3B8]">
+                  {sortBy === 'similarity' ? '🏆 Top Analog:' : '📍 Nearest Offset:'}
+                </span>
+                <span className="font-bold text-[#252B33] dark:text-white">{topRankedOffset.well.name}</span>
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-[#6B7280] dark:text-[#94A3B8]">
+                <span>Distance: {topRankedOffset.distanceKm} km</span>
+                <span className="font-bold text-[#3FAE68]">{Math.round(topRankedOffset.similarity.total * 100)}% Match</span>
+              </div>
+            </div>
+          )}
+        </div>
+
         <MapContainer
           center={[centerLat, centerLng]}
           zoom={10}
@@ -491,6 +629,8 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
             isPicking={isPickingLocation}
             onPick={handleMapPick}
             zoomTarget={zoomTarget}
+            centerCoords={[centerLat, centerLng]}
+            radiusKm={radiusKm}
           />
 
           {/* Map Tile Layer: Mapbox Tiles when token is provided, with fallback to Carto/OSM */}
@@ -516,21 +656,73 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
             }}
           />
 
+          {/* Dynamic Ray Connecting Center Well to the #1 Ranked Offset Well */}
+          {topRankedOffset && (
+            <>
+              <Polyline
+                positions={[
+                  [centerLat, centerLng],
+                  [topRankedOffset.well.coordinates.surfaceLat, topRankedOffset.well.coordinates.surfaceLng]
+                ]}
+                pathOptions={{
+                  color: sortBy === 'similarity' ? '#3FC3B6' : '#F59E0B',
+                  weight: 3,
+                  dashArray: sortBy === 'similarity' ? '8, 6' : '4, 4',
+                  opacity: 0.95
+                }}
+              >
+                <Popup className="custom-popup">
+                  <div className="p-2 text-xs font-mono bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-white">
+                    <span className="font-bold text-[#26A69A] dark:text-[#3FC3B6]">
+                      {sortBy === 'similarity' ? '🏆 #1 Stratigraphic Analog' : '📍 #1 Closest Offset Well'}
+                    </span>
+                    <div className="text-[11px] text-[#6B7280] dark:text-[#94A3B8]">
+                      {topRankedOffset.well.name} ({topRankedOffset.distanceKm} km · {Math.round(topRankedOffset.similarity.total * 100)}% match)
+                    </div>
+                  </div>
+                </Popup>
+              </Polyline>
+
+              {/* Pulsing Target Ring around #1 Ranked Well */}
+              <CircleMarker
+                center={[topRankedOffset.well.coordinates.surfaceLat, topRankedOffset.well.coordinates.surfaceLng]}
+                radius={16}
+                pathOptions={{
+                  color: sortBy === 'similarity' ? '#3FC3B6' : '#F59E0B',
+                  fillColor: sortBy === 'similarity' ? '#3FC3B6' : '#F59E0B',
+                  fillOpacity: 0.2,
+                  weight: 2,
+                  dashArray: '3, 3'
+                }}
+              />
+            </>
+          )}
+
           {/* Offset Well Markers */}
           {wellsWithMetrics.map(({ well, distanceKm, similarity, inRadius }) => {
             const isCenter = well.id === centerWell.id;
-            const markerColor = getMarkerColor(well);
+            const rankIndex = sortedWells.findIndex((s) => s.well.id === well.id);
+            const isTopRanked = rankIndex === 0;
+            const markerColor = isCenter
+              ? (isDarkMode ? '#ED1C24' : '#ED1C24')
+              : isTopRanked
+              ? (sortBy === 'similarity' ? '#3FC3B6' : '#F59E0B')
+              : getMarkerColor(well);
 
             return (
               <CircleMarker
                 key={well.id}
                 center={[well.coordinates.surfaceLat, well.coordinates.surfaceLng]}
-                radius={isCenter ? 12 : inRadius ? 8 : 6}
+                radius={isCenter ? 12 : isTopRanked ? 10 : inRadius ? 8 : 6}
                 pathOptions={{
-                  color: isCenter ? (isDarkMode ? '#FFFFFF' : '#0F172A') : markerColor,
+                  color: isCenter
+                    ? (isDarkMode ? '#FFFFFF' : '#0F172A')
+                    : isTopRanked
+                    ? (isDarkMode ? '#FFFFFF' : '#0F172A')
+                    : markerColor,
                   fillColor: markerColor,
-                  fillOpacity: isCenter ? 1 : inRadius ? 0.9 : 0.5,
-                  weight: isCenter ? 3 : 1.5
+                  fillOpacity: isCenter ? 1 : isTopRanked ? 1 : inRadius ? 0.9 : 0.5,
+                  weight: isCenter ? 3 : isTopRanked ? 2.5 : 1.5
                 }}
                 eventHandlers={{
                   click: () => setSelectedWell(well)
@@ -539,7 +731,18 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                 <Popup className="custom-popup">
                   <div className="p-3 text-xs font-mono bg-white dark:bg-[#242D3B] text-[#252B33] dark:text-white rounded-none min-w-[210px] space-y-2 border border-[#E2E5E8] dark:border-[#364356] shadow-lg">
                     <div className="font-bold flex items-center justify-between gap-2 border-b border-[#E2E5E8] dark:border-[#364356] pb-1.5">
-                      <span className="text-sm font-extrabold text-[#26A69A] dark:text-[#3FC3B6]">{well.name}</span>
+                      <div className="flex items-center gap-1.5">
+                        {rankIndex >= 0 && (
+                          <span className={`px-1.5 py-0.2 rounded-none text-[10px] font-bold ${
+                            isTopRanked
+                              ? (sortBy === 'similarity' ? 'bg-[#26A69A] text-white' : 'bg-[#F59E0B] text-black')
+                              : 'bg-[#34435A] text-white'
+                          }`}>
+                            #{rankIndex + 1}
+                          </span>
+                        )}
+                        <span className="text-sm font-extrabold text-[#26A69A] dark:text-[#3FC3B6]">{well.name}</span>
+                      </div>
                       <StatusBadge status={well.status} size="sm" />
                     </div>
 
@@ -995,10 +1198,10 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
               </button>
             </form>
 
-            {/* Quick Assam Basin Presets */}
+            {/* Quick Regional & Pan-India Basin Presets */}
             <div className="space-y-1.5">
               <div className="text-[10px] font-mono font-bold text-[#6B7280] dark:text-[#94A3B8] uppercase tracking-wider">
-                Assam Basin Field Presets
+                Seven Sisters & National Basin Presets
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {ASSAM_BASIN_PRESETS.map((preset) => (
@@ -1008,7 +1211,7 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     onClick={() => handleApplyPreset(preset)}
                     className="text-[10px] font-mono px-2 py-1 rounded-none bg-white hover:bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] text-[#252B33] dark:text-white hover:text-[#26A69A] cursor-pointer transition-colors shadow-2xs"
                   >
-                    + {preset.name.split(' ')[0]} ({preset.depthMD}m)
+                    + {preset.name.split(' (')[0]} ({preset.depthMD}m)
                   </button>
                 ))}
               </div>
@@ -1114,23 +1317,61 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
           </div>
         )}
 
-        {/* ════════ TAB 2: OFFSET ANALOGS (Theme-Matched with Scroll Option) ════════ */}
+        {/* ════════ TAB 2: OFFSET ANALOGS (Theme-Matched with Dynamic Ranking) ════════ */}
         {sidebarTab === 'offsets' && (
           <div className="flex-1 min-h-0 flex flex-col">
+            
+            {/* ── Active Ranking Explainer Banner ── */}
+            <div className={`p-2.5 rounded-none border text-xs font-mono mb-2.5 transition-colors ${
+              sortBy === 'similarity'
+                ? 'bg-[#D9F2EE]/60 dark:bg-[#3FC3B6]/15 border-[#3FC3B6] text-[#252B33] dark:text-white'
+                : 'bg-[#FEF3C7]/70 dark:bg-[#F59E0B]/15 border-[#F59E0B] text-[#252B33] dark:text-white'
+            }`}>
+              <div className="flex items-center justify-between font-bold text-xs mb-1">
+                <div className="flex items-center gap-1.5">
+                  {sortBy === 'similarity' ? (
+                    <>
+                      <Compass className="w-3.5 h-3.5 text-[#26A69A] dark:text-[#3FC3B6]" />
+                      <span className="text-[#26A69A] dark:text-[#3FC3B6] uppercase">Stratigraphic Similarity Mode</span>
+                    </>
+                  ) : (
+                    <>
+                      <MapPin className="w-3.5 h-3.5 text-[#D97706] dark:text-[#F59E0B]" />
+                      <span className="text-[#D97706] dark:text-[#F59E0B] uppercase">Geographic Distance Mode</span>
+                    </>
+                  )}
+                </div>
+                {topRankedOffset && (
+                  <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-none ${
+                    sortBy === 'similarity'
+                      ? 'bg-[#26A69A] text-white'
+                      : 'bg-[#F59E0B] text-black'
+                  }`}>
+                    #1: {topRankedOffset.well.name}
+                  </span>
+                )}
+              </div>
+              <p className="text-[10px] text-[#6B7280] dark:text-[#CBD5E1] leading-relaxed">
+                {sortBy === 'similarity'
+                  ? 'Ranked by formation, lithology, and pore-pressure correlation. Avoids the Proximity Trap (closest well is not always the best analog).'
+                  : 'Ranked strictly by radial Euclidean surface coordinate distance from active well center.'}
+              </p>
+            </div>
+
             <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#E2E5E8] dark:border-[#364356] text-[11px] font-mono">
               <span className="text-[#6B7280] dark:text-[#94A3B8]">
-                {sortBy === 'distance' ? 'By Distance' : 'By Stratigraphic Similarity'}
+                {sortBy === 'distance' ? 'Sorted: Nearest First' : 'Sorted: Best Correlation First'}
               </span>
               <span className="inline-flex items-center gap-1 text-[10px] text-[#26A69A] dark:text-[#3FC3B6] font-bold bg-[#D9F2EE] dark:bg-[#3FC3B6]/20 px-2 py-0.5 rounded-none border border-[#3FC3B6]">
                 <ArrowUpDown className="w-3 h-3" />
-                Scroll Viewport ({sortedWells.length} Wells)
+                {sortedWells.length} Offset Analogs
               </span>
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1.5 scrollbar-thin scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scroll-smooth">
 
-            {sortedWells.map(({ well, distanceKm, similarity, inRadius }) => {
-              const isCenter = well.id === centerWell.id;
+            {sortedWells.map(({ well, distanceKm, similarity, inRadius }, idx) => {
+              const isTop = idx === 0;
               const simPct = Math.round(similarity.total * 100);
               const formattedWellCoords = formatCoords(well.coordinates.surfaceLat, well.coordinates.surfaceLng, coordFormat);
 
@@ -1143,17 +1384,26 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                   }}
                   className={`p-3 rounded-none border transition cursor-pointer text-xs font-mono space-y-2 shadow-2xs ${
                     selectedWell?.id === well.id
-                      ? 'border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15'
-                      : isCenter
-                      ? 'border-[#ED1C24] bg-[#FDF2F2] dark:bg-[#ED1C24]/15'
+                      ? 'border-[#3FC3B6] bg-[#D9F2EE]/40 dark:bg-[#3FC3B6]/15 ring-1 ring-[#3FC3B6]'
+                      : isTop
+                      ? (sortBy === 'similarity'
+                          ? 'border-[#26A69A] dark:border-[#3FC3B6] bg-[#D9F2EE]/25 dark:bg-[#3FC3B6]/10'
+                          : 'border-[#F59E0B] dark:border-[#F59E0B] bg-[#FEF3C7]/30 dark:bg-[#F59E0B]/10')
                       : inRadius
                       ? 'border-[#E2E5E8] dark:border-[#364356] bg-white dark:bg-[#1E2532] hover:border-[#34435A]'
                       : 'border-[#E2E5E8]/60 dark:border-[#364356]/60 bg-[#F5F7F8] dark:bg-[#191E26] opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className={`px-1.5 py-0.2 rounded-none text-[10px] font-bold font-mono ${
+                          isTop
+                            ? (sortBy === 'similarity' ? 'bg-[#26A69A] text-white' : 'bg-[#F59E0B] text-black')
+                            : 'bg-[#34435A] text-white'
+                        }`}>
+                          #{idx + 1} {isTop ? (sortBy === 'similarity' ? '★ TOP ANALOG' : '★ CLOSEST') : ''}
+                        </span>
                         <span className="font-bold text-[#252B33] dark:text-white">{well.name}</span>
                         <StatusBadge status={well.status} size="sm" />
                       </div>
@@ -1198,13 +1448,23 @@ export const WellMapInner: React.FC<WellMapInnerProps> = ({
                     )}
                   </div>
 
+                  {/* Prominent Primary Metric based on active Sort Mode */}
                   <div className="pt-2 border-t border-[#E2E5E8] dark:border-[#364356] grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="flex items-center gap-1 text-[#252B33] dark:text-white">
-                      <MapPin className="w-3 h-3 text-[#26A69A] dark:text-[#3FC3B6]" />
+                    <div className={`flex items-center gap-1.5 ${
+                      sortBy === 'distance'
+                        ? 'font-extrabold text-[#D97706] dark:text-[#F59E0B]'
+                        : 'text-[#252B33] dark:text-white'
+                    }`}>
+                      <MapPin className={`w-3.5 h-3.5 shrink-0 ${sortBy === 'distance' ? 'text-[#F59E0B]' : 'text-[#26A69A] dark:text-[#3FC3B6]'}`} />
                       <span>{distanceKm} km dist</span>
                     </div>
-                    <div className="flex items-center justify-end gap-1 font-bold">
-                      <Compass className="w-3 h-3 text-[#3FC3B6]" />
+
+                    <div className={`flex items-center justify-end gap-1.5 ${
+                      sortBy === 'similarity'
+                        ? 'font-extrabold text-[#26A69A] dark:text-[#3FC3B6]'
+                        : 'font-bold'
+                    }`}>
+                      <Compass className={`w-3.5 h-3.5 shrink-0 ${sortBy === 'similarity' ? 'text-[#3FC3B6]' : 'text-[#6B7280]'}`} />
                       <span className={simPct >= 70 ? 'text-[#3FAE68]' : 'text-[#F2B84B]'}>
                         {simPct}% sim
                       </span>

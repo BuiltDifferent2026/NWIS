@@ -37,7 +37,7 @@ export default function GeospatialMapPage() {
   const [selectedField, setSelectedField] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [radiusKm, setRadiusKm] = useState<number>(25);
-  const [centerWellId, setCenterWellId] = useState<string>('well-glk-14');
+  const [centerWellId, setCenterWellId] = useState<string>('GK-401');
   const [sortBy, setSortBy] = useState<'distance' | 'similarity'>('similarity');
 
   const centerWell = WELLS.find((w) => w.id === centerWellId) || WELLS[0];
@@ -66,7 +66,7 @@ export default function GeospatialMapPage() {
                 Geospatial Well Map & Coordinate Intelligence
               </h1>
               <span className="px-2 py-0.5 rounded-none bg-[#34435A] text-white border border-[#222222] text-[10px] font-mono font-bold">
-                Assam–Arakan Basin
+                Seven Sisters & Pan-India Basin Grid
               </span>
             </div>
             
@@ -110,20 +110,61 @@ export default function GeospatialMapPage() {
           {/* Basin Field Filter */}
           <div className="space-y-1">
             <label className="text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#94A3B8] block">
-              Basin Field Filter
+              Basin & Field Filter
             </label>
             <select
               value={selectedField}
               onChange={(e) => setSelectedField(e.target.value)}
               className="w-full bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2.5 py-2 font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
-              <option value="all">All Assam Fields</option>
-              <option value="Geleki">Geleki Field</option>
-              <option value="Digboi">Digboi Field</option>
-              <option value="Rudrasagar">Rudrasagar Field</option>
-              <option value="Lakwa">Lakwa Field</option>
-              <option value="Kharsang">Kharsang Field</option>
-              <option value="Moran">Moran Field</option>
+              <option value="all">All Fields & Basins ({WELLS.length} Wells)</option>
+              <optgroup label="Seven Sisters — Assam">
+                <option value="Geleki">Geleki Field</option>
+                <option value="Digboi">Digboi Field</option>
+                <option value="Lakwa">Lakwa Field</option>
+                <option value="Rudrasagar">Rudrasagar Field</option>
+                <option value="Nahorkatiya">Nahorkatiya Field</option>
+                <option value="Moran">Moran Field</option>
+                <option value="Jorajan">Jorajan Field</option>
+                <option value="Tengakhat">Tengakhat Field</option>
+                <option value="Borholla">Borholla Field</option>
+                <option value="Duliajan">Duliajan Field</option>
+                <option value="Amguri">Amguri Field</option>
+                <option value="Dhansiri">Dhansiri Field</option>
+              </optgroup>
+              <optgroup label="Seven Sisters — Tripura">
+                <option value="Rokhia">Rokhia Gas Field</option>
+                <option value="Baramura">Baramura Gas Field</option>
+                <option value="Agartala Dome">Agartala Dome Field</option>
+              </optgroup>
+              <optgroup label="Seven Sisters — Arunachal Pradesh">
+                <option value="Kumchai">Kumchai Field</option>
+                <option value="Diyun">Diyun Field</option>
+                <option value="Kharsang">Kharsang Field</option>
+                <option value="Pasighat">Pasighat Frontier</option>
+              </optgroup>
+              <optgroup label="Seven Sisters — Nagaland, Mizoram, Manipur, Meghalaya">
+                <option value="Changpang">Changpang Field (Nagaland)</option>
+                <option value="Tuli">Tuli Field (Nagaland)</option>
+                <option value="Bilkhawthlir">Bilkhawthlir (Mizoram)</option>
+                <option value="Keifang">Keifang (Mizoram)</option>
+                <option value="Churachandpur">Churachandpur (Manipur)</option>
+                <option value="Tamenglong">Tamenglong (Manipur)</option>
+                <option value="Baghmara">Baghmara (Meghalaya)</option>
+                <option value="Dalu">Dalu (Meghalaya)</option>
+              </optgroup>
+              <optgroup label="Pan-India Basins — Western, Southern & Offshore">
+                <option value="Barmer-Mangala">Barmer Mangala (Rajasthan)</option>
+                <option value="Barmer-Bhagyam">Barmer Bhagyam (Rajasthan)</option>
+                <option value="Ankleshwar">Ankleshwar (Cambay, Gujarat)</option>
+                <option value="Gandhar">Gandhar (Cambay, Gujarat)</option>
+                <option value="KG Deepwater">KG Deepwater (Andhra Pradesh)</option>
+                <option value="Ravva Offshore">Ravva Offshore (KG Basin)</option>
+                <option value="Mumbai High">Mumbai High (Offshore Maharashtra)</option>
+                <option value="Bassein Gas">Bassein Gas (Offshore Maharashtra)</option>
+                <option value="Narimanam">Narimanam (Cauvery, Tamil Nadu)</option>
+                <option value="Bhuvanagiri">Bhuvanagiri (Cauvery, Tamil Nadu)</option>
+              </optgroup>
             </select>
           </div>
 
@@ -137,10 +178,13 @@ export default function GeospatialMapPage() {
               onChange={(e) => setRadiusKm(Number(e.target.value))}
               className="w-full bg-[#F5F7F8] dark:bg-[#1E2532] border border-[#E2E5E8] dark:border-[#364356] rounded-none px-2.5 py-2 font-bold text-[#252B33] dark:text-white focus:outline-hidden focus:border-[#3FC3B6]"
             >
-              <option value={10}>10 km Radius</option>
+              <option value={10}>10 km Local Cluster</option>
               <option value={25}>25 km Standard Radius</option>
               <option value={50}>50 km Regional Search</option>
               <option value={100}>100 km Basin Wide</option>
+              <option value={350}>350 km Seven Sisters / Northeast</option>
+              <option value={1000}>1,000 km Inter-Basin Regional</option>
+              <option value={3000}>3,000 km Pan-India National Grid</option>
             </select>
           </div>
 
@@ -170,24 +214,26 @@ export default function GeospatialMapPage() {
               <button
                 type="button"
                 onClick={() => setSortBy('similarity')}
-                className={`flex-1 py-1.5 rounded-none text-center font-bold text-[11px] cursor-pointer transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-none text-center font-bold text-[11px] cursor-pointer transition-colors ${
                   sortBy === 'similarity'
-                    ? 'bg-[#34435A] text-white shadow-2xs'
+                    ? 'bg-[#26A69A] dark:bg-[#3FC3B6] text-white dark:text-[#191E26] shadow-2xs'
                     : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
               >
-                Similarity
+                <Compass className="w-3.5 h-3.5 shrink-0" />
+                <span>Similarity</span>
               </button>
               <button
                 type="button"
                 onClick={() => setSortBy('distance')}
-                className={`flex-1 py-1.5 rounded-none text-center font-bold text-[11px] cursor-pointer transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-none text-center font-bold text-[11px] cursor-pointer transition-colors ${
                   sortBy === 'distance'
-                    ? 'bg-[#34435A] text-white shadow-2xs'
+                    ? 'bg-[#F59E0B] text-black shadow-2xs'
                     : 'text-[#6B7280] dark:text-[#94A3B8] hover:text-[#252B33] dark:hover:text-white'
                 }`}
               >
-                Distance
+                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                <span>Distance</span>
               </button>
             </div>
           </div>
@@ -205,6 +251,7 @@ export default function GeospatialMapPage() {
             searchQuery={searchQuery}
             selectedField={selectedField}
             sortBy={sortBy}
+            onSortByChange={setSortBy}
           />
         </div>
       </section>
